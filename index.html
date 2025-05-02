@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ilio Xaenor - DnD Charakter-Manager</title>
+    <style>
+        :root {
+            --primary-color: #1e392a;
+            --secondary-color: #9b7653;
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --accent-color: #497a5c;
+            --border-radius: 8px;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1, h2, h3 {
+            margin: 0;
+        }
+        
+        .character-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+            flex: 1;
+        }
+        
+        .character-image {
+            max-width: 200px;
+            box-shadow: var(--card-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .character-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .abilities {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .ability-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+        
+        .ability-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .ability-mod {
+            font-size: 18px;
+            color: var(--secondary-color);
+        }
+        
+        .action-area {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .actions, .roll-result {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .action-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .action-button:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .roll-result {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+        
+        .dice-result {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--primary-color);
+        }
+        
+        .dice-breakdown {
+            font-size: 16px;
+            color: var(--secondary-color);
+        }
+        
+        .guide-step {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(155, 118, 83, 0.1);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .guide-step h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .dice-input-container {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            align-items: center;
+        }
+        
+        .dice-input-container input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100px;
+        }
+        
+        .dice-input-container select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .skills-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .skill-item:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        
+        .features-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .feature-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .feature-name {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .tab-button {
+            background-color: #ddd;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .tab-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .highlight {
+            animation: pulse 1s;
+        }
+        
+        @keyframes pulse {
+            0% { background-color: rgba(73, 122, 92, 0.2); }
+            50% { background-color: rgba(73, 122, 92, 0.5); }
+            100% { background-color: rgba(73, 122, 92, 0); }
+        }
+
+        .spells-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .spells-grid, .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .abilities {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .action-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .character-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Ilio Xaenor</h1>
+                <p>Waldelf (Gloomstalker Ranger 4 / Rogue 1)</p>
+            </div>
+            <div>
+                <span id="ac">RK: 16</span> | 
+                <span id="speed">Bewegung: 35 ft</span> | 
+                <span id="prof-bonus">Übungsbonus: +3</span>
+            </div>
+        </header>
+        
+        <div class="character-info">
+            <div class="character-image">
+                <img src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Ilio Xaenor - Waldelf Ranger/Rogue" />
+            </div>
+            <div class="info-card">
+                <h3>Charakter</h3>
+                <p><strong>Hintergrund:</strong> Outlander</p>
+                <p><strong>Volk:</strong> Waldelf (Humanoid)</p>
+                <p><strong>Sprachen:</strong> Common, Elvish, Dwarvish, Sign-Language, Orkish, Diebessprache</p>
+            </div>
+            <div class="info-card">
+                <h3>Kampfwerte</h3>
+                <p><strong>Trefferpunkte:</strong> <span id="current-hp">21</span>/<span id="max-hp">21</span></p>
+                <p><strong>Initiative:</strong> +4 (DEX)</p>
+                <p><strong>Passive Wahrnehmung:</strong> 18</p>
+            </div>
+        </div>
+        
+        <div class="abilities">
+            <div class="ability-card">
+                <h3>STR</h3>
+                <div class="ability-score">10</div>
+                <div class="ability-mod">+0</div>
+                <div>Rettungswurf: +3</div>
+            </div>
+            <div class="ability-card">
+                <h3>DEX</h3>
+                <div class="ability-score">18</div>
+                <div class="ability-mod">+4</div>
+                <div>Rettungswurf: +7</div>
+            </div>
+            <div class="ability-card">
+                <h3>CON</h3>
+                <div class="ability-score">14</div>
+                <div class="ability-mod">+2</div>
+                <div>Rettungswurf: +2</div>
+            </div>
+            <div class="ability-card">
+                <h3>INT</h3>
+                <div class="ability-score">10</div>
+                <div class="ability-mod">+0</div>
+                <div>Rettungswurf: +0</div>
+            </div>
+            <div class="ability-card">
+                <h3>WIS</h3>
+                <div class="ability-score">14</div>
+                <div class="ability-mod">+2</div>
+                <div>Rettungswurf: +2</div>
+            </div>
+            <div class="ability-card">
+                <h3>CHA</h3>
+                <div class="ability-score">10</div>
+                <div class="ability-mod">+0</div>
+                <div>Rettungswurf: +0</div>
+            </div>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'combat')">Kampf</button>
+                <button class="tab-button" onclick="openTab(event, 'skills')">Fertigkeiten</button>
+                <button class="tab-button" onclick="openTab(event, 'features')">Merkmale & Zauber</button>
+            </div>
+            
+            <div id="combat" class="tab-content active">
+                <div class="action-area">
+                    <div class="actions">
+                        <h3>Kampfaktionen</h3>
+                        <div class="action-guide">
+                            <div class="guide-step">
+                                <h4>Schritt 1: Aktiviere Buffs (optional)</h4>
+                                <button class="action-button" onclick="toggleBuff('hunters-mark')">Hunter's Mark</button>
+                                <button class="action-button" onclick="toggleBuff('sharpshooter')">Sharpshooter</button>
+                            </div>
+                            <div class="guide-step">
+                                <h4>Schritt 2: Angriffswurf (d20)</h4>
+                                <p>Wirf einen d20-Würfel und gib das Ergebnis ein:</p>
+                                <div class="dice-input-container">
+                                    <input type="number" id="attack-roll-input" placeholder="d20 Wert" min="1" max="20">
+                                    <select id="attack-weapon-select">
+                                        <option value="bow">Langbogen</option>
+                                        <option value="dagger">Dolch</option>
+                                    </select>
+                                    <button class="action-button" onclick="calculateAttack()">Berechnen</button>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <h4>Schritt 3: Schadenswurf (bei Treffer)</h4>
+                                <p>Bei Treffer: Wirf W8 (Bogen) oder W4 (Dolch)</p>
+                                <div class="dice-input-container">
+                                    <input type="number" id="damage-roll-input" placeholder="Würfelwert" min="1" max="8">
+                                    <select id="damage-weapon-select">
+                                        <option value="bow">Langbogen (d8)</option>
+                                        <option value="dagger">Dolch (d4)</option>
+                                    </select>
+                                    <button class="action-button" onclick="calculateDamage()">Berechnen</button>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <h4>Schritt 4: Zusatzschaden (wenn anwendbar)</h4>
+                                <div class="dice-input-container">
+                                    <input type="number" id="hunters-mark-input" placeholder="Hunter's Mark (d6)" min="1" max="6">
+                                    <button class="action-button" onclick="addHuntersMark()">Hunter's Mark hinzufügen</button>
+                                </div>
+                                <div class="dice-input-container">
+                                    <input type="number" id="sneak-attack-input" placeholder="Sneak Attack (d6)" min="1" max="6">
+                                    <button class="action-button" onclick="addSneakAttack()">Hinterhältigen Angriff hinzufügen</button>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <h4>Andere Würfe</h4>
+                                <div class="other-rolls">
+                                    <button class="action-button" onclick="rollInitiative()">Initiative</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="roll-result">
+                        <h3>Würfelergebnis</h3>
+                        <div class="dice-result" id="roll-value">Folge den Schritten</div>
+                        <div class="dice-breakdown" id="roll-breakdown"></div>
+                        <div id="roll-message"></div>
+                        <div id="current-damage-container" style="margin-top: 20px; display: none;">
+                            <h4>Aktueller Gesamt-Schaden:</h4>
+                            <div id="current-damage-value" style="font-size: 24px; font-weight: bold;">0</div>
+                            <div id="current-damage-breakdown"></div>
+                            <button class="action-button" onclick="resetDamage()">Zurücksetzen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="skills" class="tab-content">
+                <div class="skills-section">
+                    <h3>Fertigkeiten</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item" onclick="rollSkill('acrobatics', 10)">
+                            <span>Akrobatik (DEX)</span>
+                            <span>+10 (E)</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSkill('athletics', 3)">
+                            <span>Athletik (STR)</span>
+                            <span>+3</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSkill('stealth', 10)">
+                            <span>Heimlichkeit (DEX)</span>
+                            <span>+10 (E)</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSkill('survival', 5)">
+                            <span>Überlebenskunst (WIS)</span>
+                            <span>+5</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSkill('perception', 8)">
+                            <span>Wahrnehmung (WIS)</span>
+                            <span>+8 (E)</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSkill('thieves-tools', 7)">
+                            <span>Diebeswerkzeug (DEX)</span>
+                            <span>+7</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skills-section">
+                    <h3>Andere Würfe</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item" onclick="rollSave('str')">
+                            <span>Stärke Rettungswurf</span>
+                            <span>+3</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSave('dex')">
+                            <span>Geschicklichkeit Rettungswurf</span>
+                            <span>+7</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSave('con')">
+                            <span>Konstitution Rettungswurf</span>
+                            <span>+2</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSave('int')">
+                            <span>Intelligenz Rettungswurf</span>
+                            <span>+0</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSave('wis')">
+                            <span>Weisheit Rettungswurf</span>
+                            <span>+2</span>
+                        </div>
+                        <div class="skill-item" onclick="rollSave('cha')">
+                            <span>Charisma Rettungswurf</span>
+                            <span>+0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="features" class="tab-content">
+                <div class="features-section">
+                    <h3>Merkmale</h3>
+                    <div class="feature-item">
+                        <div class="feature-name">Darkvision (120 ft)</div>
+                        <p>Du kannst in Dunkelheit bis zu 120 Fuß weit sehen, als wäre es dämmriges Licht.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-name">Fey Ancestry</div>
+                        <p>Du hast Vorteil bei Rettungswürfen gegen Bezauberung und kannst nicht durch Magie in den Schlaf versetzt werden.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-name">Trance</div>
+                        <p>Anstatt zu schlafen, meditierst du tief für 4 Stunden pro Tag.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-name">Archery Fighting Style</div>
+                        <p>Du erhältst einen Bonus von +2 auf Angriffswürfe mit Fernkampfwaffen.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-name">Unseen in Darkness</div>
+                        <p>Du bist unsichtbar für Kreaturen, die nur auf Darkvision angewiesen sind, um dich zu sehen.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-name">Sharpshooter</div>
+                        <p>Deine Fernkampfangriffe haben keinen Nachteil bei großer Reichweite, ignorieren Halb- und Dreivierteldeckung, und du erleidest keinen Nachteil, wenn du in Nahkampfreichweite angreifst.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-name">Expertise</div>
+                        <p>Dein Übungsbonus ist in Akrobatik, Heimlichkeit und Wahrnehmung verdoppelt.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-name">Sneak Attack</div>
+                        <p>Einmal pro Zug kannst du 1W6 zusätzlichen Schaden verursachen, wenn du im Vorteil bist oder ein Verbündeter neben deinem Ziel steht.</p>
+                    </div>
+                </div>
+                
+                <div class="features-section">
+                    <h3>Zauber</h3>
+                    <div class="spells-grid">
+                        <div class="feature-item">
+                            <div class="feature-name">Hunter's Mark (Bonusaktion)</div>
+                            <p>Konzentration, bis zu 1 Stunde. Markiere ein Ziel und verursache bei Treffern zusätzlich 1W6 Schaden.</p>
+                            <button class="action-button" onclick="toggleBuff('hunters-mark')">Aktivieren/Deaktivieren</button>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-name">Fog Cloud (Aktion)</div>
+                            <p>Konzentration, bis zu 1 Stunde. Erschaffe einen 20-Fuß-Radius Nebel, der stark verhülltes Gelände erzeugt.</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-name">Goodberry (Aktion)</div>
+                            <p>Erzeuge 10 Beeren, die je 1 Trefferpunkt heilen und für einen Tag Nahrung bieten.</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-name">Beast Bond (Aktion)</div>
+                            <p>Konzentration, bis zu 10 Minuten. Verbinde dich telepathisch mit einem freundlichen Tier.</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-name">Cure Wounds (Aktion)</div>
+                            <p>Berührung. Heile 1W8 + deinen Weisheitsmodifikator an Trefferpunkten.</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-name">Ensnaring Strike (Bonusaktion)</div>
+                            <p>Konzentration, bis zu 1 Minute. Dein nächster Waffenangriff erzeugt magische Ranken, die das Ziel festhalten können.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab-Wechsel
+        function openTab(evt, tabName) {
+            var i, tabContent, tabButtons;
+            
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].classList.remove("active");
+            }
+            
+            tabButtons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        // Würfelfunktionen
+        function rollDice(sides) {
+            return Math.floor(Math.random() * sides) + 1;
+        }
+        
+        function rollMultipleDice(quantity, sides) {
+            let results = [];
+            for (let i = 0; i < quantity; i++) {
+                results.push(rollDice(sides));
+            }
+            return results;
+        }
+        
+        // Aktive Buffs
+        let activeBuffs = {
+            'hunters-mark': false,
+            'sharpshooter': false
+        };
+        
+        let currentDamage = {
+            base: 0,
+            huntersMark: 0,
+            sneakAttack: 0,
+            modifier: 0,
+            total: 0
+        };
+        
+        function toggleBuff(buffName) {
+            activeBuffs[buffName] = !activeBuffs[buffName];
+            
+            let message = '';
+            if (buffName === 'hunters-mark') {
+                message = activeBuffs[buffName] ? 
+                    "Hunter's Mark ist aktiv (+1d6 Schaden)" : 
+                    "Hunter's Mark ist deaktiviert";
+            } else if (buffName === 'sharpshooter') {
+                message = activeBuffs[buffName] ? 
+                    "Sharpshooter ist aktiv (Keine Nachteile für Reichweite/Deckung/Nahkampf)" : 
+                    "Sharpshooter ist deaktiviert";
+            }
+            
+            document.getElementById('roll-value').textContent = message;
+            document.getElementById('roll-breakdown').textContent = 'Jetzt gehe zu Schritt 2: Angriffswurf';
+            document.getElementById('roll-message').textContent = '';
+        }
+        
+        // Angriff berechnen aus Eingabe
+        function calculateAttack() {
+            const dieRoll = parseInt(document.getElementById('attack-roll-input').value);
+            
+            if (isNaN(dieRoll) || dieRoll < 1 || dieRoll > 20) {
+                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert zwischen 1 und 20 ein.';
+                return;
+            }
+            
+            const weaponType = document.getElementById('attack-weapon-select').value;
+            let modifier = 7; // Basis: +4 DEX, +3 Prof
+            
+            if (weaponType === 'bow') {
+                modifier += 2; // Archery Fighting Style
+            }
+            
+            let total = dieRoll + modifier;
+            let breakdown = `d20 Wurf: ${dieRoll}`;
+            breakdown += ` + ${weaponType === 'bow' ? '9' : '7'} (${weaponType === 'bow' ? '+4 DEX, +3 PROF, +2 ARCHERY' : '+4 DEX, +3 PROF'})`;
+            
+            breakdown += ` = ${total}`;
+            
+            let message = '';
+            if (dieRoll === 20) {
+                message = 'Kritischer Treffer! (Verdoppele die Anzahl der Schadenswürfel!)';
+                document.getElementById('roll-value').classList.add('highlight');
+                setTimeout(() => {
+                    document.getElementById('roll-value').classList.remove('highlight');
+                }, 1000);
+            } else if (dieRoll === 1) {
+                message = 'Kritischer Fehlschlag!';
+            }
+            
+            document.getElementById('roll-value').textContent = total;
+            document.getElementById('roll-breakdown').textContent = breakdown;
+            document.getElementById('roll-message').textContent = message;
+            
+            if (dieRoll !== 1) {
+                document.getElementById('roll-message').textContent += '\nFahre mit Schritt 3 (Schadenswurf) fort, wenn du getroffen hast.';
+            }
+        }
+        
+        // Schaden berechnen aus Eingabe
+        function calculateDamage() {
+            const dieRoll = parseInt(document.getElementById('damage-roll-input').value);
+            const weaponType = document.getElementById('damage-weapon-select').value;
+            const diceMax = weaponType === 'bow' ? 8 : 4;
+            
+            if (isNaN(dieRoll) || dieRoll < 1 || dieRoll > diceMax) {
+                document.getElementById('roll-message').textContent = `Bitte gib einen gültigen Wert zwischen 1 und ${diceMax} ein.`;
+                return;
+            }
+            
+            resetDamage();
+            
+            // Grundschaden
+            const modifier = 4; // DEX Mod
+            let baseTotal = dieRoll + modifier;
+            
+            currentDamage.base = dieRoll;
+            currentDamage.modifier = modifier;
+            currentDamage.total = baseTotal;
+            
+            // Breakdown erstellen
+            let breakdown = `${dieRoll} (${weaponType === 'bow' ? 'Langbogen' : 'Dolch'}) + ${modifier} (DEX)`;
+            
+            document.getElementById('current-damage-container').style.display = 'block';
+            document.getElementById('current-damage-value').textContent = baseTotal;
+            document.getElementById('current-damage-breakdown').textContent = breakdown;
+            
+            document.getElementById('roll-value').textContent = baseTotal;
+            document.getElementById('roll-breakdown').textContent = breakdown;
+            document.getElementById('roll-message').textContent = 'Füge ggf. Hunter\'s Mark oder Sneak Attack hinzu (Schritt 4)';
+        }
+        
+        // Hunter's Mark hinzufügen
+        function addHuntersMark() {
+            if (!activeBuffs['hunters-mark']) {
+                document.getElementById('roll-message').textContent = "Hunter's Mark ist nicht aktiv. Bitte aktiviere es zuerst in Schritt 1.";
+                return;
+            }
+            
+            const huntersMarkRoll = parseInt(document.getElementById('hunters-mark-input').value);
+            
+            if (isNaN(huntersMarkRoll) || huntersMarkRoll < 1 || huntersMarkRoll > 6) {
+                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert zwischen 1 und 6 für Hunter\'s Mark ein.';
+                return;
+            }
+            
+            currentDamage.huntersMark = huntersMarkRoll;
+            currentDamage.total += huntersMarkRoll;
+            
+            updateDamageDisplay();
+        }
+        
+        // Sneak Attack hinzufügen
+        function addSneakAttack() {
+            const sneakAttackRoll = parseInt(document.getElementById('sneak-attack-input').value);
+            
+            if (isNaN(sneakAttackRoll) || sneakAttackRoll < 1 || sneakAttackRoll > 6) {
+                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert zwischen 1 und 6 für Sneak Attack ein.';
+                return;
+            }
+            
+            currentDamage.sneakAttack = sneakAttackRoll;
+            currentDamage.total += sneakAttackRoll;
+            
+            updateDamageDisplay();
+        }
+        
+        // Aktualisiere die Schadensanzeige
+        function updateDamageDisplay() {
+            document.getElementById('current-damage-value').textContent = currentDamage.total;
+            
+            let breakdown = `${currentDamage.base} (Waffe) + ${currentDamage.modifier} (DEX)`;
+            
+            if (currentDamage.huntersMark > 0) {
+                breakdown += ` + ${currentDamage.huntersMark} (Hunter's Mark)`;
+            }
+            
+            if (currentDamage.sneakAttack > 0) {
+                breakdown += ` + ${currentDamage.sneakAttack} (Sneak Attack)`;
+            }
+            
+            breakdown += ` = ${currentDamage.total}`;
+            document.getElementById('current-damage-breakdown').textContent = breakdown;
+            
+            document.getElementById('roll-value').textContent = currentDamage.total;
+            document.getElementById('roll-breakdown').textContent = breakdown;
+            document.getElementById('roll-message').textContent = 'Gesamtschaden berechnet!';
+        }
+        
+        // Zurücksetzen des aktuellen Schadens
+        function resetDamage() {
+            currentDamage = {
+                base: 0,
+                huntersMark: 0,
+                sneakAttack: 0,
+                modifier: 0,
+                total: 0
+            };
+            
+            document.getElementById('current-damage-value').textContent = '0';
+            document.getElementById('current-damage-breakdown').textContent = '';
+        }
+        
+        // Initiative
+        function rollInitiative() {
+            let dieRoll = rollDice(20);
+            let modifier = 4; // DEX Mod
+            let total = dieRoll + modifier;
+            
+            document.getElementById('roll-value').textContent = total;
+            document.getElementById('roll-breakdown').textContent = `Initiative: ${dieRoll} + ${modifier} (DEX) = ${total}`;
+            document.getElementById('roll-message').textContent = '';
+        }
+        
+        // Fertigkeitswürfe
+        function rollSkill(skillName, bonus) {
+            let dieRoll = rollDice(20);
+            let total = dieRoll + bonus;
+            
+            let skillNameGerman = {
+                'acrobatics': 'Akrobatik',
+                'athletics': 'Athletik',
+                'stealth': 'Heimlichkeit',
+                'survival': 'Überlebenskunst',
+                'perception': 'Wahrnehmung',
+                'thieves-tools': 'Diebeswerkzeug'
+            }[skillName];
+            
+            document.getElementById('roll-value').textContent = total;
+            document.getElementById('roll-breakdown').textContent = `${skillNameGerman}: ${dieRoll} + ${bonus} = ${total}`;
+            document.getElementById('roll-message').textContent = '';
+        }
+        
+        // Rettungswürfe
+        function rollSave(ability) {
+            let dieRoll = rollDice(20);
+            let bonus = {
+                'str': 3,
+                'dex': 7,
+                'con': 2,
+                'int': 0,
+                'wis': 2,
+                'cha': 0
+            }[ability];
+            
+            let abilityNameGerman = {
+                'str': 'Stärke',
+                'dex': 'Geschicklichkeit',
+                'con': 'Konstitution',
+                'int': 'Intelligenz',
+                'wis': 'Weisheit',
+                'cha': 'Charisma'
+            }[ability];
+            
+            let total = dieRoll + bonus;
+            
+            document.getElementById('roll-value').textContent = total;
+            document.getElementById('roll-breakdown').textContent = `${abilityNameGerman} Rettungswurf: ${dieRoll} + ${bonus} = ${total}`;
+            document.getElementById('roll-message').textContent = '';
+        }
+</script>
