@@ -11,12 +11,16 @@
             padding: 0;
             background-color: white;
             color: black;
-            font-size: 16px;
-            line-height: 1.4;
+            font-size: 14px;
+            line-height: 1.3;
         }
         
         h1, h2, h3 {
-            margin: 10px 0;
+            margin: 5px 0;
+        }
+        
+        h3 {
+            font-size: 16px;
         }
         
         .main-container {
@@ -27,16 +31,16 @@
         
         .character-sheet {
             display: table-cell;
-            width: 80%;
+            width: 75%;
             vertical-align: top;
-            padding-right: 10px;
+            padding-right: 5px;
         }
         
         .character-image {
             display: table-cell;
-            width: 20%;
+            width: 25%;
             vertical-align: top;
-            padding-left: 10px;
+            padding-left: 5px;
         }
         
         .character-image img {
@@ -44,27 +48,28 @@
             border: 1px solid black;
         }
         
-        .box {
-            border: 1px solid black;
-            padding: 8px;
-            margin-bottom: 10px;
+        .compact-header {
+            margin-bottom: 5px;
         }
         
-        .section {
-            margin-bottom: 15px;
+        .box {
+            border: 1px solid black;
+            padding: 5px;
+            margin-bottom: 5px;
         }
         
         .ability-scores {
             display: table;
             width: 100%;
             table-layout: fixed;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         .ability {
             display: table-cell;
             text-align: center;
-            padding: 3px;
+            font-size: 12px;
+            padding: 2px;
             border: 1px solid black;
         }
         
@@ -73,29 +78,29 @@
         }
         
         .ability-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
         }
         
         button {
             background-color: white;
             border: 1px solid black;
-            padding: 5px;
-            margin: 3px;
+            padding: 3px;
+            margin: 2px;
             font-family: serif;
-            font-size: 14px;
+            font-size: 12px;
         }
         
         input, select {
             border: 1px solid black;
-            padding: 5px;
+            padding: 3px;
             font-family: serif;
-            font-size: 14px;
+            font-size: 12px;
             background-color: white;
         }
         
         .tab-buttons {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         .tab-content {
@@ -104,6 +109,32 @@
         
         .active {
             display: block;
+        }
+        
+        .split-layout {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        
+        .actions-column {
+            display: table-cell;
+            width: 60%;
+            vertical-align: top;
+            padding-right: 5px;
+        }
+        
+        .results-column {
+            display: table-cell;
+            width: 40%;
+            vertical-align: top;
+            padding-left: 5px;
+        }
+        
+        .results-box {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
         }
         
         .skill-item {
@@ -118,8 +149,9 @@
         }
         
         .feature-item {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
         }
         
         .feature-name {
@@ -129,52 +161,47 @@
         .dice-result {
             font-size: 24px;
             font-weight: bold;
-            margin: 10px 0;
+            margin: 5px 0;
         }
         
         .dice-breakdown {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         #roll-message {
-            margin: 10px 0;
-            padding: 5px;
+            margin: 5px 0;
+            padding: 3px;
             border: 1px dashed #ccc;
         }
         
         #current-damage-container {
-            margin-top: 10px;
-            padding: 5px;
+            margin-top: 5px;
+            padding: 3px;
             border: 1px solid black;
         }
         
         .hp-controls {
             display: table;
             width: 100%;
-            margin: 10px 0;
+            margin: 5px 0;
         }
         
         .hp-display {
-            display: table-cell;
-            width: 60%;
-            vertical-align: middle;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
+            margin-bottom: 5px;
         }
         
         .hp-buttons {
-            display: table-cell;
-            width: 40%;
-            text-align: right;
-            vertical-align: middle;
+            text-align: center;
         }
         
-        .hp-buttons button {
-            width: 30px;
+        .hp-button {
+            width: 40px;
             height: 30px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            margin: 0 2px;
+            margin: 0 5px;
         }
         
         .hp-input {
@@ -187,75 +214,52 @@
 <body>
     <div class="main-container">
         <div class="character-sheet">
-            <h1>Ilio Xaenor</h1>
-            <p>Waldelf (Gloomstalker Ranger 4 / Rogue 1)</p>
+            <div class="compact-header">
+                <h1 style="margin:0;">Ilio Xaenor</h1>
+                <small>Waldelf (Gloomstalker Ranger 4 / Rogue 1) | RK: 16 | Bewegung: 35 ft | Übungsbonus: +3</small>
+            </div>
             
-            <div class="box">
-                <div>
-                    <span>RK: 16 | Bewegung: 35 ft | Übungsbonus: +3</span>
+            <div class="hp-controls box">
+                <div class="hp-display">
+                    Trefferpunkte: <span id="current-hp">21</span>/<span id="max-hp">21</span>
                 </div>
-                <div>
-                    <strong>Hintergrund:</strong> Outlander<br>
-                    <strong>Volk:</strong> Waldelf (Humanoid)<br>
-                    <strong>Sprachen:</strong> Common, Elvish, Dwarvish, Sign-Language, Orkish, Diebessprache<br>
-                </div>
-                
-                <!-- HP Manager -->
-                <div class="hp-controls">
-                    <div class="hp-display">
-                        Trefferpunkte: <span id="current-hp">21</span>/<span id="max-hp">21</span>
-                    </div>
-                    <div class="hp-buttons">
-                        <input type="number" id="hp-change" class="hp-input" value="1" min="1">
-                        <button onclick="modifyHP(-1)">-</button>
-                        <button onclick="modifyHP(1)">+</button>
-                    </div>
-                </div>
-                
-                <div>
-                    <strong>Initiative:</strong> +4 (DEX)<br>
-                    <strong>Passive Wahrnehmung:</strong> 18
+                <div class="hp-buttons">
+                    <input type="number" id="hp-change" class="hp-input" value="1" min="1">
+                    <button class="hp-button" onclick="modifyHP(-1)">-</button>
+                    <button class="hp-button" onclick="modifyHP(1)">+</button>
                 </div>
             </div>
             
-            <div class="section">
-                <div class="ability-scores">
-                    <div class="ability">
-                        <div class="ability-name">STR</div>
-                        <div class="ability-value">10</div>
-                        <div>+0</div>
-                        <div>RW: +3</div>
-                    </div>
-                    <div class="ability">
-                        <div class="ability-name">DEX</div>
-                        <div class="ability-value">18</div>
-                        <div>+4</div>
-                        <div>RW: +7</div>
-                    </div>
-                    <div class="ability">
-                        <div class="ability-name">CON</div>
-                        <div class="ability-value">14</div>
-                        <div>+2</div>
-                        <div>RW: +2</div>
-                    </div>
-                    <div class="ability">
-                        <div class="ability-name">INT</div>
-                        <div class="ability-value">10</div>
-                        <div>+0</div>
-                        <div>RW: +0</div>
-                    </div>
-                    <div class="ability">
-                        <div class="ability-name">WIS</div>
-                        <div class="ability-value">14</div>
-                        <div>+2</div>
-                        <div>RW: +2</div>
-                    </div>
-                    <div class="ability">
-                        <div class="ability-name">CHA</div>
-                        <div class="ability-value">10</div>
-                        <div>+0</div>
-                        <div>RW: +0</div>
-                    </div>
+            <div class="ability-scores">
+                <div class="ability">
+                    <div class="ability-name">STR</div>
+                    <div class="ability-value">10</div>
+                    <div>+0</div>
+                </div>
+                <div class="ability">
+                    <div class="ability-name">DEX</div>
+                    <div class="ability-value">18</div>
+                    <div>+4</div>
+                </div>
+                <div class="ability">
+                    <div class="ability-name">CON</div>
+                    <div class="ability-value">14</div>
+                    <div>+2</div>
+                </div>
+                <div class="ability">
+                    <div class="ability-name">INT</div>
+                    <div class="ability-value">10</div>
+                    <div>+0</div>
+                </div>
+                <div class="ability">
+                    <div class="ability-name">WIS</div>
+                    <div class="ability-value">14</div>
+                    <div>+2</div>
+                </div>
+                <div class="ability">
+                    <div class="ability-name">CHA</div>
+                    <div class="ability-value">10</div>
+                    <div>+0</div>
                 </div>
             </div>
             
@@ -266,63 +270,63 @@
             </div>
             
             <div id="combat" class="tab-content active">
-                <h3>Kampfaktionen</h3>
-                
-                <div class="box">
-                    <h4>Schritt 1: Buffs aktivieren</h4>
-                    <button onclick="toggleBuff('hunters-mark')">Hunter's Mark</button>
-                    <button onclick="toggleBuff('sharpshooter')">Sharpshooter</button>
-                </div>
-                
-                <div class="box">
-                    <h4>Schritt 2: Angriffswurf</h4>
-                    <p>Wirf einen d20-Würfel und gib das Ergebnis ein:</p>
-                    <input type="number" id="attack-roll-input" placeholder="d20" min="1" max="20">
-                    <select id="attack-weapon-select">
-                        <option value="bow">Langbogen</option>
-                        <option value="dagger">Dolch</option>
-                    </select>
-                    <button onclick="calculateAttack()">Berechnen</button>
-                </div>
-                
-                <div class="box">
-                    <h4>Schritt 3: Schadenswurf</h4>
-                    <p>Bei Treffer: Wirf W8 (Bogen) oder W4 (Dolch)</p>
-                    <input type="number" id="damage-roll-input" placeholder="Würfel" min="1" max="8">
-                    <select id="damage-weapon-select">
-                        <option value="bow">Langbogen (d8)</option>
-                        <option value="dagger">Dolch (d4)</option>
-                    </select>
-                    <button onclick="calculateDamage()">Berechnen</button>
-                </div>
-                
-                <div class="box">
-                    <h4>Schritt 4: Zusatzschaden</h4>
-                    <div>
-                        <input type="number" id="hunters-mark-input" placeholder="Hunter's Mark (d6)" min="1" max="6">
-                        <button onclick="addHuntersMark()">Hunter's Mark hinzufügen</button>
+                <div class="split-layout">
+                    <div class="actions-column">
+                        <div class="box">
+                            <button onclick="toggleBuff('hunters-mark')">Hunter's Mark</button>
+                            <button onclick="toggleBuff('sharpshooter')">Sharpshooter</button>
+                        </div>
+                        
+                        <div class="box">
+                            <h3>Angriffswurf (d20)</h3>
+                            <input type="number" id="attack-roll-input" placeholder="d20" min="1" max="20" style="width:40px;">
+                            <select id="attack-weapon-select">
+                                <option value="bow">Bogen</option>
+                                <option value="dagger">Dolch</option>
+                            </select>
+                            <button onclick="calculateAttack()">OK</button>
+                        </div>
+                        
+                        <div class="box">
+                            <h3>Schadenswurf</h3>
+                            <input type="number" id="damage-roll-input" placeholder="W8/W4" min="1" max="8" style="width:40px;">
+                            <select id="damage-weapon-select">
+                                <option value="bow">Bogen (d8)</option>
+                                <option value="dagger">Dolch (d4)</option>
+                            </select>
+                            <button onclick="calculateDamage()">OK</button>
+                        </div>
+                        
+                        <div class="box">
+                            <h3>Zusatzschaden</h3>
+                            <div>
+                                <input type="number" id="hunters-mark-input" placeholder="d6" min="1" max="6" style="width:40px;">
+                                <button onclick="addHuntersMark()">+ Hunter's Mark</button>
+                            </div>
+                            <div>
+                                <input type="number" id="sneak-attack-input" placeholder="d6" min="1" max="6" style="width:40px;">
+                                <button onclick="addSneakAttack()">+ Sneak Attack</button>
+                            </div>
+                        </div>
+                        
+                        <div class="box">
+                            <button onclick="rollInitiative()">Initiative</button>
+                            <button onclick="openTab('skills')">Fertigkeiten</button>
+                        </div>
                     </div>
-                    <div>
-                        <input type="number" id="sneak-attack-input" placeholder="Sneak Attack (d6)" min="1" max="6">
-                        <button onclick="addSneakAttack()">Sneak Attack hinzufügen</button>
-                    </div>
-                </div>
-                
-                <div class="box">
-                    <h4>Andere Würfe</h4>
-                    <button onclick="rollInitiative()">Initiative</button>
-                </div>
-                
-                <div class="box">
-                    <h3>Würfelergebnis</h3>
-                    <div class="dice-result" id="roll-value">-</div>
-                    <div class="dice-breakdown" id="roll-breakdown"></div>
-                    <div id="roll-message"></div>
-                    <div id="current-damage-container" style="display: none;">
-                        <h4>Aktueller Gesamt-Schaden:</h4>
-                        <div id="current-damage-value" style="font-size: 20px; font-weight: bold;">0</div>
-                        <div id="current-damage-breakdown"></div>
-                        <button onclick="resetDamage()">Zurücksetzen</button>
+                    
+                    <div class="results-column">
+                        <div class="box results-box">
+                            <h3>Würfelergebnis</h3>
+                            <div class="dice-result" id="roll-value">-</div>
+                            <div class="dice-breakdown" id="roll-breakdown"></div>
+                            <div id="roll-message"></div>
+                            <div id="current-damage-container" style="display: none;">
+                                <div id="current-damage-value" style="font-size: 20px; font-weight: bold;">0</div>
+                                <div id="current-damage-breakdown"></div>
+                                <button onclick="resetDamage()">Zurücksetzen</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -332,7 +336,7 @@
                 <div class="box">
                     <div class="skill-item" onclick="rollSkill('acrobatics', 10)">
                         <span>Akrobatik (DEX)</span>
-                        <span class="skill-value">+10 (E)</span>
+                        <span class="skill-value">+10</span>
                     </div>
                     <div class="skill-item" onclick="rollSkill('athletics', 3)">
                         <span>Athletik (STR)</span>
@@ -340,7 +344,7 @@
                     </div>
                     <div class="skill-item" onclick="rollSkill('stealth', 10)">
                         <span>Heimlichkeit (DEX)</span>
-                        <span class="skill-value">+10 (E)</span>
+                        <span class="skill-value">+10</span>
                     </div>
                     <div class="skill-item" onclick="rollSkill('survival', 5)">
                         <span>Überlebenskunst (WIS)</span>
@@ -348,7 +352,7 @@
                     </div>
                     <div class="skill-item" onclick="rollSkill('perception', 8)">
                         <span>Wahrnehmung (WIS)</span>
-                        <span class="skill-value">+8 (E)</span>
+                        <span class="skill-value">+8</span>
                     </div>
                     <div class="skill-item" onclick="rollSkill('thieves-tools', 7)">
                         <span>Diebeswerkzeug (DEX)</span>
@@ -410,7 +414,7 @@
                     </div>
                     <div class="feature-item">
                         <div class="feature-name">Sharpshooter</div>
-                        <p>Deine Fernkampfangriffe haben keinen Nachteil bei großer Reichweite, ignorieren Halb- und Dreivierteldeckung, und du erleidest keinen Nachteil, wenn du in Nahkampfreichweite angreifst.</p>
+                        <p>Keine Nachteile bei großer Reichweite, ignoriert Deckung, kein Nachteil im Nahkampf.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-name">Expertise</div>
@@ -418,7 +422,7 @@
                     </div>
                     <div class="feature-item">
                         <div class="feature-name">Sneak Attack</div>
-                        <p>Einmal pro Zug kannst du 1W6 zusätzlichen Schaden verursachen, wenn du im Vorteil bist oder ein Verbündeter neben deinem Ziel steht.</p>
+                        <p>Einmal pro Zug 1W6 Zusatzschaden bei Vorteil oder wenn ein Verbündeter neben dem Ziel steht.</p>
                     </div>
                 </div>
                 
@@ -426,46 +430,43 @@
                 <div class="box">
                     <div class="feature-item">
                         <div class="feature-name">Hunter's Mark (Bonusaktion)</div>
-                        <p>Konzentration, bis zu 1 Stunde. Markiere ein Ziel und verursache bei Treffern zusätzlich 1W6 Schaden.</p>
+                        <p>Konzentration, 1 Stunde. +1W6 Schaden gegen markiertes Ziel.</p>
                         <button onclick="toggleBuff('hunters-mark')">Aktivieren/Deaktivieren</button>
                     </div>
                     <div class="feature-item">
                         <div class="feature-name">Fog Cloud (Aktion)</div>
-                        <p>Konzentration, bis zu 1 Stunde. Erschaffe einen 20-Fuß-Radius Nebel, der stark verhülltes Gelände erzeugt.</p>
+                        <p>Konzentration, 1 Stunde. 20-Fuß Nebel erzeugt stark verhülltes Gelände.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-name">Goodberry (Aktion)</div>
-                        <p>Erzeuge 10 Beeren, die je 1 Trefferpunkt heilen und für einen Tag Nahrung bieten.</p>
+                        <p>10 Beeren, je 1 TP Heilung und 1 Tag Nahrung.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-name">Beast Bond (Aktion)</div>
-                        <p>Konzentration, bis zu 10 Minuten. Verbinde dich telepathisch mit einem freundlichen Tier.</p>
+                        <p>Konzentration, 10 Minuten. Telepathie mit freundlichem Tier.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-name">Cure Wounds (Aktion)</div>
-                        <p>Berührung. Heile 1W8 + deinen Weisheitsmodifikator an Trefferpunkten.</p>
+                        <p>Berührung. Heile 1W8 + WIS Mod.</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-name">Ensnaring Strike (Bonusaktion)</div>
-                        <p>Konzentration, bis zu 1 Minute. Dein nächster Waffenangriff erzeugt magische Ranken, die das Ziel festhalten können.</p>
+                        <p>Konzentration, 1 Minute. Nächster Angriff erzeugt fesselnde Ranken.</p>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Character Image Section -->
         <div class="character-image">
-            <img src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Ilio Xaenor - Waldelf Ranger/Rogue">
+            <img src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Ilio Xaenor">
         </div>
     </div>
 
     <script>
         // Tab-Wechsel
         function openTab(tabName) {
-            var i, tabContent;
-            
-            tabContent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabContent.length; i++) {
+            var tabContent = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContent.length; i++) {
                 tabContent[i].style.display = "none";
             }
             
@@ -493,9 +494,9 @@
             var maxHP = parseInt(document.getElementById('max-hp').textContent);
             
             if (modifier > 0) { // Heilung
-                currentHP = Math.min(currentHP + (changeAmount * modifier), maxHP);
+                currentHP = Math.min(currentHP + (changeAmount * 1), maxHP);
             } else { // Schaden
-                currentHP = Math.max(currentHP + (changeAmount * modifier), 0);
+                currentHP = Math.max(currentHP + (changeAmount * -1), 0);
             }
             
             document.getElementById('current-hp').textContent = currentHP;
@@ -521,28 +522,28 @@
             var message = '';
             if (buffName === 'hunters-mark') {
                 message = activeBuffs[buffName] ? 
-                    "Hunter's Mark ist aktiv (+1d6 Schaden)" : 
-                    "Hunter's Mark ist deaktiviert";
+                    "Hunter's Mark aktiv (+1d6)" : 
+                    "Hunter's Mark inaktiv";
             } else if (buffName === 'sharpshooter') {
                 message = activeBuffs[buffName] ? 
-                    "Sharpshooter ist aktiv (Keine Nachteile für Reichweite/Deckung/Nahkampf)" : 
-                    "Sharpshooter ist deaktiviert";
+                    "Sharpshooter aktiv" : 
+                    "Sharpshooter inaktiv";
             }
             
             document.getElementById('roll-value').textContent = message;
-            document.getElementById('roll-breakdown').textContent = 'Jetzt gehe zu Schritt 2: Angriffswurf';
+            document.getElementById('roll-breakdown').textContent = 'Gehe zu Schritt 2';
             document.getElementById('roll-message').textContent = '';
             
             // Wechsle zum Combat-Tab, um das Ergebnis anzuzeigen
             openTab('combat');
         }
         
-        // Angriff berechnen aus Eingabe (korrigierte Version ohne Archery-Bonus)
+        // Angriff berechnen aus Eingabe
         function calculateAttack() {
             var dieRoll = parseInt(document.getElementById('attack-roll-input').value);
             
             if (isNaN(dieRoll) || dieRoll < 1 || dieRoll > 20) {
-                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert zwischen 1 und 20 ein.';
+                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert ein (1-20).';
                 return;
             }
             
@@ -550,14 +551,11 @@
             var modifier = 7; // Basis: +4 DEX, +3 Prof
             
             var total = dieRoll + modifier;
-            var breakdown = "d20 Wurf: " + dieRoll;
-            breakdown += " + 7 (+4 DEX, +3 PROF)";
-            
-            breakdown += " = " + total;
+            var breakdown = "d20: " + dieRoll + " + 7 = " + total;
             
             var message = '';
             if (dieRoll === 20) {
-                message = 'Kritischer Treffer! (Verdoppele die Anzahl der Schadenswürfel!)';
+                message = 'Kritischer Treffer!';
             } else if (dieRoll === 1) {
                 message = 'Kritischer Fehlschlag!';
             }
@@ -567,7 +565,7 @@
             document.getElementById('roll-message').textContent = message;
             
             if (dieRoll !== 1) {
-                document.getElementById('roll-message').textContent += '\nFahre mit Schritt 3 (Schadenswurf) fort, wenn du getroffen hast.';
+                document.getElementById('roll-message').textContent += ' → Weiter zu Schritt 3';
             }
         }
         
@@ -578,7 +576,7 @@
             var diceMax = weaponType === 'bow' ? 8 : 4;
             
             if (isNaN(dieRoll) || dieRoll < 1 || dieRoll > diceMax) {
-                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert zwischen 1 und ' + diceMax + ' ein.';
+                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert ein (1-' + diceMax + ').';
                 return;
             }
             
@@ -593,7 +591,7 @@
             currentDamage.total = baseTotal;
             
             // Breakdown erstellen
-            var breakdown = dieRoll + " (" + (weaponType === 'bow' ? 'Langbogen' : 'Dolch') + ") + " + modifier + " (DEX)";
+            var breakdown = dieRoll + " (Waffe) + 4 (DEX) = " + baseTotal;
             
             document.getElementById('current-damage-container').style.display = 'block';
             document.getElementById('current-damage-value').textContent = baseTotal;
@@ -601,20 +599,20 @@
             
             document.getElementById('roll-value').textContent = baseTotal;
             document.getElementById('roll-breakdown').textContent = breakdown;
-            document.getElementById('roll-message').textContent = "Füge ggf. Hunter's Mark oder Sneak Attack hinzu (Schritt 4)";
+            document.getElementById('roll-message').textContent = "Ggf. zu Schritt 4 (Zusatzschaden)";
         }
         
         // Hunter's Mark hinzufügen
         function addHuntersMark() {
             if (!activeBuffs['hunters-mark']) {
-                document.getElementById('roll-message').textContent = "Hunter's Mark ist nicht aktiv. Bitte aktiviere es zuerst in Schritt 1.";
+                document.getElementById('roll-message').textContent = "Hunter's Mark nicht aktiv. Aktiviere es zuerst.";
                 return;
             }
             
             var huntersMarkRoll = parseInt(document.getElementById('hunters-mark-input').value);
             
             if (isNaN(huntersMarkRoll) || huntersMarkRoll < 1 || huntersMarkRoll > 6) {
-                document.getElementById('roll-message').textContent = "Bitte gib einen gültigen Wert zwischen 1 und 6 für Hunter's Mark ein.";
+                document.getElementById('roll-message').textContent = "Bitte gib einen gültigen Wert ein (1-6).";
                 return;
             }
             
@@ -629,7 +627,7 @@
             var sneakAttackRoll = parseInt(document.getElementById('sneak-attack-input').value);
             
             if (isNaN(sneakAttackRoll) || sneakAttackRoll < 1 || sneakAttackRoll > 6) {
-                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert zwischen 1 und 6 für Sneak Attack ein.';
+                document.getElementById('roll-message').textContent = 'Bitte gib einen gültigen Wert ein (1-6).';
                 return;
             }
             
@@ -646,11 +644,11 @@
             var breakdown = currentDamage.base + " (Waffe) + " + currentDamage.modifier + " (DEX)";
             
             if (currentDamage.huntersMark > 0) {
-                breakdown += " + " + currentDamage.huntersMark + " (Hunter's Mark)";
+                breakdown += " + " + currentDamage.huntersMark + " (HM)";
             }
             
             if (currentDamage.sneakAttack > 0) {
-                breakdown += " + " + currentDamage.sneakAttack + " (Sneak Attack)";
+                breakdown += " + " + currentDamage.sneakAttack + " (SA)";
             }
             
             breakdown += " = " + currentDamage.total;
@@ -658,7 +656,7 @@
             
             document.getElementById('roll-value').textContent = currentDamage.total;
             document.getElementById('roll-breakdown').textContent = breakdown;
-            document.getElementById('roll-message').textContent = 'Gesamtschaden berechnet!';
+            document.getElementById('roll-message').textContent = 'Gesamtschaden';
         }
         
         // Zurücksetzen des aktuellen Schadens
@@ -682,7 +680,7 @@
             var total = dieRoll + modifier;
             
             document.getElementById('roll-value').textContent = total;
-            document.getElementById('roll-breakdown').textContent = "Initiative: " + dieRoll + " + " + modifier + " (DEX) = " + total;
+            document.getElementById('roll-breakdown').textContent = "Initiative: " + dieRoll + " + 4 = " + total;
             document.getElementById('roll-message').textContent = '';
         }
         
@@ -732,7 +730,7 @@
             var total = dieRoll + bonus;
             
             document.getElementById('roll-value').textContent = total;
-            document.getElementById('roll-breakdown').textContent = abilityNameGerman + " Rettungswurf: " + dieRoll + " + " + bonus + " = " + total;
+            document.getElementById('roll-breakdown').textContent = abilityNameGerman + " RW: " + dieRoll + " + " + bonus + " = " + total;
             document.getElementById('roll-message').textContent = '';
             
             // Wechsle zum Combat-Tab, um das Ergebnis anzuzeigen
