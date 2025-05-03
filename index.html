@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilio Xaenor - DnD Charakter</title>
+    <title>Ilio Xaenor - Minimalistisches Blatt</title>
     <style>
         body {
             font-family: serif;
@@ -12,817 +12,704 @@
             background-color: white;
             color: black;
             font-size: 14px;
-            line-height: 1.3;
+            line-height: 1.2;
         }
         
-        h1, h2, h3 {
-            margin: 5px 0;
-        }
-        
-        h3 {
-            font-size: 16px;
-        }
-        
-        .main-container {
+        .container {
             display: table;
             width: 100%;
             table-layout: fixed;
         }
         
-        .character-sheet {
+        .character-column {
             display: table-cell;
             width: 65%;
             vertical-align: top;
-            padding-right: 5px;
         }
         
-        .character-image {
+        .image-column {
             display: table-cell;
             width: 35%;
             vertical-align: top;
             padding-left: 5px;
         }
         
-        .character-image img {
+        .character-image {
             width: 100%;
             border: 1px solid black;
-        }
-        
-        .compact-header {
             margin-bottom: 5px;
         }
         
-        .box {
+        .header {
+            margin-bottom: 5px;
+        }
+        
+        .section {
             border: 1px solid black;
             padding: 5px;
             margin-bottom: 5px;
         }
         
-        .ability-scores {
+        h1, h2, h3 {
+            margin: 0 0 5px 0;
+        }
+        
+        h1 {
+            font-size: 18px;
+        }
+        
+        h3 {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .abilities {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            margin-bottom: 5px;
+            border-spacing: 2px;
+        }
+        
+        .ability {
+            display: table-cell;
+            text-align: center;
+            padding: 2px 0;
+            border: 1px solid black;
+            font-size: 12px;
+        }
+        
+        .ability-value {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .tab-bar {
             display: table;
             width: 100%;
             table-layout: fixed;
             margin-bottom: 5px;
         }
         
-        .ability {
+        .tab {
             display: table-cell;
             text-align: center;
-            font-size: 12px;
-            padding: 2px;
             border: 1px solid black;
+            cursor: pointer;
+            padding: 3px 0;
         }
         
-        .ability-name {
+        .tab.active {
+            background-color: #ccc;
             font-weight: bold;
-        }
-        
-        .ability-value {
-            font-size: 16px;
-            font-weight: bold;
-        }
-        
-        button {
-            background-color: white;
-            border: 1px solid black;
-            padding: 3px;
-            margin: 2px;
-            font-family: serif;
-            font-size: 12px;
-        }
-        
-        input, select {
-            border: 1px solid black;
-            padding: 3px;
-            font-family: serif;
-            font-size: 12px;
-            background-color: white;
-        }
-        
-        .tab-buttons {
-            margin-bottom: 5px;
         }
         
         .tab-content {
             display: none;
         }
         
-        .active {
+        .tab-content.active {
             display: block;
-        }
-        
-        .split-layout {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-        }
-        
-        .actions-column {
-            display: table-cell;
-            width: 100%;
-            vertical-align: top;
-        }
-        
-        .results-column {
-            padding-left: 5px;
-        }
-        
-        .results-box {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
-        }
-        
-        .skill-item {
-            padding: 3px;
-            border-bottom: 1px solid #ccc;
-            cursor: pointer;
-        }
-        
-        .skill-value {
-            float: right;
-            font-weight: bold;
-        }
-        
-        .feature-item {
-            margin-bottom: 5px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
-        }
-        
-        .feature-name {
-            font-weight: bold;
-        }
-        
-        .dice-result {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 5px 0;
-        }
-        
-        .dice-breakdown {
-            margin-bottom: 5px;
-        }
-        
-        #roll-message {
-            margin: 5px 0;
-            padding: 3px;
-            border: 1px dashed #ccc;
-        }
-        
-        #current-damage-container {
-            margin-top: 5px;
-            padding: 3px;
-            border: 1px solid black;
         }
         
         .hp-controls {
             display: table;
             width: 100%;
-            margin: 5px 0;
+            table-layout: fixed;
+            margin-bottom: 5px;
         }
         
         .hp-display {
-            font-size: 16px;
+            display: table-cell;
+            text-align: left;
+            vertical-align: middle;
             font-weight: bold;
-            margin-bottom: 5px;
         }
         
         .hp-buttons {
-            text-align: center;
+            display: table-cell;
+            text-align: right;
         }
         
         .hp-button {
-            width: 40px;
+            width: 30px;
             height: 30px;
             font-size: 16px;
             font-weight: bold;
-            margin: 0 5px;
+            margin: 0 2px;
         }
         
         .hp-input {
-            width: 40px;
+            width: 30px;
             text-align: center;
-            margin: 0 5px;
         }
         
-        .number-pad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-gap: 5px;
+        .skill-item {
+            display: table;
+            width: 100%;
+            padding: 2px 0;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        
+        .skill-name {
+            display: table-cell;
+            text-align: left;
+        }
+        
+        .skill-value {
+            display: table-cell;
+            text-align: right;
+            font-weight: bold;
+            width: 30px;
+        }
+        
+        .buff-toggles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
             margin-bottom: 5px;
         }
         
-        .num-button {
-            width: 100%;
-            height: 30px;
-            font-size: 16px;
+        .buff-toggle {
+            flex: 1;
+            min-width: 80px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        
+        .buff-toggle.active {
+            background-color: #ccc;
             font-weight: bold;
         }
         
         .dice-input {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 5px;
-            font-size: 16px;
-            height: 30px;
+            width: 60px;
         }
         
-        .current-value {
-            text-align: center;
-            font-size: 18px;
+        .compact-section {
+            margin-bottom: 10px;
+        }
+        
+        .result-display {
+            font-size: 20px;
             font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .result-detail {
+            font-size: 14px;
             margin-bottom: 5px;
         }
         
-        .button-section {
+        .quick-dice {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin: 5px 0;
         }
         
-        .button-section button {
+        .dice-btn {
+            padding: 5px;
+            min-width: 20px;
+            text-align: center;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        
+        .dice-row {
+            display: flex;
+            margin-bottom: 5px;
+            align-items: center;
+        }
+        
+        .dice-label {
+            width: 50px;
+        }
+        
+        .dice-controls {
             flex: 1;
-            margin: 0 2px;
+            display: flex;
+            gap: 3px;
+        }
+        
+        button {
+            background-color: white;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        
+        select {
+            border: 1px solid black;
+            background-color: white;
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="character-sheet">
-            <div class="compact-header">
-                <h1 style="margin:0;">Ilio Xaenor</h1>
-                <small>Waldelf (Gloomstalker Ranger 4 / Rogue 1) | RK: 16 | Bewegung: 35 ft | Übungsbonus: +3</small>
-            </div>
-            
-            <div class="hp-controls box">
-                <div class="hp-display">
-                    Trefferpunkte: <span id="current-hp">16</span>/<span id="max-hp">21</span>
-                </div>
-                <div class="hp-buttons">
-                    <input type="number" id="hp-change" class="hp-input" value="1" min="1">
-                    <button class="hp-button" onclick="modifyHP(-1)">-</button>
-                    <button class="hp-button" onclick="modifyHP(1)">+</button>
+    <div class="container">
+        <div class="character-column">
+            <div class="header">
+                <h1>Ilio Xaenor</h1>
+                <small>Waldelf Gloomstalker 4/Rogue 1 | RK 16 | Speed 35ft</small>
+                
+                <div class="hp-controls section">
+                    <div class="hp-display">TP: <span id="current-hp">16</span>/<span id="max-hp">21</span></div>
+                    <div class="hp-buttons">
+                        <input type="number" id="hp-change" class="hp-input" value="1" min="1">
+                        <button class="hp-button" onclick="modifyHP(-1)">-</button>
+                        <button class="hp-button" onclick="modifyHP(1)">+</button>
+                    </div>
                 </div>
             </div>
             
-            <div class="ability-scores">
+            <div class="abilities">
                 <div class="ability">
-                    <div class="ability-name">STR</div>
+                    <div>STR</div>
                     <div class="ability-value">10</div>
                     <div>+0</div>
                 </div>
                 <div class="ability">
-                    <div class="ability-name">DEX</div>
+                    <div>DEX</div>
                     <div class="ability-value">18</div>
                     <div>+4</div>
                 </div>
                 <div class="ability">
-                    <div class="ability-name">CON</div>
+                    <div>CON</div>
                     <div class="ability-value">14</div>
                     <div>+2</div>
                 </div>
                 <div class="ability">
-                    <div class="ability-name">INT</div>
+                    <div>INT</div>
                     <div class="ability-value">10</div>
                     <div>+0</div>
                 </div>
                 <div class="ability">
-                    <div class="ability-name">WIS</div>
+                    <div>WIS</div>
                     <div class="ability-value">14</div>
                     <div>+2</div>
                 </div>
                 <div class="ability">
-                    <div class="ability-name">CHA</div>
+                    <div>CHA</div>
                     <div class="ability-value">10</div>
                     <div>+0</div>
                 </div>
             </div>
             
-            <div class="tab-buttons">
-                <button onclick="openTab('combat')">Kampf</button>
-                <button onclick="openTab('skills')">Fertigkeiten</button>
-                <button onclick="openTab('features')">Merkmale & Zauber</button>
+            <div class="tab-bar">
+                <div class="tab active" onclick="changeTab('combat')">Kampf</div>
+                <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
+                <div class="tab" onclick="changeTab('features')">Merkmale</div>
             </div>
             
+            <!-- Combat Tab -->
             <div id="combat" class="tab-content active">
-                <div class="box">
-                    <button onclick="toggleBuff('hunters-mark')">Hunter's Mark</button>
-                    <button onclick="toggleBuff('sharpshooter')">Sharpshooter</button>
+                <!-- Buffs -->
+                <div class="section">
+                    <div class="buff-toggles">
+                        <div id="buff-hunters-mark" class="buff-toggle" onclick="toggleBuff('hunters-mark')">Hunter's Mark</div>
+                        <div id="buff-sharpshooter" class="buff-toggle" onclick="toggleBuff('sharpshooter')">Sharpshooter</div>
+                    </div>
                 </div>
                 
-                <div class="split-layout">
-                    <div class="actions-column">
-                        <div class="box">
-                            <h3>Angriffswurf (d20)</h3>
-                            <div class="current-value" id="current-d20-value">-</div>
-                            <div class="number-pad" id="d20-numpad">
-                                <button class="num-button" onclick="setDiceValue('d20', 1)">1</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 2)">2</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 3)">3</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 4)">4</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 5)">5</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 6)">6</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 7)">7</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 8)">8</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 9)">9</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 10)">10</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 11)">11</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 12)">12</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 13)">13</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 14)">14</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 15)">15</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 16)">16</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 17)">17</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 18)">18</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 19)">19</button>
-                                <button class="num-button" onclick="setDiceValue('d20', 20)">20</button>
-                                <button class="num-button" onclick="clearDiceValue('d20')">C</button>
-                            </div>
-                            <div class="button-section">
-                                <select id="attack-weapon-select">
-                                    <option value="bow">Bogen</option>
-                                    <option value="dagger">Dolch</option>
-                                </select>
-                                <button onclick="calculateAttack()">OK</button>
-                            </div>
+                <!-- Dice Rolls -->
+                <div class="section">
+                    <!-- Attack Roll -->
+                    <div class="dice-row">
+                        <div class="dice-label">Angriff</div>
+                        <div class="dice-controls">
+                            <input type="number" id="attack-roll" class="dice-input" min="1" max="20" placeholder="d20">
+                            <select id="attack-weapon">
+                                <option value="bow">Bogen</option>
+                                <option value="dagger">Dolch</option>
+                            </select>
+                            <button onclick="rollAttack()">OK</button>
                         </div>
-                        
-                        <div class="box">
-                            <h3>Schadenswurf</h3>
-                            <div class="current-value" id="current-damage-die-value">-</div>
-                            <div class="number-pad" id="damage-numpad">
-                                <button class="num-button" onclick="setDiceValue('damage', 1)">1</button>
-                                <button class="num-button" onclick="setDiceValue('damage', 2)">2</button>
-                                <button class="num-button" onclick="setDiceValue('damage', 3)">3</button>
-                                <button class="num-button" onclick="setDiceValue('damage', 4)">4</button>
-                                <button class="num-button" onclick="setDiceValue('damage', 5)">5</button>
-                                <button class="num-button" onclick="setDiceValue('damage', 6)">6</button>
-                                <button class="num-button" onclick="setDiceValue('damage', 7)">7</button>
-                                <button class="num-button" onclick="setDiceValue('damage', 8)">8</button>
-                                <button class="num-button" onclick="clearDiceValue('damage')">C</button>
-                            </div>
-                            <div class="button-section">
-                                <select id="damage-weapon-select">
-                                    <option value="bow">Bogen (d8)</option>
-                                    <option value="dagger">Dolch (d4)</option>
-                                </select>
-                                <button onclick="calculateDamage()">OK</button>
-                            </div>
+                    </div>
+                    
+                    <div class="quick-dice">
+                        <div class="dice-btn" onclick="quickInputAttack(2)">2</div>
+                        <div class="dice-btn" onclick="quickInputAttack(5)">5</div>
+                        <div class="dice-btn" onclick="quickInputAttack(10)">10</div>
+                        <div class="dice-btn" onclick="quickInputAttack(15)">15</div>
+                        <div class="dice-btn" onclick="quickInputAttack(18)">18</div>
+                        <div class="dice-btn" onclick="quickInputAttack(20)">20</div>
+                    </div>
+                    
+                    <!-- Damage Roll -->
+                    <div class="dice-row">
+                        <div class="dice-label">Schaden</div>
+                        <div class="dice-controls">
+                            <input type="number" id="damage-roll" class="dice-input" min="1" max="8" placeholder="W8/W4">
+                            <select id="damage-weapon">
+                                <option value="bow">Bogen (d8)</option>
+                                <option value="dagger">Dolch (d4)</option>
+                            </select>
+                            <button onclick="rollDamage()">OK</button>
                         </div>
-                        
-                        <div class="box">
-                            <h3>Zusatzschaden</h3>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <div style="width: 48%;">
-                                    <div class="current-value" id="current-hm-value">-</div>
-                                    <div class="number-pad" id="hm-numpad" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 2px;">
-                                        <button class="num-button" onclick="setDiceValue('hm', 1)">1</button>
-                                        <button class="num-button" onclick="setDiceValue('hm', 2)">2</button>
-                                        <button class="num-button" onclick="setDiceValue('hm', 3)">3</button>
-                                        <button class="num-button" onclick="setDiceValue('hm', 4)">4</button>
-                                        <button class="num-button" onclick="setDiceValue('hm', 5)">5</button>
-                                        <button class="num-button" onclick="setDiceValue('hm', 6)">6</button>
-                                    </div>
-                                    <button style="width: 100%;" onclick="addHuntersMark()">+ Hunter's Mark</button>
-                                </div>
-                                <div style="width: 48%;">
-                                    <div class="current-value" id="current-sa-value">-</div>
-                                    <div class="number-pad" id="sa-numpad" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 2px;">
-                                        <button class="num-button" onclick="setDiceValue('sa', 1)">1</button>
-                                        <button class="num-button" onclick="setDiceValue('sa', 2)">2</button>
-                                        <button class="num-button" onclick="setDiceValue('sa', 3)">3</button>
-                                        <button class="num-button" onclick="setDiceValue('sa', 4)">4</button>
-                                        <button class="num-button" onclick="setDiceValue('sa', 5)">5</button>
-                                        <button class="num-button" onclick="setDiceValue('sa', 6)">6</button>
-                                    </div>
-                                    <button style="width: 100%;" onclick="addSneakAttack()">+ Sneak Attack</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="box">
-                            <button onclick="rollInitiative()">Initiative</button>
-                            <button onclick="openTab('skills')">Fertigkeiten</button>
+                    </div>
+                    
+                    <div class="quick-dice">
+                        <div class="dice-btn" onclick="quickInputDamage(1)">1</div>
+                        <div class="dice-btn" onclick="quickInputDamage(2)">2</div>
+                        <div class="dice-btn" onclick="quickInputDamage(3)">3</div>
+                        <div class="dice-btn" onclick="quickInputDamage(4)">4</div>
+                        <div class="dice-btn" onclick="quickInputDamage(5)">5</div>
+                        <div class="dice-btn" onclick="quickInputDamage(6)">6</div>
+                        <div class="dice-btn" onclick="quickInputDamage(7)">7</div>
+                        <div class="dice-btn" onclick="quickInputDamage(8)">8</div>
+                    </div>
+                    
+                    <!-- Sneak Attack -->
+                    <div class="dice-row">
+                        <div class="dice-label">Sneak</div>
+                        <div class="dice-controls">
+                            <input type="number" id="sneak-roll" class="dice-input" min="1" max="6" placeholder="W6">
+                            <button onclick="addSneakAttack()">+SA</button>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Other Rolls -->
+                <div class="section">
+                    <button onclick="rollInitiative()">Initiative</button>
+                    <button onclick="clearResults()">Zurücksetzen</button>
+                </div>
             </div>
             
+            <!-- Skills Tab -->
             <div id="skills" class="tab-content">
-                <h3>Fertigkeiten</h3>
-                <div class="box">
+                <div class="section">
+                    <h3>Fertigkeiten</h3>
                     <div class="skill-item" onclick="rollSkill('acrobatics', 10)">
-                        <span>Akrobatik (DEX)</span>
+                        <span class="skill-name">Akrobatik (DEX)</span>
                         <span class="skill-value">+10</span>
                     </div>
                     <div class="skill-item" onclick="rollSkill('athletics', 3)">
-                        <span>Athletik (STR)</span>
+                        <span class="skill-name">Athletik (STR)</span>
                         <span class="skill-value">+3</span>
                     </div>
                     <div class="skill-item" onclick="rollSkill('stealth', 10)">
-                        <span>Heimlichkeit (DEX)</span>
+                        <span class="skill-name">Heimlichkeit (DEX)</span>
                         <span class="skill-value">+10</span>
                     </div>
                     <div class="skill-item" onclick="rollSkill('survival', 5)">
-                        <span>Überlebenskunst (WIS)</span>
+                        <span class="skill-name">Überlebenskunst (WIS)</span>
                         <span class="skill-value">+5</span>
                     </div>
                     <div class="skill-item" onclick="rollSkill('perception', 8)">
-                        <span>Wahrnehmung (WIS)</span>
+                        <span class="skill-name">Wahrnehmung (WIS)</span>
                         <span class="skill-value">+8</span>
                     </div>
                     <div class="skill-item" onclick="rollSkill('thieves-tools', 7)">
-                        <span>Diebeswerkzeug (DEX)</span>
+                        <span class="skill-name">Diebeswerkzeug (DEX)</span>
                         <span class="skill-value">+7</span>
                     </div>
                 </div>
                 
-                <h3>Rettungswürfe</h3>
-                <div class="box">
+                <div class="section">
+                    <h3>Rettungswürfe</h3>
                     <div class="skill-item" onclick="rollSave('str')">
-                        <span>Stärke</span>
+                        <span class="skill-name">Stärke</span>
                         <span class="skill-value">+3</span>
                     </div>
                     <div class="skill-item" onclick="rollSave('dex')">
-                        <span>Geschicklichkeit</span>
+                        <span class="skill-name">Geschicklichkeit</span>
                         <span class="skill-value">+7</span>
                     </div>
                     <div class="skill-item" onclick="rollSave('con')">
-                        <span>Konstitution</span>
+                        <span class="skill-name">Konstitution</span>
                         <span class="skill-value">+2</span>
                     </div>
                     <div class="skill-item" onclick="rollSave('int')">
-                        <span>Intelligenz</span>
+                        <span class="skill-name">Intelligenz</span>
                         <span class="skill-value">+0</span>
                     </div>
                     <div class="skill-item" onclick="rollSave('wis')">
-                        <span>Weisheit</span>
+                        <span class="skill-name">Weisheit</span>
                         <span class="skill-value">+2</span>
                     </div>
                     <div class="skill-item" onclick="rollSave('cha')">
-                        <span>Charisma</span>
+                        <span class="skill-name">Charisma</span>
                         <span class="skill-value">+0</span>
                     </div>
                 </div>
             </div>
             
+            <!-- Features Tab -->
             <div id="features" class="tab-content">
-                <h3>Merkmale</h3>
-                <div class="box">
-                    <div class="feature-item">
-                        <div class="feature-name">Darkvision (120 ft)</div>
-                        <p>Du kannst in Dunkelheit bis zu 120 Fuß weit sehen, als wäre es dämmriges Licht.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Fey Ancestry</div>
-                        <p>Du hast Vorteil bei Rettungswürfen gegen Bezauberung und kannst nicht durch Magie in den Schlaf versetzt werden.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Trance</div>
-                        <p>Anstatt zu schlafen, meditierst du tief für 4 Stunden pro Tag.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Archery Fighting Style</div>
-                        <p>Du erhältst einen Bonus von +2 auf Angriffswürfe mit Fernkampfwaffen.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Unseen in Darkness</div>
-                        <p>Du bist unsichtbar für Kreaturen, die nur auf Darkvision angewiesen sind, um dich zu sehen.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Sharpshooter</div>
-                        <p>Keine Nachteile bei großer Reichweite, ignoriert Deckung, kein Nachteil im Nahkampf.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Expertise</div>
-                        <p>Dein Übungsbonus ist in Akrobatik, Heimlichkeit und Wahrnehmung verdoppelt.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Sneak Attack</div>
-                        <p>Einmal pro Zug 1W6 Zusatzschaden bei Vorteil oder wenn ein Verbündeter neben dem Ziel steht.</p>
+                <div class="section">
+                    <div class="buff-toggles">
+                        <div id="spell-hunters-mark" class="buff-toggle" onclick="toggleBuff('hunters-mark')">Hunter's Mark</div>
+                        <div id="spell-fog-cloud" class="buff-toggle" onclick="toggleSpell('fog-cloud')">Fog Cloud</div>
                     </div>
                 </div>
                 
-                <h3>Zauber</h3>
-                <div class="box">
-                    <div class="feature-item">
-                        <div class="feature-name">Hunter's Mark (Bonusaktion)</div>
-                        <p>Konzentration, 1 Stunde. +1W6 Schaden gegen markiertes Ziel.</p>
-                        <button onclick="toggleBuff('hunters-mark')">Aktivieren/Deaktivieren</button>
+                <div class="section">
+                    <div style="margin-bottom: 5px;">
+                        <b>Darkvision (120 ft)</b><br>
+                        Sehen in Dunkelheit als wäre es dämmrig.
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Fog Cloud (Aktion)</div>
-                        <p>Konzentration, 1 Stunde. 20-Fuß Nebel erzeugt stark verhülltes Gelände.</p>
+                    <div style="margin-bottom: 5px;">
+                        <b>Fey Ancestry</b><br>
+                        Vorteil gegen Bezauberung, immun gegen magischen Schlaf.
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Goodberry (Aktion)</div>
-                        <p>10 Beeren, je 1 TP Heilung und 1 Tag Nahrung.</p>
+                    <div style="margin-bottom: 5px;">
+                        <b>Unseen in Darkness</b><br>
+                        Unsichtbar für Kreaturen, die nur Darkvision nutzen.
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Beast Bond (Aktion)</div>
-                        <p>Konzentration, 10 Minuten. Telepathie mit freundlichem Tier.</p>
+                    <div style="margin-bottom: 5px;">
+                        <b>Expertise</b><br>
+                        Doppelter Übungsbonus in Akrobatik, Heimlichkeit, Wahrnehmung.
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Cure Wounds (Aktion)</div>
-                        <p>Berührung. Heile 1W8 + WIS Mod.</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-name">Ensnaring Strike (Bonusaktion)</div>
-                        <p>Konzentration, 1 Minute. Nächster Angriff erzeugt fesselnde Ranken.</p>
+                    <div style="margin-bottom: 5px;">
+                        <b>Sneak Attack</b><br>
+                        1W6 Zusatzschaden bei Vorteil/Verbündetem.
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="character-image">
-            <img src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Ilio Xaenor">
+        <div class="image-column">
+            <img src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Ilio Xaenor" class="character-image">
             
-            <div class="box results-box">
-                <h3>Würfelergebnis</h3>
-                <div class="dice-result" id="roll-value">-</div>
-                <div class="dice-breakdown" id="roll-breakdown"></div>
-                <div id="roll-message"></div>
-                <div id="current-damage-container" style="display: none;">
-                    <div id="current-damage-value" style="font-size: 20px; font-weight: bold;">0</div>
-                    <div id="current-damage-breakdown"></div>
-                    <button onclick="resetDamage()">Zurücksetzen</button>
+            <div class="section">
+                <div class="result-display" id="result-value">-</div>
+                <div class="result-detail" id="result-breakdown"></div>
+                <div id="damage-display" style="display: none;">
+                    <div class="result-display" id="total-damage">0</div>
+                    <div class="result-detail" id="damage-breakdown"></div>
+                    <button onclick="clearDamage()">Reset</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Dice input values
-        var diceValues = {
-            'd20': null,
-            'damage': null,
-            'hm': null,
-            'sa': null
+        // Active Buffs
+        var buffs = {
+            'hunters-mark': false,
+            'sharpshooter': false,
+            'fog-cloud': false
         };
         
-        function setDiceValue(diceType, value) {
-            diceValues[diceType] = value;
-            document.getElementById('current-' + diceType + '-value').textContent = value;
+        // Damage tracking
+        var damage = {
+            base: 0,
+            modifier: 0,
+            huntersMark: 0,
+            sneakAttack: 0,
+            total: 0
+        };
+        
+        // Change tab
+        function changeTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
             
-            // Set the corresponding input field (if it exists)
-            if (diceType === 'd20') {
-                document.getElementById('attack-roll-input').value = value;
-            } else if (diceType === 'damage') {
-                document.getElementById('damage-roll-input').value = value;
-            } else if (diceType === 'hm') {
-                document.getElementById('hunters-mark-input').value = value;
-            } else if (diceType === 'sa') {
-                document.getElementById('sneak-attack-input').value = value;
-            }
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to tab button
+            document.querySelectorAll('.tab').forEach(tab => {
+                if (tab.textContent.toLowerCase().includes(tabName)) {
+                    tab.classList.add('active');
+                }
+            });
         }
         
-        function clearDiceValue(diceType) {
-            diceValues[diceType] = null;
-            document.getElementById('current-' + diceType + '-value').textContent = '-';
-        }
-        
-        // Add hidden input fields for compatibility
-        document.body.innerHTML += '<input type="hidden" id="attack-roll-input"><input type="hidden" id="damage-roll-input"><input type="hidden" id="hunters-mark-input"><input type="hidden" id="sneak-attack-input">';
-        
-        // Tab-Wechsel
-        function openTab(tabName) {
-            var tabContent = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < tabContent.length; i++) {
-                tabContent[i].style.display = "none";
+        // Toggle buff
+        function toggleBuff(buffName) {
+            buffs[buffName] = !buffs[buffName];
+            
+            // Update UI
+            document.getElementById('buff-' + buffName).classList.toggle('active', buffs[buffName]);
+            
+            // Also update in spells tab if exists
+            if (document.getElementById('spell-' + buffName)) {
+                document.getElementById('spell-' + buffName).classList.toggle('active', buffs[buffName]);
             }
             
-            document.getElementById(tabName).style.display = "block";
+            // Show message
+            document.getElementById('result-value').textContent = buffs[buffName] ? 
+                buffName + " aktiv" : 
+                buffName + " inaktiv";
+            document.getElementById('result-breakdown').textContent = "";
         }
         
-        // Alle Tabs initial ausblenden außer combat
-        document.getElementById("skills").style.display = "none";
-        document.getElementById("features").style.display = "none";
-        
-        // Würfelfunktionen
-        function rollDice(sides) {
-            return Math.floor(Math.random() * sides) + 1;
+        // Toggle spell (same as buff for now)
+        function toggleSpell(spellName) {
+            buffs[spellName] = !buffs[spellName];
+            document.getElementById('spell-' + spellName).classList.toggle('active', buffs[spellName]);
+            
+            document.getElementById('result-value').textContent = buffs[spellName] ? 
+                spellName + " aktiv" : 
+                spellName + " inaktiv";
+            document.getElementById('result-breakdown').textContent = "";
         }
         
-        // Lebenspunkte verwalten
+        // HP Management
         function modifyHP(modifier) {
-            var changeAmount = parseInt(document.getElementById('hp-change').value);
-            if (isNaN(changeAmount) || changeAmount < 1) {
-                changeAmount = 1;
-                document.getElementById('hp-change').value = 1;
-            }
-            
+            var amount = parseInt(document.getElementById('hp-change').value) || 1;
             var currentHP = parseInt(document.getElementById('current-hp').textContent);
             var maxHP = parseInt(document.getElementById('max-hp').textContent);
             
-            if (modifier > 0) { // Heilung
-                currentHP = Math.min(currentHP + (changeAmount * 1), maxHP);
-            } else { // Schaden
-                currentHP = Math.max(currentHP + (changeAmount * -1), 0);
+            if (modifier > 0) {
+                // Healing
+                currentHP = Math.min(currentHP + amount, maxHP);
+            } else {
+                // Damage
+                currentHP = Math.max(currentHP - amount, 0);
             }
             
             document.getElementById('current-hp').textContent = currentHP;
         }
         
-        // Aktive Buffs
-        var activeBuffs = {
-            'hunters-mark': false,
-            'sharpshooter': false
-        };
-        
-        var currentDamage = {
-            base: 0,
-            huntersMark: 0,
-            sneakAttack: 0,
-            modifier: 0,
-            total: 0
-        };
-        
-        function toggleBuff(buffName) {
-            activeBuffs[buffName] = !activeBuffs[buffName];
-            
-            var message = '';
-            if (buffName === 'hunters-mark') {
-                message = activeBuffs[buffName] ? 
-                    "Hunter's Mark aktiv (+1d6)" : 
-                    "Hunter's Mark inaktiv";
-            } else if (buffName === 'sharpshooter') {
-                message = activeBuffs[buffName] ? 
-                    "Sharpshooter aktiv" : 
-                    "Sharpshooter inaktiv";
-            }
-            
-            document.getElementById('roll-value').textContent = message;
-            document.getElementById('roll-breakdown').textContent = 'Gehe zu Schritt 2';
-            document.getElementById('roll-message').textContent = '';
-            
-            // Wechsle zum Combat-Tab, um das Ergebnis anzuzeigen
-            openTab('combat');
+        // Quick input for attack roll
+        function quickInputAttack(value) {
+            document.getElementById('attack-roll').value = value;
         }
         
-        // Angriff berechnen aus Eingabe
-        function calculateAttack() {
-            var dieRoll = diceValues['d20'];
-            if (dieRoll === null) {
-                document.getElementById('roll-message').textContent = 'Bitte wähle einen d20-Wert.';
-                return;
-            }
-            
-            var weaponType = document.getElementById('attack-weapon-select').value;
-            var modifier = 7; // Basis: +4 DEX, +3 Prof
-            
-            var total = dieRoll + modifier;
-            var breakdown = "d20: " + dieRoll + " + 7 = " + total;
-            
-            var message = '';
-            if (dieRoll === 20) {
-                message = 'Kritischer Treffer!';
-            } else if (dieRoll === 1) {
-                message = 'Kritischer Fehlschlag!';
-            }
-            
-            document.getElementById('roll-value').textContent = total;
-            document.getElementById('roll-breakdown').textContent = breakdown;
-            document.getElementById('roll-message').textContent = message;
-            
-            if (dieRoll !== 1) {
-                document.getElementById('roll-message').textContent += ' → Weiter zu Schritt 3';
-            }
-            
-            // Clear the dice value
-            clearDiceValue('d20');
+        // Quick input for damage roll
+        function quickInputDamage(value) {
+            document.getElementById('damage-roll').value = value;
         }
         
-        // Schaden berechnen aus Eingabe
-        function calculateDamage() {
-            var dieRoll = diceValues['damage'];
-            if (dieRoll === null) {
-                document.getElementById('roll-message').textContent = 'Bitte wähle einen Schadenswürfelwert.';
+        // Attack Roll
+        function rollAttack() {
+            var roll = parseInt(document.getElementById('attack-roll').value);
+            if (isNaN(roll) || roll < 1 || roll > 20) {
+                document.getElementById('result-breakdown').textContent = "Ungültiger Wert (1-20)";
                 return;
             }
             
-            var weaponType = document.getElementById('damage-weapon-select').value;
-            var diceMax = weaponType === 'bow' ? 8 : 4;
+            var weapon = document.getElementById('attack-weapon').value;
+            var modifier = 7; // Base: +4 DEX, +3 Prof
             
-            if (dieRoll > diceMax) {
-                document.getElementById('roll-message').textContent = 'Wert zu hoch für die Waffe (max ' + diceMax + ').';
-                return;
-            }
+            // Calculate total
+            var total = roll + modifier;
             
-            resetDamage();
+            // Display result
+            var resultText = roll === 20 ? "Kritischer Treffer!" : (roll === 1 ? "Fehlschlag!" : total);
+            document.getElementById('result-value').textContent = resultText;
+            document.getElementById('result-breakdown').textContent = "d20: " + roll + " + " + modifier + " = " + total;
             
-            // Grundschaden
-            var modifier = 4; // DEX Mod
-            var baseTotal = dieRoll + modifier;
-            
-            currentDamage.base = dieRoll;
-            currentDamage.modifier = modifier;
-            currentDamage.total = baseTotal;
-            
-            // Breakdown erstellen
-            var breakdown = dieRoll + " (Waffe) + 4 (DEX) = " + baseTotal;
-            
-            document.getElementById('current-damage-container').style.display = 'block';
-            document.getElementById('current-damage-value').textContent = baseTotal;
-            document.getElementById('current-damage-breakdown').textContent = breakdown;
-            
-            document.getElementById('roll-value').textContent = baseTotal;
-            document.getElementById('roll-breakdown').textContent = breakdown;
-            document.getElementById('roll-message').textContent = "Ggf. zu Schritt 4 (Zusatzschaden)";
-            
-            // Clear the dice value
-            clearDiceValue('damage');
+            // Clear the input
+            document.getElementById('attack-roll').value = "";
         }
         
-        // Hunter's Mark hinzufügen
-        function addHuntersMark() {
-            if (!activeBuffs['hunters-mark']) {
-                document.getElementById('roll-message').textContent = "Hunter's Mark nicht aktiv. Aktiviere es zuerst.";
+        // Damage Roll
+        function rollDamage() {
+            var roll = parseInt(document.getElementById('damage-roll').value);
+            var weapon = document.getElementById('damage-weapon').value;
+            var maxDice = weapon === 'bow' ? 8 : 4;
+            
+            if (isNaN(roll) || roll < 1 || roll > maxDice) {
+                document.getElementById('result-breakdown').textContent = "Ungültiger Wert (1-" + maxDice + ")";
                 return;
             }
             
-            var huntersMarkRoll = diceValues['hm'];
-            if (huntersMarkRoll === null) {
-                document.getElementById('roll-message').textContent = "Bitte wähle einen Wert für Hunter's Mark.";
-                return;
+            // Reset damage
+            clearDamage();
+            
+            // Calculate base damage
+            var modifier = 4; // DEX
+            var totalDamage = roll + modifier;
+            
+            // Update damage object
+            damage.base = roll;
+            damage.modifier = modifier;
+            damage.total = totalDamage;
+            
+            // Add Hunter's Mark if active
+            if (buffs['hunters-mark']) {
+                var huntersMarkRoll = Math.floor(Math.random() * 6) + 1;
+                damage.huntersMark = huntersMarkRoll;
+                damage.total += huntersMarkRoll;
             }
             
-            currentDamage.huntersMark = huntersMarkRoll;
-            currentDamage.total += huntersMarkRoll;
-            
+            // Update display
             updateDamageDisplay();
             
-            // Clear the dice value
-            clearDiceValue('hm');
+            // Clear input
+            document.getElementById('damage-roll').value = "";
         }
         
-        // Sneak Attack hinzufügen
+        // Add Sneak Attack
         function addSneakAttack() {
-            var sneakAttackRoll = diceValues['sa'];
-            if (sneakAttackRoll === null) {
-                document.getElementById('roll-message').textContent = 'Bitte wähle einen Wert für Sneak Attack.';
+            var roll = parseInt(document.getElementById('sneak-roll').value);
+            
+            if (isNaN(roll) || roll < 1 || roll > 6) {
+                document.getElementById('result-breakdown').textContent = "Ungültiger Wert (1-6)";
                 return;
             }
             
-            currentDamage.sneakAttack = sneakAttackRoll;
-            currentDamage.total += sneakAttackRoll;
+            // Add to damage
+            damage.sneakAttack = roll;
+            damage.total += roll;
             
+            // Update display
             updateDamageDisplay();
             
-            // Clear the dice value
-            clearDiceValue('sa');
+            // Clear input
+            document.getElementById('sneak-roll').value = "";
         }
         
-        // Aktualisiere die Schadensanzeige
+        // Update damage display
         function updateDamageDisplay() {
-            document.getElementById('current-damage-value').textContent = currentDamage.total;
+            document.getElementById('damage-display').style.display = 'block';
+            document.getElementById('total-damage').textContent = damage.total;
             
-            var breakdown = currentDamage.base + " (Waffe) + " + currentDamage.modifier + " (DEX)";
+            var breakdown = damage.base + " (Waffe) + " + damage.modifier + " (DEX)";
             
-            if (currentDamage.huntersMark > 0) {
-                breakdown += " + " + currentDamage.huntersMark + " (HM)";
+            if (damage.huntersMark > 0) {
+                breakdown += " + " + damage.huntersMark + " (HM)";
             }
             
-            if (currentDamage.sneakAttack > 0) {
-                breakdown += " + " + currentDamage.sneakAttack + " (SA)";
+            if (damage.sneakAttack > 0) {
+                breakdown += " + " + damage.sneakAttack + " (SA)";
             }
             
-            breakdown += " = " + currentDamage.total;
-            document.getElementById('current-damage-breakdown').textContent = breakdown;
-            
-            document.getElementById('roll-value').textContent = currentDamage.total;
-            document.getElementById('roll-breakdown').textContent = breakdown;
-            document.getElementById('roll-message').textContent = 'Gesamtschaden';
+            document.getElementById('damage-breakdown').textContent = breakdown;
+            document.getElementById('result-value').textContent = damage.total;
+            document.getElementById('result-breakdown').textContent = breakdown;
         }
         
-        // Zurücksetzen des aktuellen Schadens
-        function resetDamage() {
-            currentDamage = {
+        // Clear damage
+        function clearDamage() {
+            damage = {
                 base: 0,
+                modifier: 0,
                 huntersMark: 0,
                 sneakAttack: 0,
-                modifier: 0,
                 total: 0
             };
             
-            document.getElementById('current-damage-value').textContent = '0';
-            document.getElementById('current-damage-breakdown').textContent = '';
+            document.getElementById('damage-display').style.display = 'none';
         }
         
-        // Initiative
+        // Roll initiative
         function rollInitiative() {
-            var dieRoll = rollDice(20);
-            var modifier = 4; // DEX Mod
-            var total = dieRoll + modifier;
+            var roll = Math.floor(Math.random() * 20) + 1;
+            var modifier = 4; // DEX
+            var total = roll + modifier;
             
-            document.getElementById('roll-value').textContent = total;
-            document.getElementById('roll-breakdown').textContent = "Initiative: " + dieRoll + " + 4 = " + total;
-            document.getElementById('roll-message').textContent = '';
+            document.getElementById('result-value').textContent = total;
+            document.getElementById('result-breakdown').textContent = "Initiative: " + roll + " + " + modifier;
         }
         
-        // Fertigkeitswürfe
+        // Roll skill check
         function rollSkill(skillName, bonus) {
-            var dieRoll = rollDice(20);
-            var total = dieRoll + bonus;
+            var roll = Math.floor(Math.random() * 20) + 1;
+            var total = roll + bonus;
             
             var skillNameGerman = {
                 'acrobatics': 'Akrobatik',
@@ -833,17 +720,16 @@
                 'thieves-tools': 'Diebeswerkzeug'
             }[skillName];
             
-            document.getElementById('roll-value').textContent = total;
-            document.getElementById('roll-breakdown').textContent = skillNameGerman + ": " + dieRoll + " + " + bonus + " = " + total;
-            document.getElementById('roll-message').textContent = '';
+            document.getElementById('result-value').textContent = total;
+            document.getElementById('result-breakdown').textContent = skillNameGerman + ": " + roll + " + " + bonus;
             
-            // Wechsle zum Combat-Tab, um das Ergebnis anzuzeigen
-            openTab('combat');
+            // Switch back to combat tab
+            changeTab('combat');
         }
         
-        // Rettungswürfe
+        // Roll saving throw
         function rollSave(ability) {
-            var dieRoll = rollDice(20);
+            var roll = Math.floor(Math.random() * 20) + 1;
             var bonus = {
                 'str': 3,
                 'dex': 7,
@@ -852,6 +738,8 @@
                 'wis': 2,
                 'cha': 0
             }[ability];
+            
+            var total = roll + bonus;
             
             var abilityNameGerman = {
                 'str': 'Stärke',
@@ -862,14 +750,18 @@
                 'cha': 'Charisma'
             }[ability];
             
-            var total = dieRoll + bonus;
+            document.getElementById('result-value').textContent = total;
+            document.getElementById('result-breakdown').textContent = abilityNameGerman + " RW: " + roll + " + " + bonus;
             
-            document.getElementById('roll-value').textContent = total;
-            document.getElementById('roll-breakdown').textContent = abilityNameGerman + " RW: " + dieRoll + " + " + bonus + " = " + total;
-            document.getElementById('roll-message').textContent = '';
-            
-            // Wechsle zum Combat-Tab, um das Ergebnis anzuzeigen
-            openTab('combat');
+            // Switch back to combat tab
+            changeTab('combat');
+        }
+        
+        // Clear results
+        function clearResults() {
+            document.getElementById('result-value').textContent = "-";
+            document.getElementById('result-breakdown').textContent = "";
+            clearDamage();
         }
     </script>
 </body>
