@@ -1,768 +1,558 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilio Xaenor - Minimalistisches Blatt</title>
-    <style>
-        body {
-            font-family: serif;
-            margin: 5px;
-            padding: 0;
-            background-color: white;
-            color: black;
-            font-size: 14px;
-            line-height: 1.2;
-        }
-        
-        .container {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-        }
-        
-        .character-column {
-            display: table-cell;
-            width: 65%;
-            vertical-align: top;
-        }
-        
-        .image-column {
-            display: table-cell;
-            width: 35%;
-            vertical-align: top;
-            padding-left: 5px;
-        }
-        
-        .character-image {
-            width: 100%;
-            border: 1px solid black;
-            margin-bottom: 5px;
-        }
-        
-        .header {
-            margin-bottom: 5px;
-        }
-        
-        .section {
-            border: 1px solid black;
-            padding: 5px;
-            margin-bottom: 5px;
-        }
-        
-        h1, h2, h3 {
-            margin: 0 0 5px 0;
-        }
-        
-        h1 {
-            font-size: 18px;
-        }
-        
-        h3 {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .abilities {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-            margin-bottom: 5px;
-            border-spacing: 2px;
-        }
-        
-        .ability {
-            display: table-cell;
-            text-align: center;
-            padding: 2px 0;
-            border: 1px solid black;
-            font-size: 12px;
-        }
-        
-        .ability-value {
-            font-weight: bold;
-            font-size: 14px;
-        }
-        
-        .tab-bar {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-            margin-bottom: 5px;
-        }
-        
-        .tab {
-            display: table-cell;
-            text-align: center;
-            border: 1px solid black;
-            cursor: pointer;
-            padding: 3px 0;
-        }
-        
-        .tab.active {
-            background-color: #ccc;
-            font-weight: bold;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .hp-controls {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-            margin-bottom: 5px;
-        }
-        
-        .hp-display {
-            display: table-cell;
-            text-align: left;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-        
-        .hp-buttons {
-            display: table-cell;
-            text-align: right;
-        }
-        
-        .hp-button {
-            width: 30px;
-            height: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 0 2px;
-        }
-        
-        .hp-input {
-            width: 30px;
-            text-align: center;
-        }
-        
-        .skill-item {
-            display: table;
-            width: 100%;
-            padding: 2px 0;
-            border-bottom: 1px solid #ddd;
-            cursor: pointer;
-        }
-        
-        .skill-name {
-            display: table-cell;
-            text-align: left;
-        }
-        
-        .skill-value {
-            display: table-cell;
-            text-align: right;
-            font-weight: bold;
-            width: 30px;
-        }
-        
-        .buff-toggles {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 5px;
-        }
-        
-        .buff-toggle {
-            flex: 1;
-            min-width: 80px;
-            padding: 5px;
-            text-align: center;
-            border: 1px solid black;
-            cursor: pointer;
-        }
-        
-        .buff-toggle.active {
-            background-color: #ccc;
-            font-weight: bold;
-        }
-        
-        .dice-input {
-            width: 60px;
-        }
-        
-        .compact-section {
-            margin-bottom: 10px;
-        }
-        
-        .result-display {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 5px 0;
-        }
-        
-        .result-detail {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        
-        .quick-dice {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px;
-            margin: 5px 0;
-        }
-        
-        .dice-btn {
-            padding: 5px;
-            min-width: 20px;
-            text-align: center;
-            border: 1px solid black;
-            cursor: pointer;
-        }
-        
-        .dice-row {
-            display: flex;
-            margin-bottom: 5px;
-            align-items: center;
-        }
-        
-        .dice-label {
-            width: 50px;
-        }
-        
-        .dice-controls {
-            flex: 1;
-            display: flex;
-            gap: 3px;
-        }
-        
-        button {
-            background-color: white;
-            border: 1px solid black;
-            cursor: pointer;
-        }
-        
-        select {
-            border: 1px solid black;
-            background-color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ilio Xaenor – Komplettes Charakter-Blatt</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: white;
+      color: black;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 5px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+    }
+    @media screen and (min-width: 600px) {
+      .container {
+        flex-direction: row;
+      }
+    }
+    .character-column, .image-column {
+      flex: 1;
+      padding: 5px;
+    }
+    .character-image {
+      width: 100%;
+      border: 1px solid black;
+      margin-bottom: 10px;
+    }
+    .section {
+      border: 1px solid black;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+    .section h2 {
+      font-size: 16px;
+      margin: 0 0 5px;
+    }
+    .toggle {
+      display: inline-block;
+      padding: 5px;
+      margin: 2px;
+      border: 1px solid black;
+      background: white;
+      cursor: pointer;
+    }
+    .active {
+      background: black;
+      color: white;
+    }
+    .result {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+    .note {
+      font-size: 12px;
+      color: #333;
+    }
+    .attributes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .attribute {
+      border: 1px solid black;
+      text-align: center;
+      width: 45px;
+      margin-bottom: 5px;
+      padding: 3px;
+    }
+    .attribute-name {
+      font-weight: bold;
+    }
+    .attribute-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .attribute-value {
+      font-size: 18px;
+      margin: 0 4px;
+    }
+    .attribute-mod {
+      font-size: 14px;
+    }
+    .attr-button {
+      width: 18px;
+      height: 18px;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 0;
+      margin: 0;
+      border: 1px solid black;
+      background: white;
+      cursor: pointer;
+      line-height: 16px;
+    }
+    .editable {
+      cursor: pointer;
+    }
+    .editable:hover {
+      text-decoration: underline;
+    }
+    .hp-control {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .hp-display {
+      flex: 1;
+      font-weight: bold;
+    }
+    .hp-buttons {
+      display: flex;
+    }
+    .hp-button {
+      width: 30px;
+      height: 30px;
+      margin: 0 2px;
+      border: 1px solid black;
+      background: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      line-height: 30px;
+    }
+    .skill-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    .skill-value {
+      font-weight: bold;
+      cursor: pointer;
+    }
+    input.small-input {
+      width: 30px;
+      text-align: center;
+      font-size: 14px;
+      padding: 2px;
+      margin: 0;
+    }
+    .tab-bar {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 5px;
+      border: 1px solid black;
+      background: white;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: black;
+      color: white;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .collapsible {
+      border: 1px solid black;
+      margin-bottom: 2px;
+    }
+    .collapsible-header {
+      background: #f0f0f0;
+      padding: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .collapsible-content {
+      padding: 5px;
+      display: none;
+    }
+    .collapsible-content p {
+      margin: 5px 0;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="character-column">
-            <div class="header">
-                <h1>Ilio Xaenor</h1>
-                <small>Waldelf Gloomstalker 4/Rogue 1 | RK 16 | Speed 35ft</small>
-                
-                <div class="hp-controls section">
-                    <div class="hp-display">TP: <span id="current-hp">16</span>/<span id="max-hp">21</span></div>
-                    <div class="hp-buttons">
-                        <input type="number" id="hp-change" class="hp-input" value="1" min="1">
-                        <button class="hp-button" onclick="modifyHP(-1)">-</button>
-                        <button class="hp-button" onclick="modifyHP(1)">+</button>
-                    </div>
-                </div>
+  <div class="container">
+    <div class="character-column">
+      <h1>Ilio Xaenor</h1>
+      <p><b>Waldelf Gloom Stalker 4 / Rogue 1</b><br>RK <span class="editable" onclick="editValue(this, 'Rüstungsklasse')">16</span> | <span class="hp-control"><span class="hp-display">TP <span id="current-hp">16</span>/<span id="max-hp" class="editable" onclick="editValue(this, 'Max TP')">21</span></span> <span class="hp-buttons"><div class="hp-button" onclick="modifyHP(-1)">-</div><div class="hp-button" onclick="modifyHP(1)">+</div></span></span> | Bewegung <span class="editable" onclick="editValue(this, 'Bewegung')">35</span>ft</p>
+
+      <div class="tab-bar">
+        <div class="tab active" onclick="changeTab('main')">Haupt</div>
+        <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
+        <div class="tab" onclick="changeTab('spells')">Zauber</div>
+        <div class="tab" onclick="changeTab('class')">Klasse</div>
+      </div>
+
+      <div id="main" class="tab-content active">
+        <div class="attributes">
+          <div class="attribute">
+            <div class="attribute-name">STR</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('str', -1)">-</button>
+              <span class="attribute-value" id="str-value">10</span>
+              <button class="attr-button" onclick="changeAttribute('str', 1)">+</button>
             </div>
-            
-            <div class="abilities">
-                <div class="ability">
-                    <div>STR</div>
-                    <div class="ability-value">10</div>
-                    <div>+0</div>
-                </div>
-                <div class="ability">
-                    <div>DEX</div>
-                    <div class="ability-value">18</div>
-                    <div>+4</div>
-                </div>
-                <div class="ability">
-                    <div>CON</div>
-                    <div class="ability-value">14</div>
-                    <div>+2</div>
-                </div>
-                <div class="ability">
-                    <div>INT</div>
-                    <div class="ability-value">10</div>
-                    <div>+0</div>
-                </div>
-                <div class="ability">
-                    <div>WIS</div>
-                    <div class="ability-value">14</div>
-                    <div>+2</div>
-                </div>
-                <div class="ability">
-                    <div>CHA</div>
-                    <div class="ability-value">10</div>
-                    <div>+0</div>
-                </div>
+            <div class="attribute-mod" id="str-mod">+0</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">DEX</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('dex', -1)">-</button>
+              <span class="attribute-value" id="dex-value">18</span>
+              <button class="attr-button" onclick="changeAttribute('dex', 1)">+</button>
             </div>
-            
-            <div class="tab-bar">
-                <div class="tab active" onclick="changeTab('combat')">Kampf</div>
-                <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
-                <div class="tab" onclick="changeTab('features')">Merkmale</div>
+            <div class="attribute-mod" id="dex-mod">+4</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">CON</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('con', -1)">-</button>
+              <span class="attribute-value" id="con-value">14</span>
+              <button class="attr-button" onclick="changeAttribute('con', 1)">+</button>
             </div>
-            
-            <!-- Combat Tab -->
-            <div id="combat" class="tab-content active">
-                <!-- Buffs -->
-                <div class="section">
-                    <div class="buff-toggles">
-                        <div id="buff-hunters-mark" class="buff-toggle" onclick="toggleBuff('hunters-mark')">Hunter's Mark</div>
-                        <div id="buff-sharpshooter" class="buff-toggle" onclick="toggleBuff('sharpshooter')">Sharpshooter</div>
-                    </div>
-                </div>
-                
-                <!-- Dice Rolls -->
-                <div class="section">
-                    <!-- Attack Roll -->
-                    <div class="dice-row">
-                        <div class="dice-label">Angriff</div>
-                        <div class="dice-controls">
-                            <input type="number" id="attack-roll" class="dice-input" min="1" max="20" placeholder="d20">
-                            <select id="attack-weapon">
-                                <option value="bow">Bogen</option>
-                                <option value="dagger">Dolch</option>
-                            </select>
-                            <button onclick="rollAttack()">OK</button>
-                        </div>
-                    </div>
-                    
-                    <div class="quick-dice">
-                        <div class="dice-btn" onclick="quickInputAttack(2)">2</div>
-                        <div class="dice-btn" onclick="quickInputAttack(5)">5</div>
-                        <div class="dice-btn" onclick="quickInputAttack(10)">10</div>
-                        <div class="dice-btn" onclick="quickInputAttack(15)">15</div>
-                        <div class="dice-btn" onclick="quickInputAttack(18)">18</div>
-                        <div class="dice-btn" onclick="quickInputAttack(20)">20</div>
-                    </div>
-                    
-                    <!-- Damage Roll -->
-                    <div class="dice-row">
-                        <div class="dice-label">Schaden</div>
-                        <div class="dice-controls">
-                            <input type="number" id="damage-roll" class="dice-input" min="1" max="8" placeholder="W8/W4">
-                            <select id="damage-weapon">
-                                <option value="bow">Bogen (d8)</option>
-                                <option value="dagger">Dolch (d4)</option>
-                            </select>
-                            <button onclick="rollDamage()">OK</button>
-                        </div>
-                    </div>
-                    
-                    <div class="quick-dice">
-                        <div class="dice-btn" onclick="quickInputDamage(1)">1</div>
-                        <div class="dice-btn" onclick="quickInputDamage(2)">2</div>
-                        <div class="dice-btn" onclick="quickInputDamage(3)">3</div>
-                        <div class="dice-btn" onclick="quickInputDamage(4)">4</div>
-                        <div class="dice-btn" onclick="quickInputDamage(5)">5</div>
-                        <div class="dice-btn" onclick="quickInputDamage(6)">6</div>
-                        <div class="dice-btn" onclick="quickInputDamage(7)">7</div>
-                        <div class="dice-btn" onclick="quickInputDamage(8)">8</div>
-                    </div>
-                    
-                    <!-- Sneak Attack -->
-                    <div class="dice-row">
-                        <div class="dice-label">Sneak</div>
-                        <div class="dice-controls">
-                            <input type="number" id="sneak-roll" class="dice-input" min="1" max="6" placeholder="W6">
-                            <button onclick="addSneakAttack()">+SA</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Other Rolls -->
-                <div class="section">
-                    <button onclick="rollInitiative()">Initiative</button>
-                    <button onclick="clearResults()">Zurücksetzen</button>
-                </div>
+            <div class="attribute-mod" id="con-mod">+2</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">INT</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('int', -1)">-</button>
+              <span class="attribute-value" id="int-value">10</span>
+              <button class="attr-button" onclick="changeAttribute('int', 1)">+</button>
             </div>
-            
-            <!-- Skills Tab -->
-            <div id="skills" class="tab-content">
-                <div class="section">
-                    <h3>Fertigkeiten</h3>
-                    <div class="skill-item" onclick="rollSkill('acrobatics', 10)">
-                        <span class="skill-name">Akrobatik (DEX)</span>
-                        <span class="skill-value">+10</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSkill('athletics', 3)">
-                        <span class="skill-name">Athletik (STR)</span>
-                        <span class="skill-value">+3</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSkill('stealth', 10)">
-                        <span class="skill-name">Heimlichkeit (DEX)</span>
-                        <span class="skill-value">+10</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSkill('survival', 5)">
-                        <span class="skill-name">Überlebenskunst (WIS)</span>
-                        <span class="skill-value">+5</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSkill('perception', 8)">
-                        <span class="skill-name">Wahrnehmung (WIS)</span>
-                        <span class="skill-value">+8</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSkill('thieves-tools', 7)">
-                        <span class="skill-name">Diebeswerkzeug (DEX)</span>
-                        <span class="skill-value">+7</span>
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <h3>Rettungswürfe</h3>
-                    <div class="skill-item" onclick="rollSave('str')">
-                        <span class="skill-name">Stärke</span>
-                        <span class="skill-value">+3</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSave('dex')">
-                        <span class="skill-name">Geschicklichkeit</span>
-                        <span class="skill-value">+7</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSave('con')">
-                        <span class="skill-name">Konstitution</span>
-                        <span class="skill-value">+2</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSave('int')">
-                        <span class="skill-name">Intelligenz</span>
-                        <span class="skill-value">+0</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSave('wis')">
-                        <span class="skill-name">Weisheit</span>
-                        <span class="skill-value">+2</span>
-                    </div>
-                    <div class="skill-item" onclick="rollSave('cha')">
-                        <span class="skill-name">Charisma</span>
-                        <span class="skill-value">+0</span>
-                    </div>
-                </div>
+            <div class="attribute-mod" id="int-mod">+0</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">WIS</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('wis', -1)">-</button>
+              <span class="attribute-value" id="wis-value">14</span>
+              <button class="attr-button" onclick="changeAttribute('wis', 1)">+</button>
             </div>
-            
-            <!-- Features Tab -->
-            <div id="features" class="tab-content">
-                <div class="section">
-                    <div class="buff-toggles">
-                        <div id="spell-hunters-mark" class="buff-toggle" onclick="toggleBuff('hunters-mark')">Hunter's Mark</div>
-                        <div id="spell-fog-cloud" class="buff-toggle" onclick="toggleSpell('fog-cloud')">Fog Cloud</div>
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <div style="margin-bottom: 5px;">
-                        <b>Darkvision (120 ft)</b><br>
-                        Sehen in Dunkelheit als wäre es dämmrig.
-                    </div>
-                    <div style="margin-bottom: 5px;">
-                        <b>Fey Ancestry</b><br>
-                        Vorteil gegen Bezauberung, immun gegen magischen Schlaf.
-                    </div>
-                    <div style="margin-bottom: 5px;">
-                        <b>Unseen in Darkness</b><br>
-                        Unsichtbar für Kreaturen, die nur Darkvision nutzen.
-                    </div>
-                    <div style="margin-bottom: 5px;">
-                        <b>Expertise</b><br>
-                        Doppelter Übungsbonus in Akrobatik, Heimlichkeit, Wahrnehmung.
-                    </div>
-                    <div style="margin-bottom: 5px;">
-                        <b>Sneak Attack</b><br>
-                        1W6 Zusatzschaden bei Vorteil/Verbündetem.
-                    </div>
-                </div>
+            <div class="attribute-mod" id="wis-mod">+2</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">CHA</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('cha', -1)">-</button>
+              <span class="attribute-value" id="cha-value">10</span>
+              <button class="attr-button" onclick="changeAttribute('cha', 1)">+</button>
             </div>
+            <div class="attribute-mod" id="cha-mod">+0</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Angriff – Schaltflächen aktivieren</h2>
+          <div class="toggle" id="hunter" onclick="toggle('hunter')">Hunter's Mark</div>
+          <div class="toggle" id="sneak" onclick="toggle('sneak')">Sneak Attack</div>
+          <div class="toggle" id="gloom" onclick="toggle('gloom')">Runde 1 (Gloom)</div>
+        </div>
+
+        <div class="section">
+          <h2>Aktueller Schadenswurf</h2>
+          <div id="summary">1W8 (Waffe) + 4 (DEX)</div>
+        </div>
+
+        <div class="section">
+          <h2>Angriffsbonus</h2>
+          <div><b>+<span id="attack-bonus">9</span> Fernkampf</b></div>
+          <div class="note">(+<span id="attack-dex">4</span> DEX, +<span id="attack-pb" class="editable" onclick="editValue(this, 'Übungsbonus')">3</span> PB, +<span id="attack-archery" class="editable" onclick="editValue(this, 'Archery Bonus')">2</span> Archery)</div>
+        </div>
+      </div>
+
+      <div id="skills" class="tab-content">
+        <div class="section">
+          <h2>Fertigkeiten & Werte</h2>
+          <div class="skill-item">
+            <span>Akrobatik (DEX):</span>
+            <span class="skill-value" onclick="editSkill(this, 'acrobatics')">+10</span>
+          </div>
+          <div class="skill-item">
+            <span>Heimlichkeit (DEX):</span>
+            <span class="skill-value" onclick="editSkill(this, 'stealth')">+10</span>
+          </div>
+          <div class="skill-item">
+            <span>Wahrnehmung (WIS):</span>
+            <span class="skill-value" onclick="editSkill(this, 'perception')">+8</span>
+          </div>
+          <div class="skill-item">
+            <span>Überlebenskunst (WIS):</span>
+            <span class="skill-value" onclick="editSkill(this, 'survival')">+5</span>
+          </div>
+          <div class="skill-item">
+            <span>Athletik (STR):</span>
+            <span class="skill-value" onclick="editSkill(this, 'athletics')">+3</span>
+          </div>
+          <div class="skill-item">
+            <span>Passive Wahrnehmung:</span>
+            <span class="skill-value" onclick="editSkill(this, 'passive-perception')">18</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Sprachen & Traits</h2>
+          <ul>
+            <li>Sprachen: Common, Elvish, Dwarvish, Orkish, Gebärdensprache, Diebessprache</li>
+            <li>Darkvision (120 ft)</li>
+            <li>Invisible to Darkvision-only creatures</li>
+            <li>Fey Ancestry (Schutz vor Bezauberung & Schlaf)</li>
+            <li>Sharpshooter (2024)</li>
+            <li>Trance statt Schlaf</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="spells" class="tab-content">
+        <div class="section">
+          <h2>Zauber (bekannt)</h2>
+          <ul>
+            <li><b>Bonusaktionen:</b> Hunter's Mark, Ensnaring Strike</li>
+            <li><b>Aktionen:</b> Fog Cloud, Cure Wounds, Beast Bond, Good Berries</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="class" class="tab-content">
+        <h2>Ranger Klassenfähigkeiten (PHB 2024)</h2>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1: Spellcasting</div>
+          <div class="collapsible-content">
+            <p>Kanalisiere die magische Essenz der Natur, um Zauber zu wirken. PHB'24 S.119</p>
+            <p><b>Spell Slots:</b> Laut Ranger-Tabelle. Werden nach langer Rast zurückgewonnen.</p>
+            <p><b>Vorbereitete Zauber:</b> Beginne mit 2 Ranger-Zaubern Level 1. Empfohlen: Cure Wounds, Ensnaring Strike.</p>
+            <p><b>Spellcasting Ability:</b> Weisheit ist deine Spellcasting Ability.</p>
+            <p><b>Spellcasting Focus:</b> Du kannst einen Druidic Focus als Spellcasting Focus verwenden.</p>
+          </div>
         </div>
         
-        <div class="image-column">
-            <img src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Ilio Xaenor" class="character-image">
-            
-            <div class="section">
-                <div class="result-display" id="result-value">-</div>
-                <div class="result-detail" id="result-breakdown"></div>
-                <div id="damage-display" style="display: none;">
-                    <div class="result-display" id="total-damage">0</div>
-                    <div class="result-detail" id="damage-breakdown"></div>
-                    <button onclick="clearDamage()">Reset</button>
-                </div>
-            </div>
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1: Favored Enemy</div>
+          <div class="collapsible-content">
+            <p>Du hast immer Hunter's Mark vorbereitet und kannst ihn zweimal ohne Spell Slot wirken. Regeneriert nach langer Rast.</p>
+          </div>
         </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1: Weapon Mastery</div>
+          <div class="collapsible-content">
+            <p>Du kannst die Mastery-Eigenschaften von zwei Waffen deiner Wahl nutzen, mit denen du profizient bist (z.B. Langbögen und Kurzschwerter).</p>
+            <p>Nach jeder langen Rast kannst du die gewählten Waffen ändern.</p>
+          </div>
+        </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 2: Deft Explorer</div>
+          <div class="collapsible-content">
+            <p><b>Expertise:</b> Wähle eine Skill-Proficiency, in der du Expertise erhältst.</p>
+            <p><b>Languages:</b> Du kennst zwei weitere Sprachen deiner Wahl.</p>
+          </div>
+        </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 2: Fighting Style</div>
+          <div class="collapsible-content">
+            <p>Du erhältst ein Fighting Style Feat deiner Wahl oder Druidic Warrior (2 Druid-Cantrips).</p>
+          </div>
+        </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 3: Gloom Stalker Subclass</div>
+          <div class="collapsible-content">
+            <p><b>Dread Ambusher:</b></p>
+            <ul>
+              <li><b>Ambusher's Leap:</b> Zu Beginn deines ersten Zuges im Kampf erhöht sich deine Geschwindigkeit um 10 Fuß.</li>
+              <li><b>Dreadful Strike:</b> Einmal pro Zug kannst du bei einem Treffer mit einer Waffe zusätzlich 2W6 psychischen Schaden verursachen. WIS-Mod mal pro langer Rast.</li>
+              <li><b>Initiative Bonus:</b> Du kannst deinen WIS-Mod zur Initiative addieren.</li>
+            </ul>
+            <p><b>Gloom Stalker Spells:</b> Level 3: Disguise Self</p>
+            <p><b>Umbral Sight:</b> Du erhältst Darkvision mit 60 Fuß Reichweite oder +60 Fuß falls du bereits Darkvision hast. In Dunkelheit bist du für Kreaturen, die nur auf Darkvision angewiesen sind, unsichtbar.</p>
+          </div>
+        </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 4: Ability Score Improvement</div>
+          <div class="collapsible-content">
+            <p>Du erhältst das Ability Score Improvement Feat oder ein anderes Feat deiner Wahl.</p>
+          </div>
+        </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 5: Extra Attack</div>
+          <div class="collapsible-content">
+            <p>Du kannst zweimal angreifen, wenn du die Angriffsaktion in deinem Zug ausführst.</p>
+          </div>
+        </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Höhere Level</div>
+          <div class="collapsible-content">
+            <p><b>Level 6: Roving</b> - Geschwindigkeit +10 Fuß (ohne schwere Rüstung) plus Kletter- und Schwimmgeschwindigkeit.</p>
+            <p><b>Level 7: Iron Mind</b> - Weisheits-Rettungswürfe Proficiency.</p>
+            <p><b>Level 8-20:</b> Weitere Fähigkeiten wie Expertise, Tireless, Nature's Veil und mehr.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // Active Buffs
-        var buffs = {
-            'hunters-mark': false,
-            'sharpshooter': false,
-            'fog-cloud': false
-        };
-        
-        // Damage tracking
-        var damage = {
-            base: 0,
-            modifier: 0,
-            huntersMark: 0,
-            sneakAttack: 0,
-            total: 0
-        };
-        
-        // Change tab
-        function changeTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to tab button
-            document.querySelectorAll('.tab').forEach(tab => {
-                if (tab.textContent.toLowerCase().includes(tabName)) {
-                    tab.classList.add('active');
-                }
-            });
+    <div class="image-column">
+      <img src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Ilio Xaenor" class="character-image">
+      <div class="section">
+        <div class="result">Würfeln real – Ergebnis hier notieren</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle active state for buffs
+    function toggle(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('active');
+      updateSummary();
+    }
+    
+    // Change tab
+    function changeTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Remove active class from all tab buttons
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      
+      // Add active class to tab button
+      document.querySelectorAll('.tab').forEach(tab => {
+        if (tab.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+          tab.classList.add('active');
         }
+      });
+    }
+
+    // Toggle collapsible sections
+    function toggleCollapsible(element) {
+      const content = element.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    }
+
+    // Update damage summary based on active buffs
+    function updateSummary() {
+      const hunter = document.getElementById('hunter').classList.contains('active');
+      const sneak = document.getElementById('sneak').classList.contains('active');
+      const gloom = document.getElementById('gloom').classList.contains('active');
+      
+      const dexMod = parseInt(document.getElementById('dex-mod').innerText.replace('+', ''));
+      
+      let dmg = `1W8 (Waffe) + ${dexMod} (DEX)`;
+      if (hunter) dmg += " + 1W6 (Hunter's Mark)";
+      if (sneak) dmg += " + 1W6 (Sneak Attack)";
+      if (gloom) dmg += " + 2W6 (Gloom Stalker)";
+
+      document.getElementById('summary').innerText = dmg;
+    }
+    
+    // Change attribute value with plus/minus buttons
+    function changeAttribute(attr, amount) {
+      const element = document.getElementById(attr + '-value');
+      let value = parseInt(element.innerText) + amount;
+      
+      // Limit attribute values to reasonable D&D range
+      if (value < 1) value = 1;
+      if (value > 30) value = 30;
+      
+      element.innerText = value;
+      
+      // Calculate and update ability modifier
+      const mod = Math.floor((value - 10) / 2);
+      const modText = mod >= 0 ? `+${mod}` : mod;
+      document.getElementById(`${attr}-mod`).innerText = modText;
+      
+      // Update DEX-based values if DEX is changed
+      if (attr === 'dex') {
+        document.getElementById('attack-dex').innerText = mod >= 0 ? mod : 0;
+        recalculateAttackBonus();
+        updateSummary();
+      }
+    }
+    
+    // Edit any value with prompt
+    function editValue(element, label) {
+      const currentValue = element.innerText;
+      const newValue = prompt(`Neuer Wert für ${label}:`, currentValue);
+      
+      if (newValue !== null && newValue !== '') {
+        element.innerText = newValue;
         
-        // Toggle buff
-        function toggleBuff(buffName) {
-            buffs[buffName] = !buffs[buffName];
-            
-            // Update UI
-            document.getElementById('buff-' + buffName).classList.toggle('active', buffs[buffName]);
-            
-            // Also update in spells tab if exists
-            if (document.getElementById('spell-' + buffName)) {
-                document.getElementById('spell-' + buffName).classList.toggle('active', buffs[buffName]);
-            }
-            
-            // Show message
-            document.getElementById('result-value').textContent = buffs[buffName] ? 
-                buffName + " aktiv" : 
-                buffName + " inaktiv";
-            document.getElementById('result-breakdown').textContent = "";
+        // Special handling for max HP
+        if (element.id === 'max-hp') {
+          const currentHP = parseInt(document.getElementById('current-hp').innerText);
+          const maxHP = parseInt(newValue);
+          if (currentHP > maxHP) {
+            document.getElementById('current-hp').innerText = maxHP;
+          }
         }
-        
-        // Toggle spell (same as buff for now)
-        function toggleSpell(spellName) {
-            buffs[spellName] = !buffs[spellName];
-            document.getElementById('spell-' + spellName).classList.toggle('active', buffs[spellName]);
-            
-            document.getElementById('result-value').textContent = buffs[spellName] ? 
-                spellName + " aktiv" : 
-                spellName + " inaktiv";
-            document.getElementById('result-breakdown').textContent = "";
-        }
-        
-        // HP Management
-        function modifyHP(modifier) {
-            var amount = parseInt(document.getElementById('hp-change').value) || 1;
-            var currentHP = parseInt(document.getElementById('current-hp').textContent);
-            var maxHP = parseInt(document.getElementById('max-hp').textContent);
-            
-            if (modifier > 0) {
-                // Healing
-                currentHP = Math.min(currentHP + amount, maxHP);
-            } else {
-                // Damage
-                currentHP = Math.max(currentHP - amount, 0);
-            }
-            
-            document.getElementById('current-hp').textContent = currentHP;
-        }
-        
-        // Quick input for attack roll
-        function quickInputAttack(value) {
-            document.getElementById('attack-roll').value = value;
-        }
-        
-        // Quick input for damage roll
-        function quickInputDamage(value) {
-            document.getElementById('damage-roll').value = value;
-        }
-        
-        // Attack Roll
-        function rollAttack() {
-            var roll = parseInt(document.getElementById('attack-roll').value);
-            if (isNaN(roll) || roll < 1 || roll > 20) {
-                document.getElementById('result-breakdown').textContent = "Ungültiger Wert (1-20)";
-                return;
-            }
-            
-            var weapon = document.getElementById('attack-weapon').value;
-            var modifier = 7; // Base: +4 DEX, +3 Prof
-            
-            // Calculate total
-            var total = roll + modifier;
-            
-            // Display result
-            var resultText = roll === 20 ? "Kritischer Treffer!" : (roll === 1 ? "Fehlschlag!" : total);
-            document.getElementById('result-value').textContent = resultText;
-            document.getElementById('result-breakdown').textContent = "d20: " + roll + " + " + modifier + " = " + total;
-            
-            // Clear the input
-            document.getElementById('attack-roll').value = "";
-        }
-        
-        // Damage Roll
-        function rollDamage() {
-            var roll = parseInt(document.getElementById('damage-roll').value);
-            var weapon = document.getElementById('damage-weapon').value;
-            var maxDice = weapon === 'bow' ? 8 : 4;
-            
-            if (isNaN(roll) || roll < 1 || roll > maxDice) {
-                document.getElementById('result-breakdown').textContent = "Ungültiger Wert (1-" + maxDice + ")";
-                return;
-            }
-            
-            // Reset damage
-            clearDamage();
-            
-            // Calculate base damage
-            var modifier = 4; // DEX
-            var totalDamage = roll + modifier;
-            
-            // Update damage object
-            damage.base = roll;
-            damage.modifier = modifier;
-            damage.total = totalDamage;
-            
-            // Add Hunter's Mark if active
-            if (buffs['hunters-mark']) {
-                var huntersMarkRoll = Math.floor(Math.random() * 6) + 1;
-                damage.huntersMark = huntersMarkRoll;
-                damage.total += huntersMarkRoll;
-            }
-            
-            // Update display
-            updateDamageDisplay();
-            
-            // Clear input
-            document.getElementById('damage-roll').value = "";
-        }
-        
-        // Add Sneak Attack
-        function addSneakAttack() {
-            var roll = parseInt(document.getElementById('sneak-roll').value);
-            
-            if (isNaN(roll) || roll < 1 || roll > 6) {
-                document.getElementById('result-breakdown').textContent = "Ungültiger Wert (1-6)";
-                return;
-            }
-            
-            // Add to damage
-            damage.sneakAttack = roll;
-            damage.total += roll;
-            
-            // Update display
-            updateDamageDisplay();
-            
-            // Clear input
-            document.getElementById('sneak-roll').value = "";
-        }
-        
-        // Update damage display
-        function updateDamageDisplay() {
-            document.getElementById('damage-display').style.display = 'block';
-            document.getElementById('total-damage').textContent = damage.total;
-            
-            var breakdown = damage.base + " (Waffe) + " + damage.modifier + " (DEX)";
-            
-            if (damage.huntersMark > 0) {
-                breakdown += " + " + damage.huntersMark + " (HM)";
-            }
-            
-            if (damage.sneakAttack > 0) {
-                breakdown += " + " + damage.sneakAttack + " (SA)";
-            }
-            
-            document.getElementById('damage-breakdown').textContent = breakdown;
-            document.getElementById('result-value').textContent = damage.total;
-            document.getElementById('result-breakdown').textContent = breakdown;
-        }
-        
-        // Clear damage
-        function clearDamage() {
-            damage = {
-                base: 0,
-                modifier: 0,
-                huntersMark: 0,
-                sneakAttack: 0,
-                total: 0
-            };
-            
-            document.getElementById('damage-display').style.display = 'none';
-        }
-        
-        // Roll initiative
-        function rollInitiative() {
-            var roll = Math.floor(Math.random() * 20) + 1;
-            var modifier = 4; // DEX
-            var total = roll + modifier;
-            
-            document.getElementById('result-value').textContent = total;
-            document.getElementById('result-breakdown').textContent = "Initiative: " + roll + " + " + modifier;
-        }
-        
-        // Roll skill check
-        function rollSkill(skillName, bonus) {
-            var roll = Math.floor(Math.random() * 20) + 1;
-            var total = roll + bonus;
-            
-            var skillNameGerman = {
-                'acrobatics': 'Akrobatik',
-                'athletics': 'Athletik',
-                'stealth': 'Heimlichkeit',
-                'survival': 'Überlebenskunst',
-                'perception': 'Wahrnehmung',
-                'thieves-tools': 'Diebeswerkzeug'
-            }[skillName];
-            
-            document.getElementById('result-value').textContent = total;
-            document.getElementById('result-breakdown').textContent = skillNameGerman + ": " + roll + " + " + bonus;
-            
-            // Switch back to combat tab
-            changeTab('combat');
-        }
-        
-        // Roll saving throw
-        function rollSave(ability) {
-            var roll = Math.floor(Math.random() * 20) + 1;
-            var bonus = {
-                'str': 3,
-                'dex': 7,
-                'con': 2,
-                'int': 0,
-                'wis': 2,
-                'cha': 0
-            }[ability];
-            
-            var total = roll + bonus;
-            
-            var abilityNameGerman = {
-                'str': 'Stärke',
-                'dex': 'Geschicklichkeit',
-                'con': 'Konstitution',
-                'int': 'Intelligenz',
-                'wis': 'Weisheit',
-                'cha': 'Charisma'
-            }[ability];
-            
-            document.getElementById('result-value').textContent = total;
-            document.getElementById('result-breakdown').textContent = abilityNameGerman + " RW: " + roll + " + " + bonus;
-            
-            // Switch back to combat tab
-            changeTab('combat');
-        }
-        
-        // Clear results
-        function clearResults() {
-            document.getElementById('result-value').textContent = "-";
-            document.getElementById('result-breakdown').textContent = "";
-            clearDamage();
-        }
-    </script>
+      }
+    }
+    
+    // Edit skill value
+    function editSkill(element, skillName) {
+      const currentValue = element.innerText;
+      const newValue = prompt(`Neuer Wert für ${skillName}:`, currentValue);
+      
+      if (newValue !== null && newValue !== '') {
+        element.innerText = newValue;
+      }
+    }
+    
+    // Modify HP
+    function modifyHP(amount) {
+      const currentHPElement = document.getElementById('current-hp');
+      const maxHPElement = document.getElementById('max-hp');
+      
+      let currentHP = parseInt(currentHPElement.innerText);
+      const maxHP = parseInt(maxHPElement.innerText);
+      
+      currentHP = Math.min(Math.max(currentHP + amount, 0), maxHP);
+      currentHPElement.innerText = currentHP;
+    }
+    
+    // Recalculate attack bonus
+    function recalculateAttackBonus() {
+      const dexMod = parseInt(document.getElementById('attack-dex').innerText);
+      const pb = parseInt(document.getElementById('attack-pb').innerText);
+      const archery = parseInt(document.getElementById('attack-archery').innerText);
+      
+      const total = dexMod + pb + archery;
+      document.getElementById('attack-bonus').innerText = total;
+    }
+  </script>
 </body>
 </html>
