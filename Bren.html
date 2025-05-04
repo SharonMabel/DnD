@@ -818,45 +818,52 @@
                 <div class="ability-desc">Du bist größer als ein normaler Goliath.</div>
               </div>
               
-              <h3>Klassen
-                <h3>Klassenmerkmale</h3>
-            
-                <div class="ability" onclick="showModal('rage-ability')">
-                  <div class="ability-name">Rage <span class="info-icon">i</span></div>
-                  <div class="ability-desc">Verstärkt Angriffe, gibt Resistenz gegen physischen Schaden. 3× pro langer Rast.</div>
-                </div>
-                
-                <div class="ability" onclick="showModal('danger-sense')">
-                  <div class="ability-name">Danger Sense <span class="info-icon">i</span></div>
-                  <div class="ability-desc">Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst.</div>
-                </div>
-                
-                <div class="ability" onclick="showModal('reckless-attack')">
-                  <div class="ability-name">Reckless Attack <span class="info-icon">i</span></div>
-                  <div class="ability-desc">Vorteil auf STR-basierte Nahkampfangriffe, aber auch Angreifer haben Vorteil gegen dich.</div>
-                </div>
-                
-                <div class="ability" onclick="showModal('extra-attack')">
-                  <div class="ability-name">Extra Attack <span class="info-icon">i</span></div>
-                  <div class="ability-desc">Du kannst zweimal angreifen, wenn du die Angriffsaktion ausführst.</div>
-                </div>
-                
-                <div class="ability" onclick="showModal('fast-movement')">
-                  <div class="ability-name">Fast Movement <span class="info-icon">i</span></div>
-                  <div class="ability-desc">Deine Bewegungsrate erhöht sich um 10 Fuß, wenn du keine schwere Rüstung trägst.</div>
-                </div>
-    
-                <div class="ability" onclick="showModal('unarmored-defense')">
-                  <div class="ability-name">Unarmored Defense <span class="info-icon">i</span></div>
-                  <div class="ability-desc">Ohne Rüstung ist deine RK 10 + DEX-Mod + CON-Mod.</div>
-                </div>
-                
-                <div class="ability" onclick="showModal('great-weapon-master')">
-                  <div class="ability-name">Great Weapon Master <span class="info-icon">i</span></div>
-                  <div class="ability-desc">+3 Extraschaden mit schweren Waffen, Bonusangriff nach Kritischem Treffer oder wenn Gegner auf 0 TP reduziert.</div>
-                </div>
+              <h3>Klassenmerkmale</h3>
+
+              <div class="ability" onclick="showModal('divine-fury')">
+                <div class="ability-name">Divine Fury <span class="info-icon">i</span></div>
+                <div class="ability-desc">Während der Rage verursacht dein erster Waffenangriff jede Runde zusätzlichen nekrotischen oder strahlenden Schaden.</div>
               </div>
-            </div>
+              
+              <div class="ability" onclick="showModal('warrior-of-the-gods')">
+                <div class="ability-name">Warrior of the Gods <span class="info-icon">i</span></div>
+                <div class="ability-desc">Zauber, die dich ins Leben zurückbringen, benötigen keine materiellen Komponenten.</div>
+              </div>
+              
+              <div class="ability" onclick="showModal('rage-ability')">
+                <div class="ability-name">Rage <span class="info-icon">i</span></div>
+                <div class="ability-desc">Verstärkt Angriffe, gibt Resistenz gegen physischen Schaden. 3× pro langer Rast.</div>
+              </div>
+              
+              <div class="ability" onclick="showModal('danger-sense')">
+                <div class="ability-name">Danger Sense <span class="info-icon">i</span></div>
+                <div class="ability-desc">Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst.</div>
+              </div>
+              
+              <div class="ability" onclick="showModal('reckless-attack')">
+                <div class="ability-name">Reckless Attack <span class="info-icon">i</span></div>
+                <div class="ability-desc">Vorteil auf STR-basierte Nahkampfangriffe, aber auch Angreifer haben Vorteil gegen dich.</div>
+              </div>
+              
+              <div class="ability" onclick="showModal('extra-attack')">
+                <div class="ability-name">Extra Attack <span class="info-icon">i</span></div>
+                <div class="ability-desc">Du kannst zweimal angreifen, wenn du die Angriffsaktion ausführst.</div>
+              </div>
+              
+              <div class="ability" onclick="showModal('fast-movement')">
+                <div class="ability-name">Fast Movement <span class="info-icon">i</span></div>
+                <div class="ability-desc">Deine Bewegungsrate erhöht sich um 10 Fuß, wenn du keine schwere Rüstung trägst.</div>
+              </div>
+              
+              <div class="ability" onclick="showModal('unarmored-defense')">
+                <div class="ability-name">Unarmored Defense <span class="info-icon">i</span></div>
+                <div class="ability-desc">Ohne Rüstung ist deine RK 10 + DEX-Mod + CON-Mod.</div>
+              </div>
+              
+              <div class="ability" onclick="showModal('great-weapon-master')">
+                <div class="ability-name">Great Weapon Master <span class="info-icon">i</span></div>
+                <div class="ability-desc">+3 Extraschaden mit schweren Waffen, Bonusangriff nach Kritischem Treffer oder wenn Gegner auf 0 TP reduziert.</div>
+              </div>
             
             <div id="inventory" class="tab-content">
               <div class="card">
@@ -1149,65 +1156,74 @@
           const description = document.getElementById('modal-description');
           
           // Set content based on ability
-          switch(abilityId) {
-            case 'rage-ability':
-              title.innerText = 'Rage';
-              description.innerHTML = `<p>Als Bonusaktion kannst du in einen Wutrausch verfallen.</p>
-              <p>Solange du in Rage bist, erhältst du folgende Vorteile, wenn du keine schwere Rüstung trägst:</p>
-              <ul>
-                <li>Du hast Vorteil auf Stärke-Würfe und Stärke-Rettungswürfe.</li>
-                <li>Wenn du mit einer Nahkampfwaffe einen Angriff ausführst, der Stärke verwendet, erhältst du einen Bonus auf den Schadenswurf. Dieser Bonus beträgt +2.</li>
-                <li>Du hast Resistenz gegen Hieb-, Stich- und Wuchtschaden.</li>
-              </ul>
-              <p>Deine Rage hält 1 Minute (10 Kampfrunden) an. Sie endet vorzeitig, wenn du bewusstlos wirst oder wenn dein Zug endet und du seit deinem letzten Zug keinen Angriff gegen einen feindlichen Gegner ausgeführt hast oder Schaden erlitten hast. Du kannst deine Rage auch als Bonusaktion beenden.</p>
-              <p>Du kannst eine Anzahl von Malen in Rage verfallen, die deinem Konstitutionsmodifikator entspricht (mindestens einmal). Bei einer langen Rast erhältst du alle verbrauchten Wutanfälle zurück.</p>`;
-              break;
-            case 'danger-sense':
-              title.innerText = 'Danger Sense';
-              description.innerHTML = `<p>Ab der 2. Stufe entwickelst du einen unheimlichen Sinn für Gefahren in deiner Nähe. Du hast Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst, wie Fallen und Zauber. Um diesen Vorteil zu nutzen, darfst du nicht blind, taub oder handlungsunfähig sein.</p>`;
-              break;
-            case 'reckless-attack':
-              title.innerText = 'Reckless Attack';
-              description.innerHTML = `<p>Ab der 2. Stufe kannst du alle Vorsicht fallen lassen, um mit verzweifelter Wildheit anzugreifen. Wenn du deinen ersten Angriff in deinem Zug ausführst, kannst du entscheiden, rücksichtslos anzugreifen. Dies gibt dir Vorteil bei Nahkampfangriffen mit Stärke während dieses Zuges, aber Angriffswürfe gegen dich haben bis zu deinem nächsten Zug Vorteil.</p>`;
-              break;
-            case 'powerful-build':
-              title.innerText = 'Powerful Build';
-              description.innerHTML = `<p>Du zählst als eine Größenkategorie größer, wenn es darum geht, deine Tragfähigkeit und das Gewicht zu bestimmen, das du schieben, ziehen oder heben kannst.</p>
-              <p>Du hast Vorteil auf alle Fähigkeitswürfe, die du machst, um den Zustand "Gepackt" zu beenden.</p>`;
-              break;
-            case 'cold-resistance':
-              title.innerText = 'Kälteresistenz';
-              description.innerHTML = `<p>Du bist an hohe Höhen und kalte Klimate gewöhnt. Du hast Resistenz gegen Kälteschaden und anstrengende Umgebungen aufgrund extremer Kälte beeinträchtigen dich nicht.</p>`;
-              break;
-            case 'large-form':
-              title.innerText = 'Large Form';
-              description.innerHTML = `<p>Du bist größer als ein durchschnittlicher Goliath, was dir in verschiedenen Situationen Vorteile verschaffen kann. Dein Spielleiter kann dir in bestimmten Situationen Vorteile gewähren, in denen deine Größe hilfreich sein könnte.</p>`;
-              break;
-            case 'extra-attack':
-              title.innerText = 'Extra Attack';
-              description.innerHTML = `<p>Ab der 5. Stufe kannst du angreifen, wenn du die Angriffsaktion in deinem Zug ausführst, zweimal anstatt einmal angreifen.</p>`;
-              break;
-            case 'fast-movement':
-              title.innerText = 'Fast Movement';
-              description.innerHTML = `<p>Ab der 5. Stufe erhöht sich deine Geschwindigkeit um 10 Fuß, während du keine schwere Rüstung trägst.</p>`;
-              break;
-            case 'unarmored-defense':
-              title.innerText = 'Unarmored Defense';
-              description.innerHTML = `<p>Ohne Rüstung entspricht deine Rüstungsklasse 10 + deinem Geschicklichkeitsmodifikator + deinem Konstitutionsmodifikator. Du kannst diesen Vorteil nutzen, wenn du einen Schild verwendest.</p>`;
-              break;
-            case 'great-weapon-master':
-              title.innerText = 'Great Weapon Master';
-              description.innerHTML = `<p><strong>Ability Score Increase:</strong> Erhöht deinen Stärke-Wert um 1, bis zu einem Maximum von 20.</p>
-              <p><strong>Heavy Weapon Mastery:</strong> Wenn du mit einer schweren Waffe als Teil der Angriffsaktion in deinem Zug einen Gegner triffst, kannst du zusätzlichen Schaden verursachen, der deinem Übungsbonus entspricht.</p>
-              <p><strong>Hew:</strong> Unmittelbar nachdem du einen kritischen Treffer mit einer Nahkampfwaffe erzielt oder eine Kreatur auf 0 Trefferpunkte reduziert hast, kannst du einen Angriff mit derselben Waffe als Bonusaktion ausführen.</p>`;
-              break;
-            default:
-              title.innerText = 'Fähigkeit';
-              description.innerText = 'Keine Information verfügbar.';
-          }
-          
-          modal.style.display = 'flex';
-        }
+// Set content based on ability
+switch(abilityId) {
+  case 'rage-ability':
+    title.innerText = 'Rage';
+    description.innerHTML = `<p>Als Bonusaktion kannst du in einen Wutrausch verfallen.</p>
+    <p>Solange du in Rage bist, erhältst du folgende Vorteile, wenn du keine schwere Rüstung trägst:</p>
+    <ul>
+      <li>Du hast Vorteil auf Stärke-Würfe und Stärke-Rettungswürfe.</li>
+      <li>Wenn du mit einer Nahkampfwaffe einen Angriff ausführst, der Stärke verwendet, erhältst du einen Bonus auf den Schadenswurf. Dieser Bonus beträgt +2.</li>
+      <li>Du hast Resistenz gegen Hieb-, Stich- und Wuchtschaden.</li>
+    </ul>
+    <p>Deine Rage hält 1 Minute (10 Kampfrunden) an. Sie endet vorzeitig, wenn du bewusstlos wirst oder wenn dein Zug endet und du seit deinem letzten Zug keinen Angriff gegen einen feindlichen Gegner ausgeführt hast oder Schaden erlitten hast. Du kannst deine Rage auch als Bonusaktion beenden.</p>
+    <p>Du kannst eine Anzahl von Malen in Rage verfallen, die deinem Konstitutionsmodifikator entspricht (mindestens einmal). Bei einer langen Rast erhältst du alle verbrauchten Wutanfälle zurück.</p>`;
+    break;
+  case 'danger-sense':
+    title.innerText = 'Danger Sense';
+    description.innerHTML = `<p>Ab der 2. Stufe entwickelst du einen unheimlichen Sinn für Gefahren in deiner Nähe. Du hast Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst, wie Fallen und Zauber. Um diesen Vorteil zu nutzen, darfst du nicht blind, taub oder handlungsunfähig sein.</p>`;
+    break;
+  case 'reckless-attack':
+    title.innerText = 'Reckless Attack';
+    description.innerHTML = `<p>Ab der 2. Stufe kannst du alle Vorsicht fallen lassen, um mit verzweifelter Wildheit anzugreifen. Wenn du deinen ersten Angriff in deinem Zug ausführst, kannst du entscheiden, rücksichtslos anzugreifen. Dies gibt dir Vorteil bei Nahkampfangriffen mit Stärke während dieses Zuges, aber Angriffswürfe gegen dich haben bis zu deinem nächsten Zug Vorteil.</p>`;
+    break;
+  case 'powerful-build':
+    title.innerText = 'Powerful Build';
+    description.innerHTML = `<p>Du zählst als eine Größenkategorie größer, wenn es darum geht, deine Tragfähigkeit und das Gewicht zu bestimmen, das du schieben, ziehen oder heben kannst.</p>
+    <p>Du hast Vorteil auf alle Fähigkeitswürfe, die du machst, um den Zustand "Gepackt" zu beenden.</p>`;
+    break;
+  case 'cold-resistance':
+    title.innerText = 'Kälteresistenz';
+    description.innerHTML = `<p>Du bist an hohe Höhen und kalte Klimate gewöhnt. Du hast Resistenz gegen Kälteschaden und anstrengende Umgebungen aufgrund extremer Kälte beeinträchtigen dich nicht.</p>`;
+    break;
+  case 'large-form':
+    title.innerText = 'Large Form';
+    description.innerHTML = `<p>Du bist größer als ein durchschnittlicher Goliath, was dir in verschiedenen Situationen Vorteile verschaffen kann. Dein Spielleiter kann dir in bestimmten Situationen Vorteile gewähren, in denen deine Größe hilfreich sein könnte.</p>`;
+    break;
+  case 'extra-attack':
+    title.innerText = 'Extra Attack';
+    description.innerHTML = `<p>Ab der 5. Stufe kannst du angreifen, wenn du die Angriffsaktion in deinem Zug ausführst, zweimal anstatt einmal angreifen.</p>`;
+    break;
+  case 'fast-movement':
+    title.innerText = 'Fast Movement';
+    description.innerHTML = `<p>Ab der 5. Stufe erhöht sich deine Geschwindigkeit um 10 Fuß, während du keine schwere Rüstung trägst.</p>`;
+    break;
+  case 'unarmored-defense':
+    title.innerText = 'Unarmored Defense';
+    description.innerHTML = `<p>Ohne Rüstung entspricht deine Rüstungsklasse 10 + deinem Geschicklichkeitsmodifikator + deinem Konstitutionsmodifikator. Du kannst diesen Vorteil nutzen, wenn du einen Schild verwendest.</p>`;
+    break;
+  case 'great-weapon-master':
+    title.innerText = 'Great Weapon Master';
+    description.innerHTML = `<p><strong>Ability Score Increase:</strong> Erhöht deinen Stärke-Wert um 1, bis zu einem Maximum von 20.</p>
+    <p><strong>Heavy Weapon Mastery:</strong> Wenn du mit einer schweren Waffe als Teil der Angriffsaktion in deinem Zug einen Gegner triffst, kannst du zusätzlichen Schaden verursachen, der deinem Übungsbonus entspricht.</p>
+    <p><strong>Hew:</strong> Unmittelbar nachdem du einen kritischen Treffer mit einer Nahkampfwaffe erzielt oder eine Kreatur auf 0 Trefferpunkte reduziert hast, kannst du einen Angriff mit derselben Waffe als Bonusaktion ausführen.</p>`;
+    break;
+  case 'divine-fury':
+    title.innerText = 'Divine Fury';
+    description.innerHTML = `<p>Ab der 3. Stufe, wenn du diesen Pfad wählst, kannst du göttliche Wut in deine Waffenangriffe kanalisieren. Während du in Rage bist, erleidet die erste Kreatur, die du in jedem deiner Züge mit einem Waffenangriff triffst, zusätzlichen Schaden in Höhe von 1W6 + die Hälfte deiner Barbaren-Stufe.</p>
+    <p>Der zusätzliche Schaden ist nekrotisch oder strahlend; du wählst den Schadenstyp, wenn du diese Fähigkeit erhältst.</p>`;
+    break;
+  case 'warrior-of-the-gods':
+    title.innerText = 'Warrior of the Gods';
+    description.innerHTML = `<p>Ab der 3. Stufe ist deine Seele für endlose Schlachten gekennzeichnet. Wenn ein Zauber wie Totenerweckung den alleinigen Effekt hat, dich ins Leben zurückzubringen (aber nicht in die Untoten), benötigt der Zauberwirker keine materiellen Komponenten, um den Zauber auf dich zu wirken.</p>`;
+    break;
+  default:
+    title.innerText = 'Fähigkeit';
+    description.innerText = 'Keine Information verfügbar.';
+}
+
+modal.style.display = 'flex';
         
         function closeModal() {
           document.getElementById('ability-modal').style.display = 'none';
