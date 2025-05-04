@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bren Varakhaal - E-Ink Optimiert</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: white;
+      color: black;
+      font-size: 14px;
+      line-height: 1.3;
+      margin: 0;
+      padding: 5px;
+    }
+    .container {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+    .character-column {
+      display: table-cell;
+      width: 80%;
+      vertical-align: top;
+      padding-right: 5px;
+    }
+    .image-column {
+      display: table-cell;
+      width: 20%;
+      vertical-align: top;
+      padding-left: 5px;
+    }
+    .character-image {
+      width: 100%;
+      border: 1px solid black;
+      margin-bottom: 5px;
+    }
+    .section {
+      border: 1px solid black;
+      padding: 5px;
+      margin-bottom: 5px;
+    }
+    .section h2 {
+      font-size: 16px;
+      margin: 0 0 5px;
+    }
+    .toggle {
+      display: inline-block;
+      padding: 3px 5px;
+      margin: 2px;
+      border: 1px solid black;
+      cursor: pointer;
+    }
+    .active {
+      background: #ddd;
+      font-weight: bold;
+    }
+    .result {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+    .attributes {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      margin-bottom: 5px;
+      border-spacing: 2px;
+    }
+    .attribute-row {
+      display: table-row;
+    }
+    .attribute {
+      display: table-cell;
+      text-align: center;
+      padding: 2px;
+      border: 1px solid black;
+    }
+    .attribute-name {
+      font-weight: bold;
+    }
+    .attribute-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .attribute-value {
+      font-size: 16px;
+      margin: 0 2px;
+    }
+    .attr-button {
+      width: 16px;
+      height: 16px;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 0;
+      margin: 0;
+      border: 1px solid black;
+      cursor: pointer;
+      line-height: 14px;
+    }
+    .hp-control {
+      display: flex;
+      align-items: center;
+    }
+    .hp-display {
+      flex: 1;
+      font-weight: bold;
+    }
+    .hp-buttons {
+      display: flex;
+    }
+    .hp-button {
+      width: 20px;
+      height: 20px;
+      margin: 0 2px;
+      border: 1px solid black;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      text-align: center;
+      line-height: 20px;
+    }
+    .tab-bar {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      margin-bottom: 5px;
+      border-spacing: 1px;
+    }
+    .tab {
+      display: table-cell;
+      text-align: center;
+      padding: 2px;
+      border: 1px solid black;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: #ddd;
+      font-weight: bold;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .collapsible {
+      border: 1px solid black;
+      margin-bottom: 2px;
+    }
+    .collapsible-header {
+      background: white;
+      padding: 2px 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .collapsible-content {
+      padding: 5px;
+      display: none;
+    }
+    .collapsible-content p {
+      margin: 3px 0;
+    }
+    .skill-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      border-bottom: 1px solid #eee;
+    }
+    button, select {
+      background: white;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="character-column">
+      <h1 style="margin: 0 0 5px 0">Bren Varakhaal</h1>
+      <div style="margin-bottom: 5px">
+        <b>Goliath Barbar 5</b><br>
+        RK: 16 | Bewegung: 40ft | 
+        <span class="hp-control">
+          TP: <span id="current-hp">46</span>/<span id="max-hp">46</span>
+          <span class="hp-buttons">
+            <button class="hp-button" onclick="modifyHP(-1)">-</button>
+            <button class="hp-button" onclick="modifyHP(1)">+</button>
+          </span>
+        </span>
+      </div>
+
+      <div class="attributes">
+        <div class="attribute-row">
+          <div class="attribute">
+            <div class="attribute-name">STR</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('str', -1)">-</button>
+              <span class="attribute-value" id="str-value">18</span>
+              <button class="attr-button" onclick="changeAttribute('str', 1)">+</button>
+            </div>
+            <div id="str-mod">+4</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">DEX</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('dex', -1)">-</button>
+              <span class="attribute-value" id="dex-value">14</span>
+              <button class="attr-button" onclick="changeAttribute('dex', 1)">+</button>
+            </div>
+            <div id="dex-mod">+2</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">CON</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('con', -1)">-</button>
+              <span class="attribute-value" id="con-value">14</span>
+              <button class="attr-button" onclick="changeAttribute('con', 1)">+</button>
+            </div>
+            <div id="con-mod">+2</div>
+          </div>
+        </div>
+        <div class="attribute-row">
+          <div class="attribute">
+            <div class="attribute-name">INT</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('int', -1)">-</button>
+              <span class="attribute-value" id="int-value">8</span>
+              <button class="attr-button" onclick="changeAttribute('int', 1)">+</button>
+            </div>
+            <div id="int-mod">-1</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">WIS</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('wis', -1)">-</button>
+              <span class="attribute-value" id="wis-value">10</span>
+              <button class="attr-button" onclick="changeAttribute('wis', 1)">+</button>
+            </div>
+            <div id="wis-mod">+0</div>
+          </div>
+          <div class="attribute">
+            <div class="attribute-name">CHA</div>
+            <div class="attribute-controls">
+              <button class="attr-button" onclick="changeAttribute('cha', -1)">-</button>
+              <span class="attribute-value" id="cha-value">12</span>
+              <button class="attr-button" onclick="changeAttribute('cha', 1)">+</button>
+            </div>
+            <div id="cha-mod">+1</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab active" onclick="changeTab('main')">Haupt</div>
+        <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
+        <div class="tab" onclick="changeTab('class')">Klasse</div>
+      </div>
+
+      <div id="main" class="tab-content active">
+        <div class="section">
+          <div>
+            <span class="toggle" id="rage" onclick="toggle('rage')">Rage</span>
+            <span class="toggle" id="gwm" onclick="toggle('gwm')">Great Weapon Master</span>
+            <span class="toggle" id="reckless" onclick="toggle('reckless')">Reckless Attack</span>
+          </div>
+          
+          <div style="margin-top: 5px">
+            <div><b>Aktueller Schaden:</b> <span id="summary">2W6 (Waffe) + 4 (STR)</span></div>
+            <div><b>Angriffsbonus:</b> +<span id="attack-bonus">7</span> (+<span id="attack-str">4</span> STR, +3 PB)</div>
+          </div>
+        </div>
+        
+        <div class="section">
+          <h2>Kampfaktionen</h2>
+          <div>
+            <b>Aktion:</b> 2 Angriffe (Extra Attack)<br>
+            <b>Bonusaktion:</b> Rage, Hew (nach Crit oder 0HP)<br>
+            <b>Reaktion:</b> Opportunity Attack
+          </div>
+        </div>
+        
+        <div class="section">
+          <h2>Fertigkeiten</h2>
+          <div class="skill-item">
+            <span>Athletik (STR):</span>
+            <span>+7</span>
+          </div>
+          <div class="skill-item">
+            <span>Einschüchtern (CHA):</span>
+            <span>+4</span>
+          </div>
+          <div class="skill-item">
+            <span>Motiv erkennen (WIS):</span>
+            <span>+3</span>
+          </div>
+          <div class="skill-item">
+            <span>Überlebenskunst (WIS):</span>
+            <span>+3</span>
+          </div>
+          <div class="skill-item">
+            <span>Wahrnehmung (WIS):</span>
+            <span>+3</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="skills" class="tab-content">
+        <div class="section">
+          <div class="skill-item">
+            <span>Initiative:</span>
+            <span>+2</span>
+          </div>
+          <div class="skill-item">
+            <span>RW Stärke:</span>
+            <span>+7</span>
+          </div>
+          <div class="skill-item">
+            <span>RW Geschicklichkeit:</span>
+            <span>+2</span>
+          </div>
+          <div class="skill-item">
+            <span>RW Konstitution:</span>
+            <span>+5</span>
+          </div>
+          <div class="skill-item">
+            <span>RW Intelligenz:</span>
+            <span>-1</span>
+          </div>
+          <div class="skill-item">
+            <span>RW Weisheit:</span>
+            <span>+0</span>
+          </div>
+          <div class="skill-item">
+            <span>RW Charisma:</span>
+            <span>+1</span>
+          </div>
+          <div class="skill-item">
+            <span>Passive Wahrnehmung:</span>
+            <span>13</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Traits</h2>
+          <ul style="margin: 0; padding-left: 20px">
+            <li>Kälteresistenz</li>
+            <li>Stoß-, Stich- und Hiebresistenz (in Rage)</li>
+            <li>Powerful Build</li>
+            <li>Great Weapon Master</li>
+            <li>Large Form</li>
+          </ul>
+        </div>
+        
+        <div class="section">
+          <h2>Hintergrund: Far Traveler</h2>
+          <div>
+            Goliath | Chaotic Neutral
+          </div>
+        </div>
+      </div>
+
+      <div id="class" class="tab-content">
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Barbarian Level 1-2</div>
+          <div class="collapsible-content">
+            <p><b>Rage:</b> Bonusaktion. Vorteil auf STR-Würfe, +2 auf Schaden, Resistenz gegen physischen Schaden. 3× pro langer Rast.</p>
+            <p><b>Unarmored Defense:</b> AC = 10 + DEX + CON (ohne Rüstung).</p>
+            <p><b>Danger Sense:</b> Vorteil auf DEX-RW gegen Gefahren, die du sehen kannst.</p>
+            <p><b>Reckless Attack:</b> Vorteil auf Nahkampfangriffe mit STR, aber Vorteil für Gegner.</p>
+          </div>
+        </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 3-5 Fähigkeiten</div>
+          <div class="collapsible-content">
+            <p><b>Primal Path:</b> Entscheidung für einen barbarischen Pfad.</p>
+            <p><b>Primal Knowledge:</b> Zusätzliche Fertigkeit: Wahrnehmung. In Rage: bestimmte Fertigkeiten mit STR nutzen.</p>
+            <p><b>Ability Score Improvement:</b> Great Weapon Master Feat.</p>
+            <p><b>Extra Attack:</b> Zwei Angriffe pro Angriffsaktion.</p>
+            <p><b>Fast Movement:</b> Bewegungsrate +10 Fuß (nicht in schwerer Rüstung).</p>
+          </div>
+        </div>
+        
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Great Weapon Master</div>
+          <div class="collapsible-content">
+            <p><b>Heavy Weapon Mastery:</b> Mit schweren Waffen +3 Extraschaden (Übungsbonus).</p>
+            <p><b>Hew:</b> Nach kritischem Treffer oder Reduzieren auf 0 TP: ein Angriff als Bonusaktion.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="image-column">
+      <img src="https://sharonmabel.github.io/DnD/Bren.jpg" alt="Bren Varakhaal" class="character-image">
+      <div class="section" style="text-align: center">
+        <div class="result">Würfelergebnis:</div>
+        <div id="dice-result" style="font-size: 24px; font-weight: bold">-</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle active state for buffs
+    function toggle(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('active');
+      updateSummary();
+    }
+    
+    // Change tab
+    function changeTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Remove active class from all tab buttons
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      
+      // Add active class to tab button
+      document.querySelectorAll('.tab').forEach(tab => {
+        if (tab.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+          tab.classList.add('active');
+        }
+      });
+    }
+
+    // Toggle collapsible sections
+    function toggleCollapsible(element) {
+      const content = element.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    }
+
+    // Update damage summary based on active buffs
+    function updateSummary() {
+      const rage = document.getElementById('rage').classList.contains('active');
+      const gwm = document.getElementById('gwm').classList.contains('active');
+      const reckless = document.getElementById('reckless').classList.contains('active');
+      
+      const strMod = parseInt(document.getElementById('str-mod').innerText.replace('+', ''));
+      
+      let dmg = `2W6 (Waffe) + ${strMod} (STR)`;
+      if (rage) dmg += " + 2 (Rage)";
+      if (gwm) dmg += " + 3 (GWM) - 5 to hit";
+
+      document.getElementById('summary').innerText = dmg;
+      
+      // Update attack bonus
+      let attackBonus = strMod + 3; // STR + Proficiency
+      if (gwm) attackBonus -= 5; // GWM penalty
+      
+      document.getElementById('attack-bonus').innerText = attackBonus;
+    }
+    
+    // Change attribute value with plus/minus buttons
+    function changeAttribute(attr, amount) {
+      const element = document.getElementById(attr + '-value');
+      let value = parseInt(element.innerText) + amount;
+      
+      // Limit attribute values to reasonable D&D range
+      if (value < 1) value = 1;
+      if (value > 30) value = 30;
+      
+      element.innerText = value;
+      
+      // Calculate and update ability modifier
+      const mod = Math.floor((value - 10) / 2);
+      const modText = mod >= 0 ? `+${mod}` : mod;
+      document.getElementById(`${attr}-mod`).innerText = modText;
+      
+      // Update STR-based values if STR is changed
+      if (attr === 'str') {
+        document.getElementById('attack-str').innerText = mod >= 0 ? mod : 0;
+        recalculateAttackBonus();
+        updateSummary();
+      }
+    }
+    
+    // Modify HP
+    function modifyHP(amount) {
+      const currentHPElement = document.getElementById('current-hp');
+      const maxHPElement = document.getElementById('max-hp');
+      
+      let currentHP = parseInt(currentHPElement.innerText);
+      const maxHP = parseInt(maxHPElement.innerText);
+      
+      currentHP = Math.min(Math.max(currentHP + amount, 0), maxHP);
+      currentHPElement.innerText = currentHP;
+    }
+    
+    // Recalculate attack bonus
+    function recalculateAttackBonus() {
+      const strMod = parseInt(document.getElementById('attack-str').innerText);
+      const pb = 3; // Proficiency bonus
+      
+      let total = strMod + pb;
+      
+      // Check if GWM is active
+      if (document.getElementById('gwm').classList.contains('active')) {
+        total -= 5;
+      }
+      
+      document.getElementById('attack-bonus').innerText = total;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&D Charaktere</title>
+  <style>
+    body {
+      font-family: serif;
+      background-color: white;
+      color: black;
+      font-size: 16px;
+      line-height: 1.3;
+      margin: 0;
+      padding: 10px;
+    }
+    
+    h1, h2, h3 {
+      margin: 5px 0;
+    }
+    
+    .page {
+      display: none;
+    }
+    
+    .page.active {
+      display: block;
+    }
+    
+    .character-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .character-item {
+      border: 1px solid #999;
+      margin-bottom: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+    
+    .character-item:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .section {
+      border: 1px solid #999;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .nav-bar {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .nav-bar button {
+      background-color: white;
+      border: 1px solid #999;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    
+    .tab-bar {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 5px;
+      border: 1px solid #999;
+      cursor: pointer;
+    }
+    
+    .tab.active {
+      background-color: #eee;
+      font-weight: bold;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .attribute-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .attribute {
+      text-align: center;
+      border: 1px solid #999;
+      padding: 5px;
+      width: 15%;
+    }
+    
+    .attribute-name {
+      font-weight: bold;
+    }
+    
+    .attribute-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .attribute-value {
+      font-size: 18px;
+      margin: 0 3px;
+      min-width: 20px;
+      text-align: center;
+    }
+    
+    .btn {
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      border: 1px solid #999;
+      background: white;
+      cursor: pointer;
+      text-align: center;
+      line-height: 18px;
+    }
+    
+    .hp-row {
+      margin: 5px 0;
+    }
+    
+    .toggle-row {
+      margin: 5px 0;
+    }
+    
+    .toggle {
+      display: inline-block;
+      padding: 5px;
+      margin-right: 5px;
+      border: 1px solid #999;
+      cursor: pointer;
+    }
+    
+    .toggle.active {
+      background-color: #eee;
+      font-weight: bold;
+    }
+    
+    .skill-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+      padding: 3px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .skill-value {
+      font-weight: bold;
+    }
+    
+    .collapsible {
+      border: 1px solid #999;
+      margin-bottom: 5px;
+    }
+    
+    .collapsible-header {
+      background-color: #eee;
+      padding: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .collapsible-content {
+      padding: 5px;
+      display: none;
+    }
+    
+    .image-toggle {
+      margin: 10px 0;
+    }
+    
+    .character-image {
+      max-width: 100%;
+      display: none;
+      margin-bottom: 10px;
+      border: 1px solid #999;
+    }
+    
+    .result-box {
+      border: 1px solid #999;
+      padding: 10px;
+      margin: 10px 0;
+      font-weight: bold;
+      min-height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Page with Character Selection -->
+  <div id="main-page" class="page active">
+    <h1>D&D Charaktere</h1>
+    
+    <p>Wähle einen Charakter aus oder erstelle einen neuen:</p>
+    
+    <ul class="character-list" id="character-list">
+      <li class="character-item" onclick="loadCharacter('ilio')">
+        <strong>Ilio Xaenor</strong>
+        <br>Waldelf Gloom Stalker 4 / Rogue 1
+      </li>
+      <!-- Additional characters will be added here by JavaScript -->
+    </ul>
+    
+    <button onclick="showPage('new-character')">Neuen Charakter erstellen</button>
+  </div>
+  
+  <!-- New Character Page -->
+  <div id="new-character" class="page">
+    <div class="nav-bar">
+      <button onclick="showPage('main-page')">← Zurück</button>
+      <h2>Neuer Charakter</h2>
+      <div></div>
+    </div>
+    
+    <div class="section">
+      <label for="char-name">Name:</label>
+      <input type="text" id="char-name" style="width: 100%; margin: 5px 0; padding: 5px;">
+      
+      <label for="char-race-class">Volk & Klasse:</label>
+      <input type="text" id="char-race-class" style="width: 100%; margin: 5px 0; padding: 5px;">
+      
+      <label for="char-image">Bild URL (optional):</label>
+      <input type="text" id="char-image" style="width: 100%; margin: 5px 0; padding: 5px;">
+      
+      <button onclick="createCharacter()">Charakter erstellen</button>
+    </div>
+  </div>
+  
+  <!-- Character Sheet Page -->
+  <div id="character-sheet" class="page">
+    <div class="nav-bar">
+      <button onclick="showPage('main-page')">← Zurück</button>
+      <h2 id="character-name">Charaktername</h2>
+      <button onclick="saveCharacter()">Speichern</button>
+    </div>
+    
+    <p id="character-race-class">Rasse/Klasse</p>
+    
+    <div class="image-toggle">
+      <button onclick="toggleImage()">Bild anzeigen/verstecken</button>
+      <img id="character-image" class="character-image" src="" alt="Charakterbild">
+    </div>
+    
+    <div class="hp-row">
+      <span>RK <span id="character-ac" onclick="editValue(this, 'Rüstungsklasse')">10</span></span> |
+      <span>TP <span id="current-hp">10</span>/<span id="max-hp" onclick="editValue(this, 'Max TP')">10</span></span>
+      <button class="btn" onclick="modifyHP(-1)">-</button>
+      <button class="btn" onclick="modifyHP(1)">+</button> |
+      <span>Bewegung <span id="character-speed" onclick="editValue(this, 'Bewegung')">30</span> ft</span>
+    </div>
+    
+    <div class="tab-bar">
+      <div class="tab active" onclick="changeTab('stats')">Stats</div>
+      <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
+      <div class="tab" onclick="changeTab('spells')">Zauber</div>
+      <div class="tab" onclick="changeTab('class')">Klasse</div>
+    </div>
+    
+    <div id="stats" class="tab-content active">
+      <div class="attribute-row">
+        <div class="attribute">
+          <div class="attribute-name">STR</div>
+          <div class="attribute-controls">
+            <button class="btn" onclick="changeAttribute('str', -1)">-</button>
+            <span class="attribute-value" id="str-value">10</span>
+            <button class="btn" onclick="changeAttribute('str', 1)">+</button>
+          </div>
+          <div id="str-mod">+0</div>
+        </div>
+        
+        <div class="attribute">
+          <div class="attribute-name">DEX</div>
+          <div class="attribute-controls">
+            <button class="btn" onclick="changeAttribute('dex', -1)">-</button>
+            <span class="attribute-value" id="dex-value">10</span>
+            <button class="btn" onclick="changeAttribute('dex', 1)">+</button>
+          </div>
+          <div id="dex-mod">+0</div>
+        </div>
+        
+        <div class="attribute">
+          <div class="attribute-name">CON</div>
+          <div class="attribute-controls">
+            <button class="btn" onclick="changeAttribute('con', -1)">-</button>
+            <span class="attribute-value" id="con-value">10</span>
+            <button class="btn" onclick="changeAttribute('con', 1)">+</button>
+          </div>
+          <div id="con-mod">+0</div>
+        </div>
+      </div>
+      
+      <div class="attribute-row">
+        <div class="attribute">
+          <div class="attribute-name">INT</div>
+          <div class="attribute-controls">
+            <button class="btn" onclick="changeAttribute('int', -1)">-</button>
+            <span class="attribute-value" id="int-value">10</span>
+            <button class="btn" onclick="changeAttribute('int', 1)">+</button>
+          </div>
+          <div id="int-mod">+0</div>
+        </div>
+        
+        <div class="attribute">
+          <div class="attribute-name">WIS</div>
+          <div class="attribute-controls">
+            <button class="btn" onclick="changeAttribute('wis', -1)">-</button>
+            <span class="attribute-value" id="wis-value">10</span>
+            <button class="btn" onclick="changeAttribute('wis', 1)">+</button>
+          </div>
+          <div id="wis-mod">+0</div>
+        </div>
+        
+        <div class="attribute">
+          <div class="attribute-name">CHA</div>
+          <div class="attribute-controls">
+            <button class="btn" onclick="changeAttribute('cha', -1)">-</button>
+            <span class="attribute-value" id="cha-value">10</span>
+            <button class="btn" onclick="changeAttribute('cha', 1)">+</button>
+          </div>
+          <div id="cha-mod">+0</div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h3>Kampfoptionen</h3>
+        <div class="toggle-row">
+          <div class="toggle" id="hunter" onclick="toggle('hunter')">Hunter's Mark</div>
+          <div class="toggle" id="sneak" onclick="toggle('sneak')">Sneak Attack</div>
+          <div class="toggle" id="gloom" onclick="toggle('gloom')">Gloom Stalker</div>
+        </div>
+        
+        <h3>Schadenswurf</h3>
+        <div id="damage-summary">1W8 (Waffe) + 0 (DEX)</div>
+        
+        <h3>Angriffsbonus</h3>
+        <div>+<span id="attack-bonus">0</span> Fernkampf</div>
+        <div>(+<span id="attack-dex">0</span> DEX, +<span id="attack-pb" onclick="editValue(this, 'Übungsbonus')">2</span> PB, +<span id="attack-archery" onclick="editValue(this, 'Archery Bonus')">0</span> Archery)</div>
+      </div>
+      
+      <div class="result-box" id="result-display">
+        Würfelergebnis hier anzeigen
+      </div>
+    </div>
+    
+    <div id="skills" class="tab-content">
+      <div class="section">
+        <h3>Fertigkeiten</h3>
+        <div class="skill-item">
+          <span>Akrobatik (DEX)</span>
+          <span class="skill-value" id="skill-acrobatics" onclick="editSkill(this, 'Akrobatik')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Athletik (STR)</span>
+          <span class="skill-value" id="skill-athletics" onclick="editSkill(this, 'Athletik')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Heimlichkeit (DEX)</span>
+          <span class="skill-value" id="skill-stealth" onclick="editSkill(this, 'Heimlichkeit')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Wahrnehmung (WIS)</span>
+          <span class="skill-value" id="skill-perception" onclick="editSkill(this, 'Wahrnehmung')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Überlebenskunst (WIS)</span>
+          <span class="skill-value" id="skill-survival" onclick="editSkill(this, 'Überlebenskunst')">+0</span>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h3>Rettungswürfe</h3>
+        <div class="skill-item">
+          <span>Stärke</span>
+          <span class="skill-value" id="save-str" onclick="editSkill(this, 'Stärke RW')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Geschicklichkeit</span>
+          <span class="skill-value" id="save-dex" onclick="editSkill(this, 'Geschicklichkeit RW')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Konstitution</span>
+          <span class="skill-value" id="save-con" onclick="editSkill(this, 'Konstitution RW')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Intelligenz</span>
+          <span class="skill-value" id="save-int" onclick="editSkill(this, 'Intelligenz RW')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Weisheit</span>
+          <span class="skill-value" id="save-wis" onclick="editSkill(this, 'Weisheit RW')">+0</span>
+        </div>
+        <div class="skill-item">
+          <span>Charisma</span>
+          <span class="skill-value" id="save-cha" onclick="editSkill(this, 'Charisma RW')">+0</span>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h3>Sprachen & Traits</h3>
+        <textarea id="traits" style="width: 100%; height: 100px; margin-top: 5px; font-family: serif;"></textarea>
+      </div>
+    </div>
+    
+    <div id="spells" class="tab-content">
+      <div class="section">
+        <h3>Zauber & Fähigkeiten</h3>
+        <textarea id="spells-text" style="width: 100%; height: 200px; margin-top: 5px; font-family: serif;"></textarea>
+      </div>
+    </div>
+    
+    <div id="class" class="tab-content">
+      <h3>Klassenmerkmale</h3>
+      <textarea id="class-text" style="width: 100%; height: 200px; margin-top: 5px; font-family: serif;"></textarea>
+    </div>
+  </div>
+
+  <script>
+    // Character data storage
+    let characters = {
+      'ilio': {
+        name: 'Ilio Xaenor',
+        raceClass: 'Waldelf Gloom Stalker 4 / Rogue 1',
+        image: 'https://sharonmabel.github.io/DnD/Ilio.png',
+        ac: 16,
+        hp: 16,
+        maxHp: 21,
+        speed: 35,
+        attributes: {
+          str: 10,
+          dex: 18,
+          con: 14,
+          int: 10,
+          wis: 14,
+          cha: 10
+        },
+        skills: {
+          acrobatics: '+10',
+          athletics: '+3',
+          stealth: '+10',
+          perception: '+8',
+          survival: '+5'
+        },
+        saves: {
+          str: '+3',
+          dex: '+7',
+          con: '+2',
+          int: '+0',
+          wis: '+2',
+          cha: '+0'
+        },
+        pb: 3,
+        archery: 2,
+        traits: 'Sprachen: Common, Elvish, Dwarvish, Orkish, Gebärdensprache, Diebessprache\n\nDarkvision (120 ft)\nInvisible to Darkvision-only creatures\nFey Ancestry (Schutz vor Bezauberung & Schlaf)\nSharpshooter (2024)\nTrance statt Schlaf',
+        spells: 'Bonusaktionen:\n- Hunter\'s Mark\n- Ensnaring Strike\n\nAktionen:\n- Fog Cloud\n- Cure Wounds\n- Beast Bond\n- Good Berries',
+        classFeatures: 'Gloom Stalker Features:\n\n- Dread Ambusher: Zu Beginn des ersten Zuges im Kampf +10 ft Bewegung und zusätzlichen Angriff\n\n- Umbral Sight: +60 ft Darkvision, unsichtbar für Kreaturen mit nur Darkvision\n\n- Dreadful Strike: 2W6 psychischer Schaden 1x pro Zug (WIS-Mod mal pro langer Rast)\n\n- Iron Mind: Weisheits-Rettungswürfe Proficiency'
+      }
+      // Other characters can be added here
+    };
+    
+    // Load characters from localStorage if available
+    if (localStorage.getItem('dnd-characters')) {
+      const storedCharacters = JSON.parse(localStorage.getItem('dnd-characters'));
+      characters = { ...characters, ...storedCharacters };
+      updateCharacterList();
+    }
+    
+    let currentCharacter = null;
+    
+    // Navigation functions
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
+    }
+    
+    function changeTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      document.getElementById(tabName).classList.add('active');
+      
+      document.querySelectorAll('.tab').forEach(tab => {
+        if (tab.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+          tab.classList.add('active');
+        }
+      });
+    }
+    
+    // Toggle image visibility
+    function toggleImage() {
+      const img = document.getElementById('character-image');
+      img.style.display = img.style.display === 'none' || img.style.display === '' ? 'block' : 'none';
+    }
+    
+    // Character management functions
+    function updateCharacterList() {
+      const list = document.getElementById('character-list');
+      list.innerHTML = ''; // Clear list
+      
+      // Add characters to list
+      Object.keys(characters).forEach(id => {
+        const char = characters[id];
+        const item = document.createElement('li');
+        item.className = 'character-item';
+        item.onclick = function() { loadCharacter(id); };
+        item.innerHTML = `<strong>${char.name}</strong><br>${char.raceClass}`;
+        list.appendChild(item);
+      });
+    }
+    
+    function loadCharacter(characterId) {
+      currentCharacter = characterId;
+      const char = characters[characterId];
+      
+      // Set character info
+      document.getElementById('character-name').textContent = char.name;
+      document.getElementById('character-race-class').textContent = char.raceClass;
+      document.getElementById('character-image').src = char.image || '';
+      document.getElementById('character-ac').textContent = char.ac || 10;
+      document.getElementById('current-hp').textContent = char.hp || 10;
+      document.getElementById('max-hp').textContent = char.maxHp || 10;
+      document.getElementById('character-speed').textContent = char.speed || 30;
+      
+      // Set attributes
+      document.getElementById('str-value').textContent = char.attributes.str;
+      document.getElementById('dex-value').textContent = char.attributes.dex;
+      document.getElementById('con-value').textContent = char.attributes.con;
+      document.getElementById('int-value').textContent = char.attributes.int;
+      document.getElementById('wis-value').textContent = char.attributes.wis;
+      document.getElementById('cha-value').textContent = char.attributes.cha;
+      
+      // Update attribute modifiers
+      updateAttributeModifiers();
+      
+      // Set skills
+      Object.keys(char.skills).forEach(skill => {
+        const element = document.getElementById('skill-' + skill);
+        if (element) element.textContent = char.skills[skill];
+      });
+      
+      // Set saves
+      Object.keys(char.saves).forEach(save => {
+        const element = document.getElementById('save-' + save);
+        if (element) element.textContent = char.saves[save];
+      });
+      
+      // Set other fields
+      document.getElementById('attack-pb').textContent = char.pb || 2;
+      document.getElementById('attack-archery').textContent = char.archery || 0;
+      document.getElementById('traits').value = char.traits || '';
+      document.getElementById('spells-text').value = char.spells || '';
+      document.getElementById('class-text').value = char.classFeatures || '';
+      
+      // Update attack bonus and damage summary
+      recalculateAttackBonus();
+      updateDamageSummary();
+      
+      showPage('character-sheet');
+    }
+    
+    function createCharacter() {
+      const name = document.getElementById('char-name').value.trim();
+      const raceClass = document.getElementById('char-race-class').value.trim();
+      const image = document.getElementById('char-image').value.trim();
+      
+      if (!name || !raceClass) {
+        alert('Bitte gib einen Namen und Volk/Klasse ein!');
+        return;
+      }
+      
+      // Create unique ID
+      const id = name.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now();
+      
+      // Create character
+      characters[id] = {
+        name: name,
+        raceClass: raceClass,
+        image: image,
+        ac: 10,
+        hp: 10,
+        maxHp: 10,
+        speed: 30,
+        attributes: {
+          str: 10,
+          dex: 10,
+          con: 10,
+          int: 10,
+          wis: 10,
+          cha: 10
+        },
+        skills: {
+          acrobatics: '+0',
+          athletics: '+0',
+          stealth: '+0',
+          perception: '+0',
+          survival: '+0'
+        },
+        saves: {
+          str: '+0',
+          dex: '+0',
+          con: '+0',
+          int: '+0',
+          wis: '+0',
+          cha: '+0'
+        },
+        pb: 2,
+        archery: 0,
+        traits: '',
+        spells: '',
+        classFeatures: ''
+      };
+      
+      // Save to localStorage
+      saveToLocalStorage();
+      
+      // Update list and load new character
+      updateCharacterList();
+      loadCharacter(id);
+    }
+    
+    function saveCharacter() {
+      if (!currentCharacter) return;
+      
+      const char = characters[currentCharacter];
+      
+      // Save all fields
+      char.ac = parseInt(document.getElementById('character-ac').textContent);
+      char.hp = parseInt(document.getElementById('current-hp').textContent);
+      char.maxHp = parseInt(document.getElementById('max-hp').textContent);
+      char.speed = parseInt(document.getElementById('character-speed').textContent);
+      
+      char.attributes.str = parseInt(document.getElementById('str-value').textContent);
+      char.attributes.dex = parseInt(document.getElementById('dex-value').textContent);
+      char.attributes.con = parseInt(document.getElementById('con-value').textContent);
+      char.attributes.int = parseInt(document.getElementById('int-value').textContent);
+      char.attributes.wis = parseInt(document.getElementById('wis-value').textContent);
+      char.attributes.cha = parseInt(document.getElementById('cha-value').textContent);
+      
+      char.pb = parseInt(document.getElementById('attack-pb').textContent);
+      char.archery = parseInt(document.getElementById('attack-archery').textContent);
+      
+      char.traits = document.getElementById('traits').value;
+      char.spells = document.getElementById('spells-text').value;
+      char.classFeatures = document.getElementById('class-text').value;
+      
+      // Save skills and saves (would need to implement if we add more fields)
+      
+      // Save to localStorage
+      saveToLocalStorage();
+      
+      // Show confirmation
+      document.getElementById('result-display').textContent = 'Charakter gespeichert!';
+      setTimeout(() => {
+        document.getElementById('result-display').textContent = 'Würfelergebnis hier anzeigen';
+      }, 2000);
+    }
+    
+    function saveToLocalStorage() {
+      // Create a copy without the default character
+      const storedCharacters = { ...characters };
+      delete storedCharacters['ilio']; // Don't save the default character
+      
+      localStorage.setItem('dnd-characters', JSON.stringify(storedCharacters));
+    }
+    
+    // Attribute handling
+    function changeAttribute(attr, amount) {
+      const element = document.getElementById(attr + '-value');
+      let value = parseInt(element.textContent) + amount;
+      
+      // Limit attribute values
+      if (value < 1) value = 1;
+      if (value > 30) value = 30;
+      
+      element.textContent = value;
+      
+      // Update modifier
+      updateAttributeModifiers();
+      
+      // Update DEX-based values if DEX is changed
+      if (attr === 'dex') {
+        recalculateAttackBonus();
+        updateDamageSummary();
+      }
+    }
+    
+    function updateAttributeModifiers() {
+      ['str', 'dex', 'con', 'int', 'wis', 'cha'].forEach(attr => {
+        const value = parseInt(document.getElementById(attr + '-value').textContent);
+        const mod = Math.floor((value - 10) / 2);
+        const modText = mod >= 0 ? `+${mod}` : mod;
+        document.getElementById(`${attr}-mod`).textContent = modText;
+        
+        if (attr === 'dex') {
+          document.getElementById('attack-dex').textContent = mod >= 0 ? mod : 0;
+        }
+      });
+    }
+    
+    // Toggle combat options
+    function toggle(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('active');
+      updateDamageSummary();
+    }
+    
+    // Update damage summary based on active buffs
+    function updateDamageSummary() {
+      const hunter = document.getElementById('hunter').classList.contains('active');
+      const sneak = document.getElementById('sneak').classList.contains('active');
+      const gloom = document.getElementById('gloom').classList.contains('active');
+      
+      const dexMod = parseInt(document.getElementById('dex-mod').textContent.replace('+', ''));
+      
+      let dmg = `1W8 (Waffe) + ${dexMod} (DEX)`;
+      if (hunter) dmg += " + 1W6 (Hunter's Mark)";
+      if (sneak) dmg += " + 1W6 (Sneak Attack)";
+      if (gloom) dmg += " + 2W6 (Gloom Stalker)";
+
+      document.getElementById('damage-summary').textContent = dmg;
+    }
+    
+    // Recalculate attack bonus
+    function recalculateAttackBonus() {
+      const dexMod = parseInt(document.getElementById('attack-dex').textContent);
+      const pb = parseInt(document.getElementById('attack-pb').textContent);
+      const archery = parseInt(document.getElementById('attack-archery').textContent);
+      
+      const total = dexMod + pb + archery;
+      document.getElementById('attack-bonus').textContent = total;
+    }
+    
+    // HP management
+    function modifyHP(amount) {
+      const currentHPElement = document.getElementById('current-hp');
+      const maxHPElement = document.getElementById('max-hp');
+      
+      let currentHP = parseInt(currentHPElement.textContent);
+      const maxHP = parseInt(maxHPElement.textContent);
+      
+      currentHP = Math.min(Math.max(currentHP + amount, 0), maxHP);
+      currentHPElement.textContent = currentHP;
+    }
+    
+    // Edit any value
+    function editValue(element, label) {
+      const currentValue = element.textContent;
+      const newValue = prompt(`Neuer Wert für ${label}:`, currentValue);
+      
+      if (newValue !== null && newValue !== '') {
+        element.textContent = newValue;
+        
+        // Special handling for max HP
+        if (element.id === 'max-hp') {
+          const currentHP = parseInt(document.getElementById('current-hp').textContent);
+          const maxHP = parseInt(newValue);
+          if (currentHP > maxHP) {
+            document.getElementById('current-hp').textContent = maxHP;
+          }
+        }
+        
+        // Update attack bonus if PB or Archery is changed
+        if (element.id === 'attack-pb' || element.id === 'attack-archery') {
+          recalculateAttackBonus();
+        }
+      }
+    }
+    
+    // Edit skill value
+    function editSkill(element, skillName) {
+      const currentValue = element.textContent;
+      const newValue = prompt(`Neuer Wert für ${skillName}:`, currentValue);
+      
+      if (newValue !== null && newValue !== '') {
+        element.textContent = newValue;
+      }
+    }
+  </script>
+</body>
+</html>
