@@ -6,7 +6,7 @@
   <title>Bren Varakhaal - Ultimate Barbarian</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;700&family=Roboto:wght@400;700&display=swap');
-    
+
     :root {
       --primary: #8B0000;
       --secondary: #4B0082;
@@ -16,12 +16,12 @@
       --card-bg: #2a2a2a;
       --border: #444;
     }
-    
+
     * {
       box-sizing: border-box;
       transition: all 0.3s ease;
     }
-    
+
     body {
       font-family: 'Roboto', sans-serif;
       background-color: var(--background);
@@ -33,19 +33,19 @@
       padding: 10px;
       overflow-x: hidden;
     }
-    
+
     h1, h2, h3 {
       font-family: 'Grenze Gotisch', cursive;
       color: var(--accent);
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
-    
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
       position: relative;
     }
-    
+
     .header {
       display: flex;
       align-items: center;
@@ -56,24 +56,24 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
       margin-bottom: 15px;
     }
-    
+
     .char-name {
       flex: 1;
       margin: 0;
       font-size: 2.5rem;
     }
-    
+
     .char-desc {
       font-size: 1.2rem;
       opacity: 0.9;
     }
-    
+
     .main-content {
       display: grid;
       grid-template-columns: 3fr 1fr;
       gap: 15px;
     }
-    
+
     .char-portrait {
       position: relative;
       border-radius: 10px;
@@ -82,18 +82,18 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
       max-height: 600px;
     }
-    
+
     .char-portrait img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.5s ease;
     }
-    
+
     .char-portrait:hover img {
       transform: scale(1.03);
     }
-    
+
     .rage-overlay {
       position: absolute;
       top: 0;
@@ -105,18 +105,18 @@
       transition: opacity 0.5s ease;
       pointer-events: none;
     }
-    
+
     .rage-active .rage-overlay {
       opacity: 1;
       animation: pulse 2s infinite;
     }
-    
+
     @keyframes pulse {
       0% { background: rgba(139, 0, 0, 0.3); }
       50% { background: rgba(139, 0, 0, 0.5); }
       100% { background: rgba(139, 0, 0, 0.3); }
     }
-    
+
     .card {
       background: rgba(42, 42, 42, 0.9);
       border-radius: 10px;
@@ -125,13 +125,13 @@
       border: 1px solid var(--border);
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
     }
-    
+
     .attributes {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
-    
+
     .attribute {
       text-align: center;
       padding: 10px;
@@ -141,35 +141,41 @@
       position: relative;
       cursor: pointer;
     }
-    
+
     .attribute:hover {
       background: rgba(75, 0, 130, 0.5);
       transform: translateY(-3px);
     }
-    
+
     .attribute-name {
       font-weight: bold;
       font-size: 1.2rem;
       color: var(--accent);
     }
-    
+
     .attribute-value {
       font-size: 2rem;
       font-weight: bold;
       margin: 5px 0;
     }
-    
+
     .attribute-mod {
       font-size: 1.5rem;
     }
-    
+
     .hp-container {
       display: flex;
-      align-items: center;
+      flex-direction: column; /* Changed from row */
       margin: 15px 0;
-      gap: 10px;
     }
-    
+
+    .hp-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px; /* Added margin */
+    }
+
     .hp-bar {
       flex: 1;
       height: 30px;
@@ -178,14 +184,24 @@
       overflow: hidden;
       position: relative;
     }
-    
-    .hp-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      width: 100%;
-      transition: width 0.3s ease;
+
+    .hp-fill-base { /* Renamed from hp-fill */
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), #CC0000); /* Base HP color */
+        position: absolute;
+        left: 0;
+        transition: width 0.3s ease;
     }
-    
+
+    .hp-fill-temp { /* New element for Temp HP */
+        height: 100%;
+        background: linear-gradient(90deg, #FFD700, #FFA500); /* Temp HP color */
+        position: absolute;
+        /* left will be set by JS */
+        transition: width 0.3s ease;
+    }
+
+
     .hp-text {
       position: absolute;
       top: 0;
@@ -198,12 +214,13 @@
       font-weight: bold;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     }
-    
+
     .hp-controls {
       display: flex;
       gap: 5px;
+      /* Removed align-items center as container is column */
     }
-    
+
     .hp-btn {
       width: 30px;
       height: 30px;
@@ -214,20 +231,94 @@
       font-weight: bold;
       cursor: pointer;
       font-size: 16px;
+      display: flex;          /* Added */
+      align-items: center;    /* Added */
+      justify-content: center;/* Added */
     }
-    
+
     .hp-btn:hover {
       background: var(--primary);
       transform: scale(1.1);
     }
-    
+
+    .hp-values { /* Added for input organization */
+        display: flex;
+        gap: 10px; /* Reduced gap */
+        margin-bottom: 8px;
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    }
+
+    .hp-field { /* Added for input organization */
+        flex: 1 1 100px; /* Allow flexible sizing */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hp-field-label { /* Added for input organization */
+        font-size: 0.8rem;
+        margin-bottom: 3px;
+        color: #AAA;
+    }
+
+    .hp-input-group { /* Added for input organization */
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .hp-input { /* Added for input styling */
+        flex: 1;
+        background: rgba(30, 30, 30, 0.8);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 5px 8px;
+        color: white;
+        font-size: 1rem;
+        text-align: center;
+        min-width: 50px; /* Ensure minimum width */
+    }
+
+     .hp-reset-btn { /* Added for styling */
+        padding: 5px 10px;
+        background: rgba(80, 80, 80, 0.5);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        font-size: 0.8rem;
+        margin-top: 5px;
+        align-self: flex-start; /* Align button */
+    }
+
+    .hp-reset-btn:hover {
+        background: rgba(100, 100, 100, 0.5);
+    }
+
+    .temp-hp-timer { /* Added for styling */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 5px;
+        font-size: 0.8rem;
+    }
+
+    .temp-hp-source { /* Added for styling */
+        flex: 1;
+        color: #FFA500; /* Temp HP color */
+    }
+
+    .temp-hp-duration { /* Added for styling */
+        color: #AAA;
+    }
+
+
     .tabs {
       display: flex;
       margin-bottom: 15px;
       border-radius: 10px;
       overflow: hidden;
     }
-    
+
     .tab {
       flex: 1;
       padding: 10px;
@@ -238,41 +329,41 @@
       font-weight: bold;
       border-right: 1px solid var(--border);
     }
-    
+
     .tab:last-child {
       border-right: none;
     }
-    
+
     .tab.active {
       background: var(--primary);
       color: white;
     }
-    
+
     .tab:hover:not(.active) {
       background: rgba(139, 0, 0, 0.3);
     }
-    
+
     .tab-content {
       display: none;
     }
-    
+
     .tab-content.active {
       display: block;
       animation: fadeIn 0.5s ease;
     }
-    
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
+
     .toggle-container {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 15px;
     }
-    
+
     .toggle {
       background: rgba(42, 42, 42, 0.7);
       border: 1px solid var(--border);
@@ -283,55 +374,55 @@
       transition: all 0.3s ease;
       user-select: none;
     }
-    
+
     .toggle.active {
       background: var(--primary);
       box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
     }
-    
+
     .toggle:hover:not(.active) {
       background: rgba(75, 0, 130, 0.5);
     }
-    
+
     .combat-stats {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    
+
     .stat {
       display: flex;
       align-items: center;
     }
-    
+
     .stat-label {
       flex: 1;
       font-weight: bold;
     }
-    
+
     .stat-value {
       font-size: 1.2rem;
       font-weight: bold;
       color: var(--accent);
     }
-    
+
     .skills {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    
+
     .skill {
       display: flex;
       justify-content: space-between;
       padding: 5px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     .skill-name {
       font-weight: bold;
     }
-    
+
     .ability {
       position: relative;
       padding: 10px;
@@ -342,22 +433,22 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
-    
+
     .ability:hover {
       background: rgba(75, 0, 130, 0.4);
     }
-    
+
     .ability-name {
       font-weight: bold;
       color: var(--accent);
     }
-    
+
     .ability-desc {
       font-size: 0.9rem;
       opacity: 0.8;
       margin-top: 5px;
     }
-    
+
     .info-icon {
       display: inline-block;
       width: 16px;
@@ -372,7 +463,7 @@
       font-size: 12px;
       font-weight: bold;
     }
-    
+
     .modal {
       display: none;
       position: fixed;
@@ -386,7 +477,7 @@
       justify-content: center;
       padding: 20px;
     }
-    
+
     .modal-content {
       background: var(--card-bg);
       max-width: 600px;
@@ -398,7 +489,7 @@
       max-height: 80vh;
       overflow-y: auto;
     }
-    
+
     .close-btn {
       position: absolute;
       top: 10px;
@@ -416,11 +507,11 @@
       font-size: 16px;
       font-weight: bold;
     }
-    
+
     .close-btn:hover {
       background: var(--accent);
     }
-    
+
     .dice-container {
       text-align: center;
       padding: 15px;
@@ -428,7 +519,7 @@
       border-radius: 10px;
       margin-top: 15px;
     }
-    
+
     .dice-btn {
       background: var(--primary);
       color: white;
@@ -439,19 +530,19 @@
       font-weight: bold;
       margin: 5px;
     }
-    
+
     .dice-btn:hover {
       background: var(--accent);
       transform: translateY(-2px);
     }
-    
+
     .dice-result {
       font-size: 2rem;
       font-weight: bold;
       margin: 10px 0;
       min-height: 50px;
     }
-    
+
     .action-btn {
       background: var(--primary);
       color: white;
@@ -466,19 +557,19 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    
+
     .action-btn:hover {
       background: var(--accent);
       transform: translateY(-2px);
       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
     }
-    
+
     .rage-btn {
       background: var(--primary);
       position: relative;
       overflow: hidden;
     }
-    
+
     .rage-btn::before {
       content: "";
       position: absolute;
@@ -490,18 +581,18 @@
       transition: all 0.5s ease;
       opacity: 0;
     }
-    
+
     .rage-btn:hover::before {
       opacity: 1;
       transform: scale(1.2);
     }
-    
+
     .rage-counter {
       font-size: 0.9rem;
       opacity: 0.8;
       margin-top: 5px;
     }
-    
+
     .infobox {
       position: absolute;
       background: rgba(26, 26, 26, 0.95);
@@ -514,13 +605,13 @@
       display: none;
       font-size: 0.9rem;
     }
-    
+
     .section-divider {
       height: 2px;
       background: linear-gradient(90deg, transparent, var(--accent), transparent);
       margin: 15px 0;
     }
-    
+
     .attribute-control {
       display: flex;
       align-items: center;
@@ -548,82 +639,462 @@
       background: var(--accent);
       transform: scale(1.1);
     }
-    
+
     /* Animation for rage activation */
     @keyframes rageActivation {
       0% { transform: scale(1); }
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
-    
+
     .rage-animation {
       animation: rageActivation 0.5s ease;
     }
-    
+
     /* Animation for leveling effect */
     @keyframes levelUp {
       0% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.5); opacity: 0.5; }
       100% { transform: scale(1); opacity: 1; }
     }
-    
+
     .level-up {
       animation: levelUp 1s ease;
     }
-    
+
+    /* Action Economy Styles */
+    .action-economy {
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(42, 42, 42, 0.9);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .action-economy h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .action-icons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 5px;
+      align-items: center; /* Center icons vertically */
+    }
+
+    .action-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    .action-regular {
+      background-color: #4CAF50; /* Green */
+      border-radius: 50%;
+    }
+
+    .action-bonus {
+      width: 0;
+      height: 0;
+      background-color: transparent;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-bottom: 18px solid #FF9800; /* Orange */
+    }
+
+    .action-reaction {
+      background-color: #2196F3; /* Blue */
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamond shape */
+    }
+
+    .action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .action-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      background: rgba(60, 60, 60, 0.6);
+      border-radius: 5px;
+      font-size: 0.9rem;
+      transition: opacity 0.3s ease; /* Added transition */
+    }
+
+    .action-details { /* Added wrapper */
+      flex: 1;
+      margin-left: 8px; /* Space between icon and text */
+    }
+
+    .action-name {
+      /* flex: 1; */ /* Removed */
+      font-weight: bold;
+    }
+
+    .action-description {
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-top: 3px;
+    }
+
+    .action-used {
+      /* text-decoration: line-through; */ /* Removed */
+      opacity: 0.5;
+    }
+     .action-disabled { /* Added for visual feedback */
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+    }
+
+    .action-checkbox {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .action-checkbox:checked::after {
+      content: '✓';
+      position: absolute;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: bold; /* Make checkmark bolder */
+      top: 0px;  /* Adjust position */
+      left: 2px; /* Adjust position */
+    }
+
+    .action-checkbox:hover {
+      background: rgba(50, 50, 50, 0.8);
+    }
+
+    .action-reset {
+      margin-top: 10px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      background: rgba(80, 80, 80, 0.5);
+      border: 1px solid var(--border);
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .action-reset:hover {
+      background: rgba(100, 100, 100, 0.5);
+    }
+
+    /* Inventory Styles */
+    .inventory-container {
+      margin-top: 15px;
+    }
+
+    .inventory-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .inventory-table th {
+      text-align: left;
+      padding: 8px;
+      background-color: rgba(60, 60, 60, 0.6);
+      border-bottom: 1px solid var(--border);
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .inventory-table td {
+      padding: 8px;
+      border-bottom: 1px solid rgba(100, 100, 100, 0.3);
+      vertical-align: middle; /* Align content vertically */
+    }
+
+    .inventory-table tr:hover {
+      background-color: rgba(60, 60, 60, 0.3);
+    }
+
+    .inventory-add {
+      display: flex;
+      flex-wrap: wrap; /* Allow wrapping */
+      gap: 10px;
+      margin-top: 15px;
+      align-items: flex-end;
+    }
+
+    .inventory-field {
+      flex: 2 1 150px; /* Flexible sizing, min 150px */
+    }
+
+    .inventory-field:nth-child(2),
+    .inventory-field:nth-child(3),
+    .inventory-field:nth-child(4) { /* Apply flex basis to weight, qty, location */
+      flex: 1 1 80px; /* Smaller flex basis */
+    }
+
+    .inventory-field label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      color: #AAA;
+    }
+
+    .inventory-input {
+      width: 100%;
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 8px;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .inventory-select {
+      width: 100%;
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 8px;
+      color: white;
+      font-size: 0.9rem;
+      height: 36px; /* Match input height */
+    }
+
+    .inventory-add-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 15px;
+      cursor: pointer;
+      font-weight: bold;
+      height: 36px; /* Match input height */
+      flex-shrink: 0; /* Prevent button shrinking */
+    }
+
+    .inventory-add-btn:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .inventory-summary {
+      display: flex;
+      flex-wrap: wrap; /* Allow wrapping */
+      justify-content: space-between;
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(60, 60, 60, 0.4);
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    .weight-meter-container { /* Added wrapper */
+       flex: 1 1 200px; /* Allow shrinking/growing */
+       min-width: 150px; /* Ensure minimum width */
+    }
+
+    .weight-meter {
+      width: 100%;
+      height: 8px;
+      background: rgba(30, 30, 30, 0.6);
+      border-radius: 4px;
+      margin-top: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .weight-fill {
+      height: 100%;
+      /* background gradient removed, color set by JS */
+      border-radius: 4px;
+      transition: width 0.3s ease, background 0.3s ease; /* Added background transition */
+    }
+
+    .weight-marker {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.8);
+      transform: translateX(-1px); /* Center marker */
+    }
+
+    .weight-text {
+      margin-top: 5px;
+      font-size: 0.8rem;
+      color: #AAA;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap; /* Allow wrapping */
+    }
+     .weight-text span { /* Add margin for wrapped elements */
+        margin-right: 5px;
+    }
+
+    .delete-item {
+      color: #FF5555;
+      cursor: pointer;
+      padding: 0 5px;
+      font-weight: bold; /* Make delete 'x' more prominent */
+      font-size: 1.1em;  /* Make delete 'x' more prominent */
+      display: inline-block; /* Ensure transform works */
+      transition: color 0.2s ease, transform 0.2s ease; /* Smooth transition */
+    }
+
+    .delete-item:hover {
+      color: #FF0000;
+      transform: scale(1.2);
+    }
+
+
     /* Responsive */
+    @media (max-width: 992px) { /* Adjusted breakpoint */
+        .attributes {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
     @media (max-width: 768px) {
       .main-content {
         grid-template-columns: 1fr;
       }
-      
-      .attributes {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
+
       .skills {
         grid-template-columns: 1fr;
       }
-      
+
       .char-name {
         font-size: 1.8rem;
       }
+      .header {
+          flex-direction: column; /* Stack elements */
+          align-items: flex-start; /* Align left */
+      }
+       .attributes { /* Ensure 2 columns on medium */
+            grid-template-columns: repeat(2, 1fr);
+      }
+      .hp-values { /* Adjust HP inputs layout */
+          gap: 8px;
+      }
+      .hp-field {
+          flex-basis: calc(50% - 4px); /* Two columns for HP inputs */
+          min-width: 0; /* Override min-width */
+      }
+       .inventory-add { /* Stack inventory inputs */
+            flex-direction: column;
+            align-items: stretch;
+      }
+       .inventory-add-btn {
+            width: 100%; /* Full width button */
+      }
+
     }
+     @media (max-width: 480px) { /* Small screens */
+        .attributes {
+            grid-template-columns: 1fr; /* Single column */
+        }
+         .hp-field {
+             flex-basis: 100%; /* Single column for HP inputs */
+        }
+         .char-name {
+             font-size: 1.6rem;
+        }
+         .char-desc {
+             font-size: 1rem;
+        }
+         .dice-container .dice-btn { /* Smaller dice buttons */
+             padding: 6px 10px;
+             font-size: 0.9rem;
+        }
+    }
+
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div>
-        <h1 class="char-name">Bren Varakhaal</h1>
-        <div class="char-desc">Goliath Barbar 5 | Chaotic Neutral | Far Traveler</div>
+    <div class="container">
+      <div class="header">
+        <div>
+          <h1 class="char-name">Bren Varakhaal</h1>
+          <div class="char-desc">Goliath Barbar 5 | Chaotic Neutral | Far Traveler</div>
+        </div>
       </div>
-    </div>
-    
-    <div class="main-content">
-      <div class="left-column">
-        <div class="card">
-          <div class="hp-container">
-            <div class="hp-bar">
-              <div class="hp-fill" id="hp-fill"></div>
-              <div class="hp-text">
-                <span id="current-hp">46</span>/<span id="max-hp">46</span> TP
-              </div>
+
+      <div class="main-content">
+        <div class="left-column">
+          <div class="card"> <div class="hp-container">
+                <div class="hp-values">
+                    <div class="hp-field">
+                      <label for="current-hp-input" class="hp-field-label">Aktuelle TP</label>
+                      <div class="hp-input-group">
+                        <input type="number" id="current-hp-input" class="hp-input" value="46" min="0" max="46" onchange="updateHPDisplay()">
+                      </div>
+                    </div>
+
+                    <div class="hp-field">
+                      <label for="base-max-hp-input" class="hp-field-label">Basis Max-TP</label>
+                      <div class="hp-input-group">
+                        <input type="number" id="base-max-hp-input" class="hp-input" value="46" min="1" onchange="updateMaxHP()">
+                      </div>
+                    </div>
+
+                    <div class="hp-field">
+                      <label for="temp-hp-input" class="hp-field-label">Temporäre TP</label>
+                      <div class="hp-input-group">
+                        <input type="number" id="temp-hp-input" class="hp-input" value="0" min="0" onchange="updateHPDisplay()">
+                        <button class="hp-btn" onclick="openTempHPModal()" title="Temporäre TP hinzufügen/verwalten">+</button>
+                      </div>
+                    </div>
+
+                    <div class="hp-field">
+                      <label for="hp-bonus-input" class="hp-field-label">TP-Bonus</label>
+                      <div class="hp-input-group">
+                        <input type="number" id="hp-bonus-input" class="hp-input" value="0" min="0" onchange="updateMaxHP()">
+                      </div>
+                    </div>
+                </div>
+
+                <div class="hp-bar-container">
+                    <div class="hp-bar">
+                      <div class="hp-fill-base" id="hp-fill-base"></div>
+                      <div class="hp-fill-temp" id="hp-fill-temp"></div>
+                      <div class="hp-text">
+                        <span id="display-current-hp">46</span>/<span id="display-max-hp">46</span> TP
+                        <span id="display-temp-hp"></span> </div>
+                    </div>
+
+                    <div class="hp-controls">
+                      <button class="hp-btn" onclick="modifyHP(-1)" title="1 TP Schaden">-</button>
+                      <button class="hp-btn" onclick="modifyHP(-5)" title="5 TP Schaden">-5</button>
+                      <button class="hp-btn" onclick="modifyHP(5)" title="5 TP Heilung">+5</button>
+                      <button class="hp-btn" onclick="modifyHP(1)" title="1 TP Heilung">+</button>
+                    </div>
+                </div>
+
+                 <div id="temp-hp-effects" style="display: none;">
+                    </div>
+
+                 <button class="hp-reset-btn" onclick="resetHP()">HP auf Maximum zurücksetzen</button>
             </div>
-            <div class="hp-controls">
-              <button class="hp-btn" onclick="modifyHP(-1)">-</button>
-              <button class="hp-btn" onclick="modifyHP(-5)">-5</button>
-              <button class="hp-btn" onclick="modifyHP(5)">+5</button>
-              <button class="hp-btn" onclick="modifyHP(1)">+</button>
-            </div>
-          </div>
-          <div class="attributes">
-            <div class="attribute" onclick="showInfo('str-info', event)">
+          </div> <div class="attributes"> <div class="attribute" onclick="showInfo('str-info', event)" title="Stärke Details anzeigen">
               <div class="attribute-name">STR</div>
               <div class="attribute-control">
-                <button class="attr-btn minus-btn" onclick="changeAttribute('str', -1); event.stopPropagation();">-</button>
+                <button class="attr-btn minus-btn" onclick="changeAttribute('str', -1); event.stopPropagation();" title="Stärke verringern">-</button>
                 <div class="attribute-value" id="str-value">18</div>
-                <button class="attr-btn plus-btn" onclick="changeAttribute('str', 1); event.stopPropagation();">+</button>
+                <button class="attr-btn plus-btn" onclick="changeAttribute('str', 1); event.stopPropagation();" title="Stärke erhöhen">+</button>
               </div>
               <div class="attribute-mod" id="str-mod">+4</div>
               <div class="infobox" id="str-info">
@@ -631,13 +1102,13 @@
                 <strong>Genutzt für:</strong> Nahkampfangriffe, Athletik, Tragen, Ziehen, Schieben
               </div>
             </div>
-            
-            <div class="attribute" onclick="showInfo('dex-info', event)">
+
+            <div class="attribute" onclick="showInfo('dex-info', event)" title="Geschicklichkeit Details anzeigen">
               <div class="attribute-name">DEX</div>
               <div class="attribute-control">
-                <button class="attr-btn minus-btn" onclick="changeAttribute('dex', -1); event.stopPropagation();">-</button>
+                <button class="attr-btn minus-btn" onclick="changeAttribute('dex', -1); event.stopPropagation();" title="Geschicklichkeit verringern">-</button>
                 <div class="attribute-value" id="dex-value">14</div>
-                <button class="attr-btn plus-btn" onclick="changeAttribute('dex', 1); event.stopPropagation();">+</button>
+                <button class="attr-btn plus-btn" onclick="changeAttribute('dex', 1); event.stopPropagation();" title="Geschicklichkeit erhöhen">+</button>
               </div>
               <div class="attribute-mod" id="dex-mod">+2</div>
               <div class="infobox" id="dex-info">
@@ -645,13 +1116,13 @@
                 <strong>Genutzt für:</strong> Rüstungsklasse, Initiative, Fernkampfangriffe, Akrobatik, Heimlichkeit, Diebische Werkzeuge
               </div>
             </div>
-            
-            <div class="attribute" onclick="showInfo('con-info', event)">
+
+            <div class="attribute" onclick="showInfo('con-info', event)" title="Konstitution Details anzeigen">
               <div class="attribute-name">CON</div>
               <div class="attribute-control">
-                <button class="attr-btn minus-btn" onclick="changeAttribute('con', -1); event.stopPropagation();">-</button>
+                <button class="attr-btn minus-btn" onclick="changeAttribute('con', -1); event.stopPropagation();" title="Konstitution verringern">-</button>
                 <div class="attribute-value" id="con-value">14</div>
-                <button class="attr-btn plus-btn" onclick="changeAttribute('con', 1); event.stopPropagation();">+</button>
+                <button class="attr-btn plus-btn" onclick="changeAttribute('con', 1); event.stopPropagation();" title="Konstitution erhöhen">+</button>
               </div>
               <div class="attribute-mod" id="con-mod">+2</div>
               <div class="infobox" id="con-info">
@@ -659,13 +1130,13 @@
                 <strong>Genutzt für:</strong> Trefferpunkte, Konzentrationswürfe für Zauber, Widerstand gegen Gifte und Krankheiten
               </div>
             </div>
-            
-            <div class="attribute" onclick="showInfo('int-info', event)">
+
+            <div class="attribute" onclick="showInfo('int-info', event)" title="Intelligenz Details anzeigen">
               <div class="attribute-name">INT</div>
               <div class="attribute-control">
-                <button class="attr-btn minus-btn" onclick="changeAttribute('int', -1); event.stopPropagation();">-</button>
+                <button class="attr-btn minus-btn" onclick="changeAttribute('int', -1); event.stopPropagation();" title="Intelligenz verringern">-</button>
                 <div class="attribute-value" id="int-value">8</div>
-                <button class="attr-btn plus-btn" onclick="changeAttribute('int', 1); event.stopPropagation();">+</button>
+                <button class="attr-btn plus-btn" onclick="changeAttribute('int', 1); event.stopPropagation();" title="Intelligenz erhöhen">+</button>
               </div>
               <div class="attribute-mod" id="int-mod">-1</div>
               <div class="infobox" id="int-info">
@@ -673,13 +1144,13 @@
                 <strong>Genutzt für:</strong> Arkana, Geschichte, Untersuchung, Natur, Religion
               </div>
             </div>
-            
-            <div class="attribute" onclick="showInfo('wis-info', event)">
+
+            <div class="attribute" onclick="showInfo('wis-info', event)" title="Weisheit Details anzeigen">
               <div class="attribute-name">WIS</div>
               <div class="attribute-control">
-                <button class="attr-btn minus-btn" onclick="changeAttribute('wis', -1); event.stopPropagation();">-</button>
+                <button class="attr-btn minus-btn" onclick="changeAttribute('wis', -1); event.stopPropagation();" title="Weisheit verringern">-</button>
                 <div class="attribute-value" id="wis-value">10</div>
-                <button class="attr-btn plus-btn" onclick="changeAttribute('wis', 1); event.stopPropagation();">+</button>
+                <button class="attr-btn plus-btn" onclick="changeAttribute('wis', 1); event.stopPropagation();" title="Weisheit erhöhen">+</button>
               </div>
               <div class="attribute-mod" id="wis-mod">+0</div>
               <div class="infobox" id="wis-info">
@@ -687,13 +1158,13 @@
                 <strong>Genutzt für:</strong> Tierkunde, Heilkunde, Wahrnehmung, Überlebenskunst
               </div>
             </div>
-            
-            <div class="attribute" onclick="showInfo('cha-info', event)">
+
+            <div class="attribute" onclick="showInfo('cha-info', event)" title="Charisma Details anzeigen">
               <div class="attribute-name">CHA</div>
               <div class="attribute-control">
-                <button class="attr-btn minus-btn" onclick="changeAttribute('cha', -1); event.stopPropagation();">-</button>
+                <button class="attr-btn minus-btn" onclick="changeAttribute('cha', -1); event.stopPropagation();" title="Charisma verringern">-</button>
                 <div class="attribute-value" id="cha-value">12</div>
-                <button class="attr-btn plus-btn" onclick="changeAttribute('cha', 1); event.stopPropagation();">+</button>
+                <button class="attr-btn plus-btn" onclick="changeAttribute('cha', 1); event.stopPropagation();" title="Charisma erhöhen">+</button>
               </div>
               <div class="attribute-mod" id="cha-mod">+1</div>
               <div class="infobox" id="cha-info">
@@ -701,644 +1172,1240 @@
                 <strong>Genutzt für:</strong> Täuschung, Einschüchterung, Auftreten, Überreden
               </div>
             </div>
-          </div>
-        </div>
-        
-        <div class="tabs">
-          <div class="tab active" onclick="changeTab('combat')">Kampf</div>
-          <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
-          <div class="tab" onclick="changeTab('abilities')">Fähigkeiten</div>
-          <div class="tab" onclick="changeTab('inventory')">Inventar</div>
-        </div>
-        
-        <div id="combat" class="tab-content active">
-          <div class="card">
-            <div class="toggle-container">
-              <div class="toggle" id="rage-toggle" onclick="toggleRage()">Rage</div>
-              <div class="toggle" id="gwm-toggle" onclick="toggleGWM()">Great Weapon Master</div>
-              <div class="toggle" id="reckless-toggle" onclick="toggleReckless()">Reckless Attack</div>
-            </div>
-            
-            <div class="combat-stats">
-              <div class="stat">
-                <div class="stat-label">Rüstungsklasse</div>
-                <div class="stat-value">16</div>
+          </div> <div class="tabs"> <div class="tab active" onclick="changeTab('combat')">Kampf</div>
+            <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
+            <div class="tab" onclick="changeTab('abilities')">Fähigkeiten</div>
+            <div class="tab" onclick="changeTab('inventory')">Inventar</div>
+          </div> <div id="combat" class="tab-content active">
+            <div class="card">
+              <div class="toggle-container">
+                <div class="toggle" id="rage-toggle" onclick="toggleRage()" title="Wut-Zustand (aktiv/inaktiv)">Rage</div>
+                <div class="toggle" id="gwm-toggle" onclick="toggleGWM()" title="Great Weapon Master (-5 Angriff/+10 Schaden)">GWM</div>
+                <div class="toggle" id="reckless-toggle" onclick="toggleReckless()" title="Reckless Attack (Vorteil auf Angriff/Nachteil auf Verteidigung)">Reckless</div>
               </div>
-              <div class="stat">
-                <div class="stat-label">Initiative</div>
-                <div class="stat-value">+2</div>
+
+              <div class="combat-stats">
+                 <div class="stat">
+                  <div class="stat-label">Rüstungsklasse</div>
+                  <div class="stat-value" id="ac-value">16</div>
+                </div>
+                 <div class="stat">
+                  <div class="stat-label">Initiative</div>
+                  <div class="stat-value" id="initiative-value">+2</div>
+                </div>
+                 <div class="stat">
+                  <div class="stat-label">Bewegungsrate</div>
+                  <div class="stat-value" id="speed-value">40 ft.</div>
+                </div>
+                <div class="section-divider"></div>
+                 <div class="stat">
+                  <div class="stat-label">Angriffsbonus</div>
+                  <div class="stat-value" id="attack-bonus">+7</div>
+                </div>
+                 <div class="stat">
+                  <div class="stat-label">Schaden (Großschwert)</div>
+                  <div class="stat-value" id="damage-formula">2W6 + 4</div>
+                </div>
               </div>
-              <div class="stat">
-                <div class="stat-label">Geschwindigkeit</div>
-                <div class="stat-value">40 ft.</div>
-              </div>
+
               <div class="section-divider"></div>
-              <div class="stat">
-                <div class="stat-label">Angriffsbonus</div>
-                <div class="stat-value" id="attack-bonus">+7</div>
-              </div>
-              <div class="stat">
-                <div class="stat-label">Schaden</div>
-                <div class="stat-value" id="damage-formula">2W6 + 4</div>
+
+              <button class="action-btn rage-btn" onclick="activateRage()" title="Rage als Bonusaktion aktivieren">
+                RAGE AKTIVIEREN
+                <div class="rage-counter" id="rage-counter">3/3 übrig</div>
+              </button>
+
+              <button class="action-btn" onclick="rollAttack()" title="Angriff mit Großschwert würfeln">ANGRIFF WÜRFELN</button>
+            </div>
+
+            <div class="card dice-container">
+              <h3>Schnellwürfel</h3>
+              <div class="dice-result" id="dice-result">-</div>
+              <div>
+                <button class="dice-btn" onclick="rollDice(4)">D4</button>
+                <button class="dice-btn" onclick="rollDice(6)">D6</button>
+                <button class="dice-btn" onclick="rollDice(8)">D8</button>
+                <button class="dice-btn" onclick="rollDice(10)">D10</button>
+                <button class="dice-btn" onclick="rollDice(12)">D12</button>
+                <button class="dice-btn" onclick="rollDice(20)">D20</button>
+                <button class="dice-btn" onclick="rollDice(100)">D100</button>
               </div>
             </div>
-            
-            <div class="section-divider"></div>
-            
-            <button class="action-btn rage-btn" onclick="activateRage()">
-              RAGE AKTIVIEREN
-              <div class="rage-counter" id="rage-counter">3/3 übrig</div>
-            </button>
-            
-            <button class="action-btn" onclick="rollAttack()">ANGRIFF WÜRFELN</button>
+             <div class="card action-economy">
+                <h3>Aktionsökonomie (pro Runde)</h3>
+
+                <div class="action-icons">
+                  <div><span class="action-icon action-regular"></span> Aktion</div>
+                  <div><span class="action-icon action-bonus"></span> Bonusaktion</div>
+                  <div><span class="action-icon action-reaction"></span> Reaktion</div>
+                </div>
+
+                <div class="action-list">
+                  <div class="action-item" id="action-attack">
+                    <span class="action-icon action-regular"></span>
+                    <div class="action-details">
+                      <div class="action-name">Angriff</div>
+                      <div class="action-description">Führe einen oder mehrere Angriffe aus</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Angriff verwenden">
+                    </div>
+                  </div>
+                   <div class="action-item" id="action-dash">
+                    <span class="action-icon action-regular"></span>
+                    <div class="action-details">
+                      <div class="action-name">Spurt</div>
+                      <div class="action-description">Bewege dich zusätzlich um deine Bewegungsrate</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Spurt verwenden">
+                    </div>
+                  </div>
+                  <div class="action-item" id="action-disengage">
+                    <span class="action-icon action-regular"></span>
+                    <div class="action-details">
+                      <div class="action-name">Lösen</div>
+                      <div class="action-description">Bewege dich weg, ohne Gelegenheitsangriffe zu provozieren</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Lösen verwenden">
+                    </div>
+                  </div>
+                   <div class="action-item" id="action-dodge">
+                    <span class="action-icon action-regular"></span>
+                    <div class="action-details">
+                      <div class="action-name">Ausweichen</div>
+                      <div class="action-description">Angriffe gegen dich haben Nachteil</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Ausweichen verwenden">
+                    </div>
+                  </div>
+                   <div class="action-item" id="action-grapple">
+                    <span class="action-icon action-regular"></span>
+                    <div class="action-details">
+                      <div class="action-name">Packen</div>
+                      <div class="action-description">Versuche, eine Kreatur zu packen (Athletik-Wurf)</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Packen verwenden">
+                    </div>
+                  </div>
+                   <div class="action-item" id="action-shove">
+                    <span class="action-icon action-regular"></span>
+                    <div class="action-details">
+                      <div class="action-name">Stoßen</div>
+                      <div class="action-description">Stoße eine Kreatur weg oder zu Boden (Athletik-Wurf)</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Stoßen verwenden">
+                    </div>
+                  </div>
+                  <div class="action-item" id="action-rage">
+                    <span class="action-icon action-bonus"></span>
+                    <div class="action-details">
+                      <div class="action-name">Rage</div>
+                      <div class="action-description">Aktiviere deinen Wutzustand</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'bonus'); if(this.checked) { activateRage(true); }" title="Bonusaktion: Rage verwenden">
+                    </div>
+                  </div>
+                   <div class="action-item" id="action-gwm-bonus">
+                     <span class="action-icon action-bonus"></span>
+                    <div class="action-details">
+                      <div class="action-name">GWM Bonus Angriff</div>
+                      <div class="action-description">Nach Krit/Kill mit schwerer Waffe</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'bonus')" title="Bonusaktion: GWM Angriff verwenden">
+                    </div>
+                  </div>
+                  <div class="action-item" id="action-opportunity">
+                    <span class="action-icon action-reaction"></span>
+                    <div class="action-details">
+                      <div class="action-name">Gelegenheitsangriff</div>
+                      <div class="action-description">Greife an, wenn ein Feind deinen Nahkampfbereich verlässt</div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                      <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'reaction')" title="Reaktion: Gelegenheitsangriff verwenden">
+                    </div>
+                  </div>
+                </div>
+
+                <button class="action-reset" onclick="resetActions()" title="Alle Aktionen für die neue Runde zurücksetzen">Aktionen zurücksetzen</button>
+             </div> </div> <div id="skills" class="tab-content">
+            <div class="card">
+              <h3>Fertigkeiten</h3>
+               <div class="skills" id="skills-list">
+                    </div>
+
+              <div class="section-divider"></div>
+
+              <h3>Rettungswürfe</h3>
+               <div class="skills" id="saves-list">
+                   </div>
+            </div>
+
+            <div class="card">
+              <h3>Andere Eigenschaften</h3>
+              <div class="skills">
+                 <div class="skill">
+                  <span class="skill-name">Passive Wahrnehmung</span>
+                  <span id="passive-perception">13</span>
+                </div>
+                 <div class="skill">
+                  <span class="skill-name">Übungsbonus</span>
+                  <span id="proficiency-bonus">+3</span>
+                </div>
+              </div>
+            </div>
+          </div> <div id="abilities" class="tab-content">
+            <div class="card">
+              <h3>Rasseneigenschaften (Goliath)</h3>
+                <div class="ability" onclick="showModal('powerful-build')" title="Details zu Powerful Build anzeigen">
+                    <div class="ability-name">Powerful Build <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Zählt als eine Größenkategorie größer für Tragfähigkeit.</div>
+                </div>
+                <div class="ability" onclick="showModal('mountain-born')" title="Details zu Mountain Born anzeigen">
+                    <div class="ability-name">Mountain Born <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Resistenz gegen Kälteschaden, akklimatisiert an große Höhen.</div>
+                </div>
+                 <div class="ability" onclick="showModal('stones-endurance')" title="Details zu Stone's Endurance anzeigen">
+                    <div class="ability-name">Stone's Endurance <span class="info-icon">i</span></div>
+                    <div class="ability-desc">(1/Kurze oder Lange Rast) Als Reaktion erlittenen Schaden um 1W12 + CON-Mod reduzieren.</div>
+                 </div>
+
+
+              <h3>Klassenmerkmale (Barbar - Path of the Zealot)</h3>
+                <div class="ability" onclick="showModal('rage-ability')" title="Details zu Rage anzeigen">
+                    <div class="ability-name">Rage (Stufe 1) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Bonusaktion; Vorteile auf STR-Würfe/Rettungswürfe, +Schaden, Resistenz gegen Hieb/Stich/Wucht.</div>
+                </div>
+                 <div class="ability" onclick="showModal('unarmored-defense')" title="Details zu Unarmored Defense anzeigen">
+                    <div class="ability-name">Unarmored Defense (Stufe 1) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Ohne Rüstung: RK = 10 + DEX-Mod + CON-Mod.</div>
+                </div>
+                 <div class="ability" onclick="showModal('reckless-attack')" title="Details zu Reckless Attack anzeigen">
+                    <div class="ability-name">Reckless Attack (Stufe 2) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Vorteil auf STR-Nahkampfangriffe in diesem Zug; Angriffe gegen dich haben Vorteil bis nächsten Zug.</div>
+                 </div>
+                 <div class="ability" onclick="showModal('danger-sense')" title="Details zu Danger Sense anzeigen">
+                    <div class="ability-name">Danger Sense (Stufe 2) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Vorteil auf DEX-Rettungswürfe gegen Effekte, die du sehen kannst.</div>
+                 </div>
+                <div class="ability" onclick="showModal('divine-fury')" title="Details zu Divine Fury anzeigen">
+                    <div class="ability-name">Divine Fury (Zealot, Stufe 3) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Während Rage: Erster Treffer pro Zug +1W6 + halbe Barbaren-Stufe (Nekrotisch/Strahlend).</div>
+                </div>
+                <div class="ability" onclick="showModal('warrior-of-the-gods')" title="Details zu Warrior of the Gods anzeigen">
+                    <div class="ability-name">Warrior of the Gods (Zealot, Stufe 3) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Wiederbelebungszauber benötigen keine materiellen Komponenten (Wert < 500 GP).</div>
+                </div>
+                 <div class="ability" onclick="showModal('primal-path')" title="Details zu Primal Path anzeigen">
+                    <div class="ability-name">Primal Path (Stufe 3) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Gewählter Pfad: Path of the Zealot.</div>
+                 </div>
+                 <div class="ability" onclick="showModal('extra-attack')" title="Details zu Extra Attack anzeigen">
+                    <div class="ability-name">Extra Attack (Stufe 5) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Kann zweimal angreifen statt einmal bei Angriffsaktion.</div>
+                 </div>
+                 <div class="ability" onclick="showModal('fast-movement')" title="Details zu Fast Movement anzeigen">
+                    <div class="ability-name">Fast Movement (Stufe 5) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">+10 Fuß Bewegungsrate ohne schwere Rüstung.</div>
+                 </div>
+
+              <h3>Talente (Feats)</h3>
+                 <div class="ability" onclick="showModal('great-weapon-master')" title="Details zu Great Weapon Master anzeigen">
+                    <div class="ability-name">Great Weapon Master <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Bonusaktion Angriff nach Krit/Kill; optional -5 Angriff für +10 Schaden bei Angriff mit schwerer Waffe.</div>
+                 </div>
+            </div>
+          </div> <div id="inventory" class="tab-content">
+            <div class="card inventory-container">
+              <h3>Inventar</h3>
+
+              <table class="inventory-table">
+                <thead>
+                  <tr>
+                    <th>Gegenstand</th>
+                    <th>Gewicht (Pfd.)</th>
+                    <th>Anzahl</th>
+                    <th>Gesamt</th>
+                    <th>Ort</th>
+                    <th></th> </tr>
+                </thead>
+                <tbody id="inventory-items">
+                  </tbody>
+              </table>
+
+              <div class="inventory-add">
+                <div class="inventory-field">
+                  <label for="item-name">Gegenstand</label>
+                  <input type="text" id="item-name" class="inventory-input" placeholder="Großschwert">
+                </div>
+                <div class="inventory-field">
+                  <label for="item-weight">Gewicht (Pfd.)</label>
+                  <input type="number" id="item-weight" class="inventory-input" placeholder="6" min="0" step="0.1">
+                </div>
+                <div class="inventory-field">
+                  <label for="item-quantity">Anzahl</label>
+                  <input type="number" id="item-quantity" class="inventory-input" placeholder="1" min="1" value="1">
+                </div>
+                <div class="inventory-field">
+                  <label for="item-location">Ort</label>
+                  <select id="item-location" class="inventory-select">
+                    <option value="equipped">Ausgerüstet</option>
+                    <option value="carried">Mitgeführt</option>
+                    <option value="backpack">Rucksack</option>
+                    <option value="pouch">Beutel</option>
+                    <option value="other">Andere</option>
+                  </select>
+                </div>
+                <button class="inventory-add-btn" onclick="addInventoryItem()" title="Neuen Gegenstand zum Inventar hinzufügen">Hinzufügen</button>
+              </div>
+
+              <div class="inventory-summary">
+                <div class="weight-meter-container">
+                  <div>Getragenes Gewicht: <span id="current-weight">0</span> / <span id="weight-capacity">540</span> Pfund</div>
+                  <div class="weight-meter">
+                    <div class="weight-fill" id="weight-fill" style="width: 0%;"></div>
+                    <div class="weight-marker" id="weight-marker-encumbered" style="left: 33.3%;"></div>
+                    <div class="weight-marker" id="weight-marker-heavily" style="left: 66.6%;"></div>
+                  </div>
+                  <div class="weight-text" id="weight-text-details">
+                    <span>Leicht</span>
+                    <span>Belastet</span>
+                    <span>Schwer Belastet</span>
+                  </div>
+                </div>
+                <div id="currency-summary">
+                    Gold: <span id="gold-total">0</span> GP
+                </div>
+              </div>
+            </div>
+          </div> </div> <div class="right-column"> <div class="char-portrait">
+            <img src="https://sharonmabel.github.io/DnD/Bren.jpg" alt="Portrait von Bren Varakhaal, einem Goliath Barbaren">
+            <div class="rage-overlay" id="rage-overlay"></div>
           </div>
-          
+
           <div class="card dice-container">
-            <div class="dice-result" id="dice-result">-</div>
+             <h3>Wichtige Würfe</h3>
+            <div class="dice-result" id="quick-dice-result">-</div>
             <div>
-              <button class="dice-btn" onclick="rollDice(4)">D4</button>
-              <button class="dice-btn" onclick="rollDice(6)">D6</button>
-              <button class="dice-btn" onclick="rollDice(8)">D8</button>
-              <button class="dice-btn" onclick="rollDice(10)">D10</button>
-              <button class="dice-btn" onclick="rollDice(12)">D12</button>
-              <button class="dice-btn" onclick="rollDice(20)">D20</button>
-              <button class="dice-btn" onclick="rollDice(100)">D100</button>
+              <button class="dice-btn" onclick="rollQuickDice('1d20+' + getModifier('str'))" title="Stärke Rettungswurf">STR Save</button>
+              <button class="dice-btn" onclick="rollQuickDice('1d20+' + getModifier('con'))" title="Konstitution Rettungswurf">CON Save</button>
+              <button class="dice-btn" onclick="rollQuickDice('1d20+' + getSkillBonus('Athletics'))" title="Athletik Wurf">Athletik</button>
+              <button class="dice-btn" onclick="rollQuickDice('1d12')" title="Trefferwürfel">D12 HD</button>
             </div>
           </div>
-        </div>
-        
-        <div id="skills" class="tab-content">
-          <div class="card">
-            <h3>Fertigkeiten</h3>
-            <div class="skills">
-              <div class="skill">
-                <span class="skill-name">Wahrnehmung (WIS)</span>
-                <span>+3</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Akrobatik (DEX)</span>
-                <span>+2</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Heimlichkeit (DEX)</span>
-                <span>+2</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Tierkunde (WIS)</span>
-                <span>+0</span>
-              </div>
-            </div>
-            
-            <div class="section-divider"></div>
-            
-            <h3>Rettungswürfe</h3>
-            <div class="skills">
-              <div class="skill">
-                <span class="skill-name">Stärke</span>
-                <span>+7</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Geschicklichkeit</span>
-                <span>+2</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Konstitution</span>
-                <span>+5</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Intelligenz</span>
-                <span>-1</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Weisheit</span>
-                <span>+0</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Charisma</span>
-                <span>+1</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card">
-            <h3>Andere Eigenschaften</h3>
-            <div class="skills">
-              <div class="skill">
-                <span class="skill-name">Passive Wahrnehmung</span>
-                <span>13</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Übungsbonus</span>
-                <span>+3</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div id="abilities" class="tab-content">
-          <div class="card">
-            <h3>Rasseneigenschaften</h3>
-            
-            <div class="ability" onclick="showModal('powerful-build')">
-              <div class="ability-name">Powerful Build <span class="info-icon">i</span></div>
-              <div class="ability-desc">Du zählst als eine Größenkategorie größer für Tragfähigkeit, und hast Vorteil auf Würfe, um den Zustand "Gepackt" zu beenden.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('cold-resistance')">
-              <div class="ability-name">Kälteresistenz <span class="info-icon">i</span></div>
-              <div class="ability-desc">Du hast Resistenz gegen Kälteschaden.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('large-form')">
-              <div class="ability-name">Large Form <span class="info-icon">i</span></div>
-              <div class="ability-desc">Du bist größer als ein normaler Goliath.</div>
-            </div>
-            
-            <h3>Klassenmerkmale</h3>
-        
-            <div class="ability" onclick="showModal('divine-fury')">
-              <div class="ability-name">Divine Fury <span class="info-icon">i</span></div>
-              <div class="ability-desc">Während der Rage verursacht dein erster Waffenangriff jede Runde zusätzlichen nekrotischen oder strahlenden Schaden.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('warrior-of-the-gods')">
-              <div class="ability-name">Warrior of the Gods <span class="info-icon">i</span></div>
-              <div class="ability-desc">Zauber, die dich ins Leben zurückbringen, benötigen keine materiellen Komponenten.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('rage-ability')">
-              <div class="ability-name">Rage <span class="info-icon">i</span></div>
-              <div class="ability-desc">Verstärkt Angriffe, gibt Resistenz gegen physischen Schaden. 3× pro langer Rast.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('danger-sense')">
-              <div class="ability-name">Danger Sense <span class="info-icon">i</span></div>
-              <div class="ability-desc">Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('reckless-attack')">
-              <div class="ability-name">Reckless Attack <span class="info-icon">i</span></div>
-              <div class="ability-desc">Vorteil auf STR-basierte Nahkampfangriffe, aber auch Angreifer haben Vorteil gegen dich.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('extra-attack')">
-              <div class="ability-name">Extra Attack <span class="info-icon">i</span></div>
-              <div class="ability-desc">Du kannst zweimal angreifen, wenn du die Angriffsaktion ausführst.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('fast-movement')">
-              <div class="ability-name">Fast Movement <span class="info-icon">i</span></div>
-              <div class="ability-desc">Deine Bewegungsrate erhöht sich um 10 Fuß, wenn du keine schwere Rüstung trägst.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('unarmored-defense')">
-              <div class="ability-name">Unarmored Defense <span class="info-icon">i</span></div>
-              <div class="ability-desc">Ohne Rüstung ist deine RK 10 + DEX-Mod + CON-Mod.</div>
-            </div>
-            
-            <div class="ability" onclick="showModal('great-weapon-master')">
-              <div class="ability-name">Great Weapon Master <span class="info-icon">i</span></div>
-              <div class="ability-desc">+3 Extraschaden mit schweren Waffen, Bonusangriff nach Kritischem Treffer oder wenn Gegner auf 0 TP reduziert.</div>
-            </div>
-          </div>
-        </div>
-        
-        <div id="inventory" class="tab-content">
-          <div class="card">
-            <h3>Ausrüstung</h3>
-            <div class="skills">
-              <div class="skill">
-                <span class="skill-name">Großschwert</span>
-                <span>2W6 + 4</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Streitaxt</span>
-                <span>1W12 + 4</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Handaxt (2)</span>
-                <span>1W6 + 4</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Kettenhemd</span>
-                <span>RK 16</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Rucksack</span>
-                <span>-</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Schlafsack</span>
-                <span>-</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Rationen (10 Tage)</span>
-                <span>-</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Wasserschlauch</span>
-                <span>-</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Abenteurerausrüstung</span>
-                <span>-</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Gold</span>
-                <span>25 GM</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="right-column">
-        <div class="char-portrait">
-          <img src="https://sharonmabel.github.io/DnD/Bren.jpg" alt="Bren Varakhaal">
-          <div class="rage-overlay" id="rage-overlay"></div>
-        </div>
-        
-        <div class="card dice-container">
-          <div class="dice-result" id="quick-dice-result">-</div>
-          <div>
-            <button class="dice-btn" onclick="rollQuickDice(20)">D20</button>
-            <button class="dice-btn" onclick="rollQuickDice(12)">D12</button>
-            <button class="dice-btn" onclick="rollQuickDice('2d6')">2D6</button>
-          </div>
-        </div>
+        </div> </div> </div> <div class="modal" id="ability-modal">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('ability-modal')" title="Schließen">&times;</button>
+        <h3 id="modal-title">Fähigkeit</h3>
+        <div id="modal-description"></div>
       </div>
     </div>
-  </div>
-  
-  <!-- Modal Templates -->
-  <div class="modal" id="ability-modal">
-    <div class="modal-content">
-      <button class="close-btn" onclick="closeModal()">&times;</button>
-      <h3 id="modal-title">Fähigkeit</h3>
-      <div id="modal-description"></div>
+
+    <div class="modal" id="temp-hp-modal">
+      <div class="modal-content" style="max-width: 400px;">
+        <button class="close-btn" onclick="closeModal('temp-hp-modal')" title="Schließen">&times;</button>
+        <h3>Temporäre Trefferpunkte / Max HP Bonus</h3>
+
+        <div style="margin-bottom: 15px;">
+          <label for="temp-hp-source-input" class="hp-field-label">Quelle / Beschreibung</label>
+          <input type="text" id="temp-hp-source-input" class="hp-input" placeholder="z.B. Aid Zauber, Inspiration..." style="width: 100%; text-align: left;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label for="temp-hp-amount-input" class="hp-field-label">Menge</label>
+          <input type="number" id="temp-hp-amount-input" class="hp-input" value="1" min="1" style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label for="temp-hp-type-select" class="hp-field-label">Typ</label>
+          <select id="temp-hp-type-select" class="hp-input" style="width: 100%; text-align: left;">
+            <option value="temp">Temporäre TP</option>
+            <option value="max">Erhöhung Max-TP</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+           <label for="temp-hp-duration-select" class="hp-field-label">Dauer</label>
+           <select id="temp-hp-duration-select" class="hp-input" style="width: 100%; text-align: left;">
+             <option value="long">Bis zur langen Rast</option>
+             <option value="short">Bis zur kurzen Rast</option>
+             <option value="combat">Bis Ende des Kampfes</option>
+             <option value="permanent">Permanent</option>
+             <option value="other">Andere</option>
+          </select>
+        </div>
+
+        <button class="action-btn" style="margin-top: 15px;" onclick="addTempHPEffect()" title="Effekt hinzufügen">Hinzufügen</button>
+      </div>
     </div>
-  </div>Athletik (STR)</span>
-                <span>+7</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Einschüchtern (CHA)</span>
-                <span>+4</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Motiv erkennen (WIS)</span>
-                <span>+3</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">Überlebenskunst (WIS)</span>
-                <span>+3</span>
-              </div>
-              <div class="skill">
-                <span class="skill-name">
-                    <script>
-                        // Variables
-                        let rageActive = false;
-                        let rageCounter = 3;
-                        let currentHP = 46;
-                        let maxHP = 46;
-                        
-                        // Init
-                        window.onload = function() {
-                          updateHPBar();
-                          
-                          // Ensure all tabs are properly set up
-                          document.getElementById('combat').classList.add('active');
-                          document.querySelectorAll('.tab')[0].classList.add('active');
-                          
-                          // Initialize all toggles
-                          updateDamage();
-                        };
-                        
-                        // Change tab
-                        function changeTab(tabName) {
-                          // Hide all tab contents
-                          document.querySelectorAll('.tab-content').forEach(content => {
-                            content.classList.remove('active');
-                          });
-                          
-                          // Remove active class from all tabs
-                          document.querySelectorAll('.tab').forEach(tab => {
-                            tab.classList.remove('active');
-                          });
-                          
-                          // Show selected tab content
-                          document.getElementById(tabName).classList.add('active');
-                          
-                          // Add active class to selected tab
-                          document.querySelectorAll('.tab').forEach(tab => {
-                            if (tab.textContent.toLowerCase().includes(tabName.toLowerCase())) {
-                              tab.classList.add('active');
-                            }
-                          });
-                        }
-                        
-                        // Toggle combat options
-                        function toggleRage() {
-                          const toggle = document.getElementById('rage-toggle');
-                          toggle.classList.toggle('active');
-                          
-                          // Update rage overlay on character portrait if active
-                          const rageOverlay = document.getElementById('rage-overlay');
-                          if (toggle.classList.contains('active')) {
-                            rageOverlay.style.opacity = '1';
-                            document.body.classList.add('rage-active');
-                          } else {
-                            rageOverlay.style.opacity = '0';
-                            document.body.classList.remove('rage-active');
-                          }
-                          
-                          updateDamage();
-                        }
-                        
-                        function toggleGWM() {
-                          const toggle = document.getElementById('gwm-toggle');
-                          toggle.classList.toggle('active');
-                          updateDamage();
-                        }
-                        
-                        function toggleReckless() {
-                          const toggle = document.getElementById('reckless-toggle');
-                          toggle.classList.toggle('active');
-                          updateDamage();
-                        }
-                        
-                        // Update damage formula based on active toggles
-                        function updateDamage() {
-                          const rageActive = document.getElementById('rage-toggle').classList.contains('active');
-                          const gwmActive = document.getElementById('gwm-toggle').classList.contains('active');
-                          
-                          let damage = "2W6 + 4";
-                          let attackBonus = 7;
-                          
-                          if (rageActive) damage += " + 2";
-                          if (gwmActive) {
-                            damage += " + 3";
-                            attackBonus -= 5;
-                          }
-                          
-                          document.getElementById('damage-formula').innerText = damage;
-                          document.getElementById('attack-bonus').innerText = "+" + attackBonus;
-                        }
-                        
-                        // Roll dice
-                        function rollDice(sides) {
-                          const result = Math.floor(Math.random() * sides) + 1;
-                          document.getElementById('dice-result').innerText = result;
-                          return result;
-                        }
-                        
-                        function rollQuickDice(dice) {
-                          let result;
-                          
-                          if (typeof dice === 'number') {
-                            result = Math.floor(Math.random() * dice) + 1;
-                          } else if (dice === '2d6') {
-                            const roll1 = Math.floor(Math.random() * 6) + 1;
-                            const roll2 = Math.floor(Math.random() * 6) + 1;
-                            result = `${roll1} + ${roll2} = ${roll1 + roll2}`;
-                          }
-                          
-                          document.getElementById('quick-dice-result').innerText = result;
-                        }
-                        
-                        // Roll attack
-                        function rollAttack() {
-                          const rageActive = document.getElementById('rage-toggle').classList.contains('active');
-                          const gwmActive = document.getElementById('gwm-toggle').classList.contains('active');
-                          const recklessActive = document.getElementById('reckless-toggle').classList.contains('active');
-                          
-                          let attackBonus = 7;
-                          if (gwmActive) attackBonus -= 5;
-                          
-                          const d20 = rollDice(20);
-                          
-                          let resultText = "";
-                          
-                          if (recklessActive) {
-                            const secondD20 = Math.floor(Math.random() * 20) + 1;
-                            const highRoll = Math.max(d20, secondD20);
-                            resultText = `${d20}, ${secondD20} → ${highRoll} + ${attackBonus} = ${highRoll + attackBonus}`;
-                          } else {
-                            resultText = `${d20} + ${attackBonus} = ${d20 + attackBonus}`;
-                          }
-                          
-                          // Check for critical
-                          if (d20 === 20) {
-                            resultText += " - KRITISCH!";
-                          }
-                          
-                          document.getElementById('dice-result').innerHTML = resultText;
-                        }
-                        
-                        // Rage activation
-                        function activateRage() {
-                          if (rageCounter <= 0) {
-                            alert("Du hast keine Wut mehr übrig!");
-                            return;
-                          }
-                          
-                          const rageToggle = document.getElementById('rage-toggle');
-                          
-                          if (!rageToggle.classList.contains('active')) {
-                            rageCounter--;
-                            document.getElementById('rage-counter').innerText = `${rageCounter}/3 übrig`;
-                            rageToggle.classList.add('active');
-                            document.getElementById('rage-overlay').style.opacity = 1;
-                            document.body.classList.add('rage-animation');
-                            document.body.classList.add('rage-active');
-                            
-                            setTimeout(() => {
-                              document.body.classList.remove('rage-animation');
-                            }, 500);
-                            
-                            updateDamage();
-                          } else {
-                            alert("Du bist bereits in Rage!");
-                          }
-                        }
-                        
-                        // HP Management
-                        function modifyHP(amount) {
-                          currentHP = Math.max(0, Math.min(maxHP, currentHP + amount));
-                          document.getElementById('current-hp').innerText = currentHP;
-                          updateHPBar();
-                        }
-                        
-                        function updateHPBar() {
-                          const percentage = (currentHP / maxHP) * 100;
-                          document.getElementById('hp-fill').style.width = `${percentage}%`;
-                          
-                          // Change color based on health
-                          let color = 'linear-gradient(90deg, var(--primary), var(--accent))';
-                          
-                          if (percentage < 25) {
-                            color = '#FF0000';
-                          } else if (percentage < 50) {
-                            color = '#FFA500';
-                          }
-                          
-                          document.getElementById('hp-fill').style.background = color;
-                        }
-                        
-                        // Attribute info popup
-                        function showInfo(infoId, event) {
-                          const infoBox = document.getElementById(infoId);
-                          
-                          // Hide all other infoboxes
-                          document.querySelectorAll('.infobox').forEach(box => {
-                            box.style.display = 'none';
-                          });
-                          
-                          // Position and show the clicked infobox
-                          infoBox.style.display = 'block';
-                          
-                          // Position the infobox to avoid going off-screen
-                          const rect = event.currentTarget.getBoundingClientRect();
-                          const infoBoxRect = infoBox.getBoundingClientRect();
-                          
-                          let left = rect.left;
-                          if (left + infoBoxRect.width > window.innerWidth) {
-                            left = window.innerWidth - infoBoxRect.width - 10;
-                          }
-                          
-                          let top = rect.bottom + 10;
-                          if (top + infoBoxRect.height > window.innerHeight) {
-                            top = rect.top - infoBoxRect.height - 10;
-                          }
-                          
-                          infoBox.style.position = 'fixed';
-                          infoBox.style.left = `${left}px`;
-                          infoBox.style.top = `${top}px`;
-                          
-                          // Close on click outside
-                          document.addEventListener('click', closeInfoBox);
-                          event.stopPropagation();
-                        }
-                        
-                        function closeInfoBox() {
-                          document.querySelectorAll('.infobox').forEach(box => {
-                            box.style.display = 'none';
-                          });
-                          document.removeEventListener('click', closeInfoBox);
-                        }
-                        
-                        // Ability modals
-                        function showModal(abilityId) {
-                          const modal = document.getElementById('ability-modal');
-                          const title = document.getElementById('modal-title');
-                          const description = document.getElementById('modal-description');
-                          
-                          // Set content based on ability
-                          switch(abilityId) {
-                            case 'rage-ability':
-                              title.innerText = 'Rage';
-                              description.innerHTML = `<p>Als Bonusaktion kannst du in einen Wutrausch verfallen.</p>
-                              <p>Solange du in Rage bist, erhältst du folgende Vorteile, wenn du keine schwere Rüstung trägst:</p>
-                              <ul>
-                                <li>Du hast Vorteil auf Stärke-Würfe und Stärke-Rettungswürfe.</li>
-                                <li>Wenn du mit einer Nahkampfwaffe einen Angriff ausführst, der Stärke verwendet, erhältst du einen Bonus auf den Schadenswurf. Dieser Bonus beträgt +2.</li>
-                                <li>Du hast Resistenz gegen Hieb-, Stich- und Wuchtschaden.</li>
-                              </ul>
-                              <p>Deine Rage hält 1 Minute (10 Kampfrunden) an. Sie endet vorzeitig, wenn du bewusstlos wirst oder wenn dein Zug endet und du seit deinem letzten Zug keinen Angriff gegen einen feindlichen Gegner ausgeführt hast oder Schaden erlitten hast. Du kannst deine Rage auch als Bonusaktion beenden.</p>
-                              <p>Du kannst eine Anzahl von Malen in Rage verfallen, die deinem Konstitutionsmodifikator entspricht (mindestens einmal). Bei einer langen Rast erhältst du alle verbrauchten Wutanfälle zurück.</p>`;
-                              break;
-                            case 'danger-sense':
-                              title.innerText = 'Danger Sense';
-                              description.innerHTML = `<p>Ab der 2. Stufe entwickelst du einen unheimlichen Sinn für Gefahren in deiner Nähe. Du hast Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst, wie Fallen und Zauber. Um diesen Vorteil zu nutzen, darfst du nicht blind, taub oder handlungsunfähig sein.</p>`;
-                              break;
-                            case 'reckless-attack':
-                              title.innerText = 'Reckless Attack';
-                              description.innerHTML = `<p>Ab der 2. Stufe kannst du alle Vorsicht fallen lassen, um mit verzweifelter Wildheit anzugreifen. Wenn du deinen ersten Angriff in deinem Zug ausführst, kannst du entscheiden, rücksichtslos anzugreifen. Dies gibt dir Vorteil bei Nahkampfangriffen mit Stärke während dieses Zuges, aber Angriffswürfe gegen dich haben bis zu deinem nächsten Zug Vorteil.</p>`;
-                              break;
-                            case 'powerful-build':
-                              title.innerText = 'Powerful Build';
-                              description.innerHTML = `<p>Du zählst als eine Größenkategorie größer, wenn es darum geht, deine Tragfähigkeit und das Gewicht zu bestimmen, das du schieben, ziehen oder heben kannst.</p>
-                              <p>Du hast Vorteil auf alle Fähigkeitswürfe, die du machst, um den Zustand "Gepackt" zu beenden.</p>`;
-                              break;
-                            case 'cold-resistance':
-                              title.innerText = 'Kälteresistenz';
-                              description.innerHTML = `<p>Du bist an hohe Höhen und kalte Klimate gewöhnt. Du hast Resistenz gegen Kälteschaden und anstrengende Umgebungen aufgrund extremer Kälte beeinträchtigen dich nicht.</p>`;
-                              break;
-                            case 'large-form':
-                              title.innerText = 'Large Form';
-                              description.innerHTML = `<p>Du bist größer als ein durchschnittlicher Goliath, was dir in verschiedenen Situationen Vorteile verschaffen kann. Dein Spielleiter kann dir in bestimmten Situationen Vorteile gewähren, in denen deine Größe hilfreich sein könnte.</p>`;
-                              break;
-                            case 'extra-attack':
-                              title.innerText = 'Extra Attack';
-                              description.innerHTML = `<p>Ab der 5. Stufe kannst du angreifen, wenn du die Angriffsaktion in deinem Zug ausführst, zweimal anstatt einmal angreifen.</p>`;
-                              break;
-                            case 'fast-movement':
-                              title.innerText = 'Fast Movement';
-                              description.innerHTML = `<p>Ab der 5. Stufe erhöht sich deine Geschwindigkeit um 10 Fuß, während du keine schwere Rüstung trägst.</p>`;
-                              break;
-                            case 'unarmored-defense':
-                              title.innerText = 'Unarmored Defense';
-                              description.innerHTML = `<p>Ohne Rüstung entspricht deine Rüstungsklasse 10 + deinem Geschicklichkeitsmodifikator + deinem Konstitutionsmodifikator. Du kannst diesen Vorteil nutzen, wenn du einen Schild verwendest.</p>`;
-                              break;
-                            case 'great-weapon-master':
-                              title.innerText = 'Great Weapon Master';
-                              description.innerHTML = `<p><strong>Ability Score Increase:</strong> Erhöht deinen Stärke-Wert um 1, bis zu einem Maximum von 20.</p>
-                              <p><strong>Heavy Weapon Mastery:</strong> Wenn du mit einer schweren Waffe als Teil der Angriffsaktion in deinem Zug einen Gegner triffst, kannst du zusätzlichen Schaden verursachen, der deinem Übungsbonus entspricht.</p>
-                              <p><strong>Hew:</strong> Unmittelbar nachdem du einen kritischen Treffer mit einer Nahkampfwaffe erzielt oder eine Kreatur auf 0 Trefferpunkte reduziert hast, kannst du einen Angriff mit derselben Waffe als Bonusaktion ausführen.</p>`;
-                              break;
-                            case 'divine-fury':
-                              title.innerText = 'Divine Fury';
-                              description.innerHTML = `<p>Ab der 3. Stufe, wenn du diesen Pfad wählst, kannst du göttliche Wut in deine Waffenangriffe kanalisieren. Während du in Rage bist, erleidet die erste Kreatur, die du in jedem deiner Züge mit einem Waffenangriff triffst, zusätzlichen Schaden in Höhe von 1W6 + die Hälfte deiner Barbaren-Stufe.</p>
-                              <p>Der zusätzliche Schaden ist nekrotisch oder strahlend; du wählst den Schadenstyp, wenn du diese Fähigkeit erhältst.</p>`;
-                              break;
-                            case 'warrior-of-the-gods':
-                              title.innerText = 'Warrior of the Gods';
-                              description.innerHTML = `<p>Ab der 3. Stufe ist deine Seele für endlose Schlachten gekennzeichnet. Wenn ein Zauber wie Totenerweckung den alleinigen Effekt hat, dich ins Leben zurückzubringen (aber nicht in die Untoten), benötigt der Zauberwirker keine materiellen Komponenten, um den Zauber auf dich zu wirken.</p>`;
-                              break;
-                            default:
-                              title.innerText = 'Fähigkeit';
-                              description.innerText = 'Keine Information verfügbar.';
-                          }
-                    
-                          modal.style.display = 'flex';
-                        }
-                    
-                        function closeModal() {
-                          document.getElementById('ability-modal').style.display = 'none';
-                        }
-                    
-                        // Close modal on clicking outside of it
-                        window.onclick = function(event) {
-                          const modal = document.getElementById('ability-modal');
-                          if (event.target === modal) {
-                            modal.style.display = 'none';
-                          }
-                        };
-                    
-                        // Change attribute value with plus/minus buttons
-                        function changeAttribute(attr, amount) {
-                          const element = document.getElementById(attr + '-value');
-                          let value = parseInt(element.innerText) + amount;
-                          
-                          // Limit attribute values to reasonable D&D range
-                          if (value < 1) value = 1;
-                          if (value > 30) value = 30;
-                          
-                          element.innerText = value;
-                          
-                          // Calculate and update ability modifier
-                          const mod = Math.floor((value - 10) / 2);
-                          const modText = mod >= 0 ? `+${mod}` : mod;
-                          document.getElementById(`${attr}-mod`).innerText = modText;
-                          
-                          // Update derived stats if needed
-                          if (attr === 'str') {
-                            // Update strength-based calculations
-                            updateDamage();
-                          } else if (attr === 'dex' || attr === 'con') {
-                            // Update AC if using unarmored defense
-                            // This would depend on your character's specifics
-                          }
-                        }
-                      </script>
-                    </body>
-                    </html>
+    <script>
+        // --- Character Data ---
+        const characterData = {
+            name: "Bren Varakhaal",
+            race: "Goliath",
+            class: "Barbarian",
+            level: 5,
+            alignment: "Chaotic Neutral",
+            background: "Far Traveler",
+            attributes: {
+                str: 18, dex: 14, con: 14, int: 8, wis: 10, cha: 12
+            },
+            hp: {
+                baseMax: 46, // Barbarian 12 + 4*7 = 40 + CON*5 = 40 + 10 = 50? Recheck calculation. Let's assume 46 based on sheet.
+                current: 46,
+                temp: 0,
+                bonus: 0, // For effects like Aid
+                hitDiceMax: 5,
+                hitDiceCurrent: 5,
+                hitDiceType: 12,
+            },
+            proficiencies: {
+                saves: ["str", "con"],
+                skills: ["Athletics", "Intimidation", "Perception", "Survival"], // Add background proficiencies if applicable
+                weapons: ["Simple", "Martial"],
+                armor: ["Light", "Medium", "Shields"],
+                tools: ["Gaming set (Dragonchess)"] // Example, adjust based on background/choices
+            },
+            features: [
+                // Add racial, class, feat features here with brief descriptions or link IDs
+                { id: "powerful-build", name: "Powerful Build", source: "Goliath" },
+                { id: "mountain-born", name: "Mountain Born", source: "Goliath" },
+                { id: "stones-endurance", name: "Stone's Endurance", source: "Goliath" },
+                { id: "rage-ability", name: "Rage", source: "Barbarian 1", usesMax: 3, usesCurrent: 3, resetOn: "long" },
+                { id: "unarmored-defense", name: "Unarmored Defense", source: "Barbarian 1" },
+                { id: "reckless-attack", name: "Reckless Attack", source: "Barbarian 2" },
+                { id: "danger-sense", name: "Danger Sense", source: "Barbarian 2" },
+                { id: "primal-path", name: "Primal Path (Zealot)", source: "Barbarian 3" },
+                { id: "divine-fury", name: "Divine Fury", source: "Zealot 3" },
+                { id: "warrior-of-the-gods", name: "Warrior of the Gods", source: "Zealot 3" },
+                { id: "asi", name: "Ability Score Improvement/Feat", source: "Barbarian 4" }, // Placeholder
+                { id: "great-weapon-master", name: "Great Weapon Master", source: "Feat" },
+                { id: "extra-attack", name: "Extra Attack", source: "Barbarian 5" },
+                { id: "fast-movement", name: "Fast Movement", source: "Barbarian 5" },
+            ],
+            inventory: [
+                { name: "Greatsword", weight: 6, quantity: 1, location: "equipped", type: "weapon" },
+                { name: "Handaxe", weight: 2, quantity: 2, location: "carried", type: "weapon" },
+                { name: "Scale Mail", weight: 45, quantity: 1, location: "equipped", type: "armor" }, // Assume Scale Mail if AC is 16 (14 + Dex 2)
+                { name: "Explorer's Pack", weight: 59, quantity: 1, location: "backpack", type: "pack", contains: ["Backpack", "Bedroll", "Mess kit", "Tinderbox", "Torches (10)", "Rations (10 days)", "Waterskin", "Hempen rope (50 feet)"] },
+                { name: "Dragonchess set", weight: 0.5, quantity: 1, location: "backpack", type: "tool" },
+                 { name: "Traveler's Clothes", weight: 4, quantity: 1, location: "backpack", type: "gear"},
+                { name: "Pouch", weight: 1, quantity: 1, location: "equipped", type: "container"},
+                { name: "Gold Pieces", weight: 0.02, quantity: 15, location: "pouch", type: "currency", abbreviation: "GP" } // Example currency
+            ],
+             speed: 40, // Base 30 + 10 from Fast Movement
+             tempHPEffects: [], // Store temporary HP effects { source, amount, type, duration }
+             resources: { // Track resources like Rage uses
+                 rage: { current: 3, max: 3, resetOn: 'long' }
+             },
+             activeToggles: { // Track status of toggles
+                rage: false,
+                gwm: false,
+                reckless: false
+             }
+        };
+
+        // --- Global Variables ---
+        let currentHP = characterData.hp.current;
+        let baseMaxHP = characterData.hp.baseMax;
+        let hpBonus = characterData.hp.bonus;
+        let tempHP = characterData.hp.temp;
+        let maxHP = baseMaxHP + hpBonus;
+        let strScore = characterData.attributes.str; // Keep track for capacity
+        const powerfulBuild = characterData.features.some(f => f.id === 'powerful-build'); // Check if feature exists
+
+        // --- Utility Functions ---
+        function getModifier(attribute) {
+            const score = characterData.attributes[attribute];
+            return Math.floor((score - 10) / 2);
+        }
+
+        function getProficiencyBonus() {
+            return Math.ceil(characterData.level / 4) + 1;
+        }
+
+         function getSkillBonus(skillName) {
+            const skillsData = { // Mapping skills to attributes
+                "Athletics": "str", "Acrobatics": "dex", "Sleight of Hand": "dex", "Stealth": "dex",
+                "Arcana": "int", "History": "int", "Investigation": "int", "Nature": "int", "Religion": "int",
+                "Animal Handling": "wis", "Insight": "wis", "Medicine": "wis", "Perception": "wis", "Survival": "wis",
+                "Deception": "cha", "Intimidation": "cha", "Performance": "cha", "Persuasion": "cha"
+            };
+            const attribute = skillsData[skillName];
+            if (!attribute) return 0; // Skill not found
+
+            let bonus = getModifier(attribute);
+            if (characterData.proficiencies.skills.includes(skillName)) {
+                bonus += getProficiencyBonus();
+            }
+            return bonus;
+        }
+
+         function getSaveBonus(attribute) {
+            let bonus = getModifier(attribute);
+            if (characterData.proficiencies.saves.includes(attribute)) {
+                bonus += getProficiencyBonus();
+            }
+            return bonus;
+        }
+
+        function formatBonus(bonus) {
+            return bonus >= 0 ? `+${bonus}` : bonus;
+        }
+
+
+        // --- Initialization ---
+        window.onload = function() {
+          populateAttributes();
+          populateSkillsAndSaves();
+          updateHPDisplay();
+          updateCombatStats();
+          initializeInventory(); // Renders inventory and calculates weight
+          updateRageCounter(); // Display initial rage uses
+
+           // Set initial tab state
+            document.getElementById('combat').classList.add('active');
+            document.querySelectorAll('.tab')[0].classList.add('active');
+        };
+
+         // --- Populate UI Elements ---
+         function populateAttributes() {
+             Object.keys(characterData.attributes).forEach(attr => {
+                const value = characterData.attributes[attr];
+                const mod = getModifier(attr);
+                document.getElementById(`${attr}-value`).innerText = value;
+                document.getElementById(`${attr}-mod`).innerText = formatBonus(mod);
+             });
+         }
+
+         function populateSkillsAndSaves() {
+            const skillsContainer = document.getElementById('skills-list');
+            const savesContainer = document.getElementById('saves-list');
+            skillsContainer.innerHTML = ''; // Clear existing
+            savesContainer.innerHTML = ''; // Clear existing
+
+            const allSkills = [ // List all standard skills
+                "Athletics", "Acrobatics", "Sleight of Hand", "Stealth", "Arcana", "History",
+                "Investigation", "Nature", "Religion", "Animal Handling", "Insight", "Medicine",
+                "Perception", "Survival", "Deception", "Intimidation", "Performance", "Persuasion"
+            ];
+
+            allSkills.sort().forEach(skill => {
+                const bonus = getSkillBonus(skill);
+                const attribute = ["Athletics"].includes(skill) ? "STR" : // Add more mappings as needed
+                                ["Acrobatics", "Sleight of Hand", "Stealth"].includes(skill) ? "DEX" :
+                                ["Arcana", "History", "Investigation", "Nature", "Religion"].includes(skill) ? "INT" :
+                                ["Animal Handling", "Insight", "Medicine", "Perception", "Survival"].includes(skill) ? "WIS" : "CHA";
+                 const isProficient = characterData.proficiencies.skills.includes(skill);
+                const skillElement = document.createElement('div');
+                skillElement.className = 'skill';
+                skillElement.innerHTML = `
+                    <span class="skill-name" title="${attribute} based ${isProficient ? '(Proficient)' : ''}">${skill}</span>
+                    <span>${formatBonus(bonus)}</span>
+                `;
+                skillsContainer.appendChild(skillElement);
+            });
+
+            const allSaves = ["str", "dex", "con", "int", "wis", "cha"];
+             allSaves.forEach(save => {
+                const bonus = getSaveBonus(save);
+                const isProficient = characterData.proficiencies.saves.includes(save);
+                const saveElement = document.createElement('div');
+                saveElement.className = 'skill'; // Reuse skill styling
+                saveElement.innerHTML = `
+                    <span class="skill-name" title="${isProficient ? '(Proficient)' : ''}">${save.toUpperCase()}</span>
+                    <span>${formatBonus(bonus)}</span>
+                `;
+                savesContainer.appendChild(saveElement);
+            });
+
+            // Update Passive Perception
+             document.getElementById('passive-perception').innerText = 10 + getSkillBonus('Perception');
+             document.getElementById('proficiency-bonus').innerText = formatBonus(getProficiencyBonus());
+         }
+
+         function updateCombatStats() {
+            const dexMod = getModifier('dex');
+            const conMod = getModifier('con');
+            const strMod = getModifier('str');
+            const profBonus = getProficiencyBonus();
+
+            // AC calculation (assuming Scale Mail: 14 + Dex mod (max 2))
+            // If Unarmored: 10 + Dex + Con
+            const ac = characterData.inventory.some(i => i.name === "Scale Mail" && i.location === 'equipped')
+                ? 14 + Math.min(dexMod, 2)
+                : 10 + dexMod + conMod; // Fallback to unarmored if no specific armor equipped
+            document.getElementById('ac-value').innerText = ac;
+
+            document.getElementById('initiative-value').innerText = formatBonus(dexMod);
+            document.getElementById('speed-value').innerText = `${characterData.speed} ft.`;
+
+            // Attack and Damage (assuming Greatsword 2H, STR based)
+            let attackBonus = strMod + profBonus;
+            let damageParts = ["2d6", formatBonus(strMod)];
+
+            if (characterData.activeToggles.rage) {
+                damageParts.push(formatBonus(2)); // Rage damage bonus at level 5
+             }
+             if (characterData.activeToggles.gwm) {
+                attackBonus -= 5;
+                damageParts.push(formatBonus(10));
+             }
+             // Divine Fury (Zealot) - Assuming first hit, active rage
+             if (characterData.activeToggles.rage) {
+                 const divineFuryDice = `1d6`; // Assuming Radiant/Necrotic chosen
+                 const divineFuryBonus = Math.floor(characterData.level / 2);
+                 damageParts.push(`${divineFuryDice}${formatBonus(divineFuryBonus)} Divine`);
+             }
+
+
+            document.getElementById('attack-bonus').innerText = formatBonus(attackBonus);
+            document.getElementById('damage-formula').innerText = damageParts.join(" + ").replace("+ -", "- "); // Basic formatting
+         }
+
+
+        // --- Tab Functions ---
+        function changeTab(tabName) {
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+          document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+          document.getElementById(tabName).classList.add('active');
+          event.currentTarget.classList.add('active'); // Add active to the clicked tab
+        }
+
+        // --- Combat Toggles & Actions ---
+        function toggleRage() {
+            characterData.activeToggles.rage = !characterData.activeToggles.rage;
+            document.getElementById('rage-toggle').classList.toggle('active', characterData.activeToggles.rage);
+            document.getElementById('rage-overlay').style.opacity = characterData.activeToggles.rage ? '1' : '0';
+            document.body.classList.toggle('rage-active', characterData.activeToggles.rage); // For potential body-wide styling
+            if (!characterData.activeToggles.rage) {
+                 // Ensure rage action checkbox is unchecked if rage ends
+                 const rageCheckbox = document.querySelector('#action-rage .action-checkbox');
+                 if(rageCheckbox && rageCheckbox.checked) {
+                     rageCheckbox.checked = false;
+                     toggleActionUsed(rageCheckbox, 'bonus'); // Update action state
+                 }
+             }
+            updateCombatStats();
+        }
+
+        function toggleGWM() {
+            characterData.activeToggles.gwm = !characterData.activeToggles.gwm;
+             document.getElementById('gwm-toggle').classList.toggle('active', characterData.activeToggles.gwm);
+             updateCombatStats();
+        }
+
+        function toggleReckless() {
+             characterData.activeToggles.reckless = !characterData.activeToggles.reckless;
+             document.getElementById('reckless-toggle').classList.toggle('active', characterData.activeToggles.reckless);
+             // updateCombatStats(); // Reckless doesn't directly change displayed bonus/dmg
+        }
+
+        function activateRage(calledFromAction = false) {
+             if (characterData.resources.rage.current <= 0) {
+                alert("Keine Wut mehr übrig!");
+                return false; // Indicate failure
+             }
+             if (characterData.activeToggles.rage) {
+                 if (!calledFromAction) alert("Bereits in Rage!"); // Don't alert if triggered by action checkbox
+                return false; // Indicate failure or already active
+             }
+
+             characterData.resources.rage.current--;
+             updateRageCounter();
+             toggleRage(); // Activate rage state and UI
+             document.body.classList.add('rage-animation'); // Visual feedback
+             setTimeout(() => document.body.classList.remove('rage-animation'), 500);
+
+             // Ensure the action checkbox reflects this if not called from it
+             if (!calledFromAction) {
+                 const rageCheckbox = document.querySelector('#action-rage .action-checkbox');
+                 if (rageCheckbox && !rageCheckbox.checked) {
+                     rageCheckbox.checked = true;
+                     toggleActionUsed(rageCheckbox, 'bonus');
+                 }
+             }
+             return true; // Indicate success
+        }
+
+         function updateRageCounter() {
+            const current = characterData.resources.rage.current;
+            const max = characterData.resources.rage.max;
+            document.getElementById('rage-counter').innerText = `${current}/${max} übrig`;
+        }
+
+        function rollAttack() {
+             const strMod = getModifier('str');
+             const profBonus = getProficiencyBonus();
+             let baseAttackBonus = strMod + profBonus;
+             let advantage = characterData.activeToggles.reckless;
+             let disadvantage = false; // Add conditions for disadvantage if needed
+
+             if (characterData.activeToggles.gwm) {
+                baseAttackBonus -= 5;
+             }
+
+             let roll1 = Math.floor(Math.random() * 20) + 1;
+             let rollResult = roll1;
+             let resultText = "";
+
+             if (advantage && !disadvantage) {
+                let roll2 = Math.floor(Math.random() * 20) + 1;
+                rollResult = Math.max(roll1, roll2);
+                resultText = `Würfel (Vorteil): ${roll1}, ${roll2} -> ${rollResult}`;
+             } else if (disadvantage && !advantage) {
+                let roll2 = Math.floor(Math.random() * 20) + 1;
+                rollResult = Math.min(roll1, roll2);
+                resultText = `Würfel (Nachteil): ${roll1}, ${roll2} -> ${rollResult}`;
+             } else {
+                 resultText = `Würfel: ${rollResult}`;
+             }
+
+             let totalAttack = rollResult + baseAttackBonus;
+             resultText += ` + ${baseAttackBonus} = ${totalAttack}`;
+
+             if (rollResult === 20) {
+                resultText += " - KRITISCH!";
+             } else if (rollResult === 1) {
+                 resultText += " - Patzer!";
+             }
+
+             // Display result in the main dice result area
+             document.getElementById('dice-result').innerHTML = `Angriff: ${resultText}`;
+        }
+
+
+        // --- Dice Rolling ---
+        function rollDice(sides) {
+          const result = Math.floor(Math.random() * sides) + 1;
+          document.getElementById('dice-result').innerText = `d${sides}: ${result}`;
+          return result;
+        }
+
+         function rollQuickDice(diceString) {
+            let resultText = "-";
+            try {
+                // Basic parser: handles "XdY+Z" or "XdY" or just "XdY"
+                const match = diceString.match(/(\d+)[dD](\d+)(?:[+](\d+))?/);
+                if (match) {
+                    const numDice = parseInt(match[1]);
+                    const sides = parseInt(match[2]);
+                    const modifier = parseInt(match[3] || '0');
+                    let total = 0;
+                    let rolls = [];
+                    for (let i = 0; i < numDice; i++) {
+                        const roll = Math.floor(Math.random() * sides) + 1;
+                        rolls.push(roll);
+                        total += roll;
+                    }
+                    total += modifier;
+                    resultText = `${diceString}: ${rolls.join(' + ')}${modifier > 0 ? ' + ' + modifier : ''} = ${total}`;
+                } else if (!isNaN(parseInt(diceString))) { // Handle simple D20, D12 etc.
+                    const sides = parseInt(diceString);
+                    const roll = Math.floor(Math.random() * sides) + 1;
+                    resultText = `d${sides}: ${roll}`;
+                } else {
+                     resultText = "Ungültiger Wurf";
+                }
+            } catch (e) {
+                resultText = "Fehler beim Würfeln";
+            }
+             document.getElementById('quick-dice-result').innerText = resultText;
+         }
+
+
+        // --- HP Management ---
+        function modifyHP(amount) {
+             if (amount < 0) { // Damage
+                 let damageTaken = Math.abs(amount);
+                 if (tempHP > 0) {
+                     const tempDamage = Math.min(damageTaken, tempHP);
+                     tempHP -= tempDamage;
+                     damageTaken -= tempDamage;
+                 }
+                 if (damageTaken > 0) {
+                     currentHP = Math.max(0, currentHP - damageTaken);
+                 }
+             } else { // Healing
+                 currentHP = Math.min(maxHP, currentHP + amount);
+             }
+             // Update inputs to reflect changes
+             document.getElementById('current-hp-input').value = currentHP;
+             document.getElementById('temp-hp-input').value = tempHP;
+             updateHPDisplay();
+        }
+
+        function updateHPDisplay() {
+            currentHP = parseInt(document.getElementById('current-hp-input').value) || 0;
+            tempHP = parseInt(document.getElementById('temp-hp-input').value) || 0;
+            hpBonus = parseInt(document.getElementById('hp-bonus-input').value) || 0;
+            baseMaxHP = parseInt(document.getElementById('base-max-hp-input').value) || 0;
+             maxHP = baseMaxHP + hpBonus; // Recalculate maxHP based on bonus
+
+             // Ensure current HP doesn't exceed current max HP
+             currentHP = Math.min(currentHP, maxHP);
+             document.getElementById('current-hp-input').value = currentHP; // Correct input if needed
+
+             // Update displayed numbers
+             document.getElementById('display-current-hp').innerText = currentHP;
+             document.getElementById('display-max-hp').innerText = maxHP;
+             document.getElementById('display-temp-hp').innerText = tempHP > 0 ? ` (+${tempHP} Temp)` : '';
+
+             // Update HP bars
+             const totalBarWidth = maxHP + tempHP; // Bar represents full potential health + temp
+             const basePercentage = totalBarWidth > 0 ? (currentHP / totalBarWidth) * 100 : 0;
+             const tempPercentage = totalBarWidth > 0 ? (tempHP / totalBarWidth) * 100 : 0;
+
+             const hpFillBase = document.getElementById('hp-fill-base');
+             const hpFillTemp = document.getElementById('hp-fill-temp');
+
+             hpFillBase.style.width = `${basePercentage}%`;
+             hpFillTemp.style.width = `${tempPercentage}%`;
+             hpFillTemp.style.left = `${basePercentage}%`; // Temp HP stacks visually 'on top' or 'after' base HP
+
+             // Change base HP bar color based on percentage of MAX HP (not including temp)
+             const currentToBaseMaxPercent = maxHP > 0 ? (currentHP / maxHP) * 100 : 0;
+             let hpColor = 'linear-gradient(90deg, var(--primary), #CC0000)'; // Default red gradient
+             if (currentToBaseMaxPercent < 25) {
+                 hpColor = '#FF0000'; // Critical red
+             } else if (currentToBaseMaxPercent < 50) {
+                 hpColor = '#FFA500'; // Wounded orange
+             } else {
+                 hpColor = 'linear-gradient(90deg, #008000, #006400)'; // Healthy green gradient
+             }
+             hpFillBase.style.background = hpColor;
+
+             // Update Temp HP Effects list display
+             renderTempHPEffects();
+        }
+
+        function updateMaxHP() {
+             baseMaxHP = parseInt(document.getElementById('base-max-hp-input').value) || 0;
+             hpBonus = parseInt(document.getElementById('hp-bonus-input').value) || 0;
+             maxHP = baseMaxHP + hpBonus;
+             // Ensure inputs reflect calculated maxHP
+             document.getElementById('display-max-hp').innerText = maxHP;
+             // Don't auto-heal, just cap current HP if needed
+              if (currentHP > maxHP) {
+                 currentHP = maxHP;
+                 document.getElementById('current-hp-input').value = currentHP;
+             }
+             updateHPDisplay(); // Update bars and text
+        }
+
+        function resetHP() {
+             currentHP = maxHP;
+             document.getElementById('current-hp-input').value = currentHP;
+             // Temp HP is usually lost on long rest, but keep manual control here
+             // tempHP = 0;
+             // document.getElementById('temp-hp-input').value = tempHP;
+             updateHPDisplay();
+        }
+
+        // --- Temp HP Modal & Effects ---
+        function openTempHPModal() {
+             // Reset modal fields
+             document.getElementById('temp-hp-source-input').value = '';
+             document.getElementById('temp-hp-amount-input').value = '1';
+             document.getElementById('temp-hp-type-select').value = 'temp';
+             document.getElementById('temp-hp-duration-select').value = 'long';
+             document.getElementById('temp-hp-modal').style.display = 'flex';
+        }
+
+        function addTempHPEffect() {
+             const source = document.getElementById('temp-hp-source-input').value.trim() || "Unbekannte Quelle";
+             const amount = parseInt(document.getElementById('temp-hp-amount-input').value) || 0;
+             const type = document.getElementById('temp-hp-type-select').value; // 'temp' or 'max'
+             const durationValue = document.getElementById('temp-hp-duration-select').value;
+             const durationTextMap = {
+                 long: "Bis zur langen Rast", short: "Bis zur kurzen Rast", combat: "Bis Ende des Kampfes",
+                 permanent: "Permanent", other: "Andere Dauer"
+             };
+             const duration = durationTextMap[durationValue] || "Unbekannte Dauer";
+
+             if (amount <= 0) {
+                 alert('Menge muss positiv sein.');
+                 return;
+             }
+
+             const newEffect = { id: Date.now(), source, amount, type, duration }; // Use timestamp as unique ID
+             characterData.tempHPEffects.push(newEffect);
+
+             applyTempHPEffects(); // Recalculate total temp/bonus HP
+             closeModal('temp-hp-modal');
+        }
+
+         function removeTempHPEffect(id) {
+            characterData.tempHPEffects = characterData.tempHPEffects.filter(effect => effect.id !== id);
+            applyTempHPEffects(); // Recalculate after removal
+        }
+
+        function applyTempHPEffects() {
+            let currentMaxTempHP = 0;
+            let currentTotalBonusHP = 0;
+
+            characterData.tempHPEffects.forEach(effect => {
+                if (effect.type === 'temp') {
+                    // Temp HP doesn't stack, take the highest
+                    currentMaxTempHP = Math.max(currentMaxTempHP, effect.amount);
+                } else if (effect.type === 'max') {
+                    // Max HP bonuses stack
+                    currentTotalBonusHP += effect.amount;
+                }
+            });
+
+            // Update global vars and inputs
+            tempHP = currentMaxTempHP;
+            hpBonus = currentTotalBonusHP;
+            document.getElementById('temp-hp-input').value = tempHP;
+            document.getElementById('hp-bonus-input').value = hpBonus;
+
+            updateMaxHP(); // This calls updateHPDisplay internally
+        }
+
+
+        function renderTempHPEffects() {
+            const effectsContainer = document.getElementById('temp-hp-effects');
+            effectsContainer.innerHTML = ''; // Clear current list
+
+            if (characterData.tempHPEffects.length === 0) {
+                effectsContainer.style.display = 'none';
+                return;
+            }
+
+            effectsContainer.style.display = 'block';
+            characterData.tempHPEffects.forEach(effect => {
+                 const effectElement = document.createElement('div');
+                 effectElement.className = 'temp-hp-timer'; // Reuse existing class
+                 effectElement.innerHTML = `
+                    <div class="temp-hp-source">${effect.source} (${effect.amount} ${effect.type === 'temp' ? 'Temp-TP' : 'Max-TP'})</div>
+                    <div class="temp-hp-duration">${effect.duration}</div>
+                    <button class="hp-btn" style="width: 20px; height: 20px; font-size: 12px; background: #555;" onclick="removeTempHPEffect(${effect.id})" title="Effekt entfernen">×</button>
+                 `;
+                 effectsContainer.appendChild(effectElement);
+             });
+        }
+
+        // --- Attribute Management ---
+        function changeAttribute(attr, amount) {
+          const valueElement = document.getElementById(`${attr}-value`);
+          let currentValue = parseInt(valueElement.innerText);
+          let newValue = currentValue + amount;
+          newValue = Math.max(1, Math.min(30, newValue)); // Clamp between 1 and 30
+
+          characterData.attributes[attr] = newValue; // Update data model
+          valueElement.innerText = newValue;
+
+          const mod = getModifier(attr);
+          document.getElementById(`${attr}-mod`).innerText = formatBonus(mod);
+
+           // Recalculate dependent stats
+            if (attr === 'str') {
+                strScore = newValue; // Update global for capacity
+                updateWeightCapacity();
+                updateCombatStats();
+                populateSkillsAndSaves(); // Update skills/saves display
+            } else if (attr === 'con') {
+                // Update base Max HP if CON changes (typical D&D rule)
+                // This requires knowing the HP calculation method (e.g., average or rolled)
+                // Simple approach: Adjust baseMaxHP by level * change in CON modifier
+                // More complex logic needed for accurate retroactive HP adjustment.
+                // For now, just update derived stats:
+                 updateMaxHP(); // Updates total max HP based on potential bonus changes
+                 updateCombatStats(); // Updates AC if unarmored
+                 populateSkillsAndSaves(); // Update saves/passive perception if WIS changes
+            } else if (attr === 'dex') {
+                 updateCombatStats(); // Updates AC, Initiative
+                 populateSkillsAndSaves();
+            } else {
+                 // Update skills/saves if INT, WIS, CHA change
+                 populateSkillsAndSaves();
+            }
+        }
+
+        function showInfo(infoId, event) {
+             const infoBox = document.getElementById(infoId);
+             document.querySelectorAll('.infobox').forEach(box => box.style.display = 'none'); // Hide others
+
+             infoBox.style.display = 'block';
+             // Simple positioning below the attribute for now
+             const rect = event.currentTarget.getBoundingClientRect();
+             infoBox.style.position = 'fixed'; // Use fixed for simplicity
+             infoBox.style.left = `${rect.left}px`;
+             infoBox.style.top = `${rect.bottom + 5}px`;
+
+             // Ensure it fits on screen (basic check)
+              if (infoBox.offsetLeft + infoBox.offsetWidth > window.innerWidth) {
+                 infoBox.style.left = `${window.innerWidth - infoBox.offsetWidth - 10}px`;
+             }
+              if (infoBox.offsetTop + infoBox.offsetHeight > window.innerHeight) {
+                  infoBox.style.top = `${rect.top - infoBox.offsetHeight - 5}px`;
+              }
+
+             // Close on next click anywhere
+             setTimeout(() => { // Timeout prevents immediate closure
+                 document.addEventListener('click', closeInfoBox, { once: true });
+             }, 0);
+             event.stopPropagation(); // Prevent click from immediately closing
+        }
+
+        function closeInfoBox() {
+             document.querySelectorAll('.infobox').forEach(box => box.style.display = 'none');
+        }
+
+        // --- Ability Modal ---
+        function showModal(abilityId) {
+          const modal = document.getElementById('ability-modal');
+          const title = document.getElementById('modal-title');
+          const description = document.getElementById('modal-description');
+
+           // Fetch descriptions (replace with actual D&D text)
+           const descriptions = {
+             'powerful-build': "<p>Du zählst als eine Größenkategorie größer, wenn es darum geht, deine Tragfähigkeit und das Gewicht zu bestimmen, das du schieben, ziehen oder heben kannst.</p>",
+             'mountain-born': "<p>Du bist an große Höhen gewöhnt, einschließlich Höhen über 10.000 Fuß. Du bist außerdem auf natürliche Weise an kalte Klimazonen angepasst, wie in Kapitel 5 des Dungeon Master's Guide beschrieben.</p><p>Du hast Resistenz gegen Kälteschaden.</p>",
+             'stones-endurance': "<p>Du kannst dich darauf konzentrieren, Verletzungen abzuwehren. Wenn du Schaden nimmst, kannst du deine Reaktion verwenden, um einen W12 zu würfeln. Addiere deinen Konstitutionsmodifikator zum gewürfelten Ergebnis und reduziere den Schaden um diese Summe.</p><p>Nachdem du diese Eigenschaft verwendet hast, kannst du sie erst wieder nutzen, nachdem du eine kurze oder lange Rast beendet hast.</p>",
+             'rage-ability': "<p>Als Bonusaktion kannst du in einen Wutrausch verfallen. Dauer: 1 Minute. Endet früher bei Bewusstlosigkeit, keiner Aktion/Schaden seit letztem Zug, oder freiwillig (Bonusaktion).</p><ul><li>Vorteil auf STR-Würfe und STR-Rettungswürfe.</li><li>Bonus auf Schadenswürfe mit STR-Nahkampfwaffen (+${getProficiencyBonus()}).</li><li>Resistenz gegen Hieb-, Stich- und Wuchtschaden.</li></ul><p>Nutzungen: ${characterData.resources.rage.max} pro langer Rast.</p>",
+             'unarmored-defense': "<p>Ohne Rüstung entspricht deine Rüstungsklasse 10 + deinem Geschicklichkeitsmodifikator + deinem Konstitutionsmodifikator. Du kannst einen Schild verwenden und trotzdem von diesem Vorteil profitieren.</p>",
+             'reckless-attack': "<p>Wenn du deinen ersten Angriff in deinem Zug ausführst, kannst du entscheiden, rücksichtslos anzugreifen. Dies gibt dir Vorteil bei Nahkampfangriffen mit Stärke während dieses Zuges, aber Angriffswürfe gegen dich haben bis zu deinem nächsten Zug Vorteil.</p>",
+             'danger-sense': "<p>Du hast Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst (z.B. Fallen, Zauber). Funktioniert nicht, wenn du geblendet, taub oder handlungsunfähig bist.</p>",
+             'primal-path': "<p>Auf Stufe 3 wählst du einen Pfad, der deine Wut formt. Dein gewählter Pfad ist der Pfad des Zeloten, der dir auf Stufe 3, 6, 10 und 14 Merkmale verleiht.</p>",
+             'divine-fury': `<p>Während du in Rage bist, erleidet die erste Kreatur, die du in jedem deiner Züge mit einem Waffenangriff triffst, zusätzlichen Schaden in Höhe von 1W6 + ${Math.floor(characterData.level / 2)}. Der Schadenstyp ist Nekrotisch oder Strahlend (wähle bei Erhalt).</p>`,
+             'warrior-of-the-gods': "<p>Wenn ein Zauber wie *Totenerweckung* den alleinigen Effekt hat, dich ins Leben zurückzubringen (nicht als Untoter), benötigt der Zauberwirker keine materiellen Komponenten, um den Zauber auf dich zu wirken.</p>",
+             'asi': "<p>Auf Stufe 4 (und weiteren Stufen) kannst du einen Attributswert um 2 oder zwei Attributswerte um je 1 erhöhen, oder ein Talent wählen. Du hast das Talent 'Great Weapon Master' gewählt.</p>",
+             'great-weapon-master': "<p><ul><li>Wenn du einen kritischen Treffer mit einer Nahkampfwaffe erzielst oder eine Kreatur mit einer solchen auf 0 Trefferpunkte reduzierst, kannst du einen Nahkampfwaffenangriff als Bonusaktion ausführen.</li><li>Bevor du einen Nahkampfangriff mit einer schweren Waffe ausführst, mit der du geübt bist, kannst du einen Malus von -5 auf den Angriffswurf nehmen. Wenn der Angriff trifft, addierst du +10 zum Schaden des Angriffs.</li></ul></p>",
+             'extra-attack': "<p>Du kannst zweimal anstatt einmal angreifen, wenn du die Angriffsaktion in deinem Zug ausführst.</p>",
+             'fast-movement': "<p>Deine Bewegungsrate erhöht sich um 10 Fuß, solange du keine schwere Rüstung trägst.</p>",
+             // Add more descriptions as needed
+            };
+
+          title.innerText = abilityId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); // Format title
+          description.innerHTML = descriptions[abilityId] || "<p>Beschreibung nicht gefunden.</p>";
+          modal.style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+          document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal on clicking outside backdrop
+        window.addEventListener('click', function(event) {
+             const modals = document.querySelectorAll('.modal');
+             modals.forEach(modal => {
+                 if (event.target === modal) {
+                     closeModal(modal.id);
+                 }
+             });
+        });
+
+
+        // --- Action Economy ---
+        function toggleActionUsed(checkbox, actionType) {
+            const actionItem = checkbox.closest('.action-item');
+            const isUsed = checkbox.checked;
+
+            actionItem.classList.toggle('action-used', isUsed);
+
+            // Disable other actions of the same type if this one is used
+            document.querySelectorAll(`.action-item:has(.action-${actionType})`).forEach(item => {
+                const itemCheckbox = item.querySelector('.action-checkbox');
+                if (item !== actionItem) {
+                    item.classList.toggle('action-disabled', isUsed);
+                     if (isUsed) itemCheckbox.disabled = true; // Disable checkbox too
+                     else itemCheckbox.disabled = false;
+                }
+            });
+
+            // Special handling for Rage action toggle linking
+             if (actionItem.id === 'action-rage') {
+                 // If checkbox is checked and rage isn't active, try activating
+                 if (isUsed && !characterData.activeToggles.rage) {
+                     if (!activateRage(true)) { // Try activating, mark as from action
+                          checkbox.checked = false; // Revert if activation failed (e.g., no uses left)
+                          toggleActionUsed(checkbox, actionType); // Re-run toggle to undo state
+                     }
+                 }
+                 // If checkbox is unchecked and rage is active, deactivate rage
+                 else if (!isUsed && characterData.activeToggles.rage) {
+                     toggleRage(); // Deactivate rage state
+                 }
+             }
+        }
+
+        function resetActions() {
+          document.querySelectorAll('.action-item').forEach(item => {
+            item.classList.remove('action-used', 'action-disabled');
+             const checkbox = item.querySelector('.action-checkbox');
+             if (checkbox) {
+                 checkbox.checked = false;
+                 checkbox.disabled = false;
+             }
+          });
+           // Also reset Rage toggle if it was activated via action
+           /* // Decided against auto-resetting rage toggle, user might want it persistent
+            if (characterData.activeToggles.rage && document.querySelector('#action-rage .action-checkbox')?.checked) {
+                 toggleRage();
+            }
+           */
+        }
+
+        // --- Inventory Management ---
+        function initializeInventory() {
+             renderInventory(); // Initial render based on characterData
+        }
+
+        function addInventoryItem() {
+             const nameInput = document.getElementById('item-name');
+             const weightInput = document.getElementById('item-weight');
+             const quantityInput = document.getElementById('item-quantity');
+             const locationSelect = document.getElementById('item-location');
+
+             const name = nameInput.value.trim();
+             const weight = parseFloat(weightInput.value) || 0;
+             const quantity = parseInt(quantityInput.value) || 1;
+             const location = locationSelect.value;
+             const type = name.toLowerCase().includes("gold") || name.toLowerCase().includes("gp") ? "currency" : // Basic type detection
+                           ["großschwert", "handaxt", "streitaxt"].includes(name.toLowerCase()) ? "weapon" :
+                           ["kettenhemd", "scale mail"].includes(name.toLowerCase()) ? "armor" : "gear";
+
+             if (!name || quantity < 1 || weight < 0) {
+                 alert('Bitte gib gültige Werte für Name, Menge (>=1) und Gewicht (>=0) ein.');
+                 return;
+             }
+
+             // Check if stackable item exists at the same location
+             const existingItemIndex = characterData.inventory.findIndex(item =>
+                 item.name.toLowerCase() === name.toLowerCase() &&
+                 item.location === location &&
+                 item.type !== 'currency' // Don't auto-stack currency this way
+             );
+
+             if (existingItemIndex > -1) {
+                 characterData.inventory[existingItemIndex].quantity += quantity;
+             } else {
+                 characterData.inventory.push({ name, weight, quantity, location, type, equipped: location === 'equipped' });
+             }
+
+             // Reset form
+             nameInput.value = '';
+             weightInput.value = '';
+             quantityInput.value = '1';
+             locationSelect.value = 'carried'; // Default to carried
+
+             renderInventory();
+        }
+
+        function removeInventoryItem(index) {
+             if (index >= 0 && index < characterData.inventory.length) {
+                 if (confirm(`"${characterData.inventory[index].name}" wirklich entfernen?`)) {
+                     characterData.inventory.splice(index, 1);
+                     renderInventory();
+                 }
+             }
+        }
+
+         function toggleEquipped(index) {
+             if (index >= 0 && index < characterData.inventory.length) {
+                 const item = characterData.inventory[index];
+                 // Simple toggle logic: If equipped, move to carried. If carried/backpack/etc, move to equipped.
+                 if (item.location === 'equipped') {
+                     item.location = 'carried';
+                 } else {
+                     item.location = 'equipped';
+                 }
+                  item.equipped = item.location === 'equipped'; // Update equipped flag
+                 renderInventory();
+             }
+         }
+
+
+        function renderInventory() {
+             const tbody = document.getElementById('inventory-items');
+             tbody.innerHTML = ''; // Clear table
+             let totalWeight = 0;
+             let totalGold = 0;
+
+             characterData.inventory.forEach((item, index) => {
+                 // Don't include weight of containers themselves if items are inside (simplification)
+                 const itemTotalWeight = (item.type !== 'container' && item.type !== 'pack') ? (item.weight * item.quantity) : 0;
+                 // Only count weight if not inside a container like a backpack (unless the container itself is being listed)
+                 if(item.location !== 'backpack' && item.location !== 'pouch' || item.type === 'pack' || item.type === 'container') {
+                    totalWeight += itemTotalWeight;
+                 }
+
+
+                 if (item.type === 'currency' && item.name.toLowerCase().includes('gold')) {
+                     totalGold += item.quantity;
+                 }
+
+                 const row = document.createElement('tr');
+                 row.className = `inventory-location-${item.location}`; // Class for potential styling
+
+                 // Determine if item can be equipped (basic check for weapon/armor)
+                 const canBeEquipped = item.type === 'weapon' || item.type === 'armor' || item.name === "Shield";
+
+                 row.innerHTML = `
+                    <td>${item.name} ${canBeEquipped ? `<span style="cursor:pointer; color: ${item.location === 'equipped' ? 'var(--accent)' : '#888'};" onclick="toggleEquipped(${index})" title="${item.location === 'equipped' ? 'Ablegen' : 'Ausrüsten'}">[${item.location === 'equipped' ? 'E' : 'A'}]</span>` : ''}</td>
+                    <td>${item.weight.toFixed(1)}</td>
+                    <td>${item.quantity}</td>
+                    <td>${itemTotalWeight.toFixed(1)}</td>
+                    <td>${item.location.charAt(0).toUpperCase() + item.location.slice(1)}</td>
+                    <td><span class="delete-item" onclick="removeInventoryItem(${index})" title="Gegenstand entfernen">×</span></td>
+                 `;
+                 tbody.appendChild(row);
+             });
+
+             document.getElementById('current-weight').textContent = totalWeight.toFixed(1);
+             document.getElementById('gold-total').textContent = totalGold; // Update gold display
+             updateWeightCapacity(totalWeight); // Pass current weight for meter update
+        }
+
+        function calculateCapacity() {
+             let capacity = strScore * 15;
+             if (powerfulBuild) {
+                 capacity *= 2; // Goliath trait doubles capacity calculation base
+             }
+             return capacity;
+        }
+
+        function updateWeightCapacity(currentWeight = 0) {
+             const capacity = calculateCapacity();
+             const encumberedThreshold = capacity / 3; // Example: STR*5 for Encumbered
+             const heavilyEncumberedThreshold = capacity * 2 / 3; // Example: STR*10 for Heavily Encumbered
+
+             document.getElementById('weight-capacity').textContent = capacity;
+
+             // Update weight meter fill and color
+             const fillPercentage = capacity > 0 ? Math.min(100, (currentWeight / capacity) * 100) : 0;
+             const weightFill = document.getElementById('weight-fill');
+             weightFill.style.width = `${fillPercentage}%`;
+
+             let fillColor = '#4CAF50'; // Green (Light)
+             if (currentWeight > heavilyEncumberedThreshold) {
+                 fillColor = '#FF5722'; // Red (Heavily Encumbered)
+             } else if (currentWeight > encumberedThreshold) {
+                 fillColor = '#FFC107'; // Yellow (Encumbered)
+             }
+             weightFill.style.backgroundColor = fillColor;
+
+             // Update threshold markers
+             document.getElementById('weight-marker-encumbered').style.left = `${(encumberedThreshold / capacity) * 100}%`;
+             document.getElementById('weight-marker-heavily').style.left = `${(heavilyEncumberedThreshold / capacity) * 100}%`;
+
+             // Update text labels for thresholds
+             document.getElementById('weight-text-details').innerHTML = `
+                <span>Leicht (0-${Math.floor(encumberedThreshold)})</span>
+                <span>Belastet (${Math.floor(encumberedThreshold) + 1}-${Math.floor(heavilyEncumberedThreshold)})</span>
+                <span>Schwer (${Math.floor(heavilyEncumberedThreshold) + 1}-${capacity})</span>
+             `;
+        }
+
+
+    </script>
+</body>
+</html>
