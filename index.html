@@ -3,39 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ilio Xaenor – Komplettes Charakter-Blatt</title>
+  <title>Ilio Xaenor - E-Ink Optimiert</title>
   <style>
     body {
       font-family: sans-serif;
       background-color: white;
       color: black;
       font-size: 14px;
-      line-height: 1.4;
+      line-height: 1.3;
       margin: 0;
       padding: 5px;
     }
     .container {
-      display: flex;
-      flex-direction: column;
+      display: table;
+      width: 100%;
+      table-layout: fixed;
     }
-    @media screen and (min-width: 600px) {
-      .container {
-        flex-direction: row;
-      }
+    .character-column {
+      display: table-cell;
+      width: 80%;
+      vertical-align: top;
+      padding-right: 5px;
     }
-    .character-column, .image-column {
-      flex: 1;
-      padding: 5px;
+    .image-column {
+      display: table-cell;
+      width: 20%;
+      vertical-align: top;
+      padding-left: 5px;
     }
     .character-image {
       width: 100%;
       border: 1px solid black;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
     .section {
       border: 1px solid black;
       padding: 5px;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
     .section h2 {
       font-size: 16px;
@@ -43,37 +47,35 @@
     }
     .toggle {
       display: inline-block;
-      padding: 5px;
+      padding: 3px 5px;
       margin: 2px;
       border: 1px solid black;
-      background: white;
       cursor: pointer;
     }
     .active {
-      background: black;
-      color: white;
+      background: #ddd;
+      font-weight: bold;
     }
     .result {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       margin: 5px 0;
     }
-    .note {
-      font-size: 12px;
-      color: #333;
-    }
     .attributes {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-bottom: 10px;
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      margin-bottom: 5px;
+      border-spacing: 2px;
+    }
+    .attribute-row {
+      display: table-row;
     }
     .attribute {
-      border: 1px solid black;
+      display: table-cell;
       text-align: center;
-      width: 45px;
-      margin-bottom: 5px;
-      padding: 3px;
+      padding: 2px;
+      border: 1px solid black;
     }
     .attribute-name {
       font-weight: bold;
@@ -84,34 +86,23 @@
       align-items: center;
     }
     .attribute-value {
-      font-size: 18px;
-      margin: 0 4px;
-    }
-    .attribute-mod {
-      font-size: 14px;
+      font-size: 16px;
+      margin: 0 2px;
     }
     .attr-button {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       font-size: 12px;
       font-weight: bold;
       padding: 0;
       margin: 0;
       border: 1px solid black;
-      background: white;
       cursor: pointer;
-      line-height: 16px;
-    }
-    .editable {
-      cursor: pointer;
-    }
-    .editable:hover {
-      text-decoration: underline;
+      line-height: 14px;
     }
     .hp-control {
       display: flex;
       align-items: center;
-      margin-bottom: 10px;
     }
     .hp-display {
       flex: 1;
@@ -121,48 +112,33 @@
       display: flex;
     }
     .hp-button {
-      width: 30px;
-      height: 30px;
+      width: 20px;
+      height: 20px;
       margin: 0 2px;
       border: 1px solid black;
-      background: white;
       cursor: pointer;
       font-weight: bold;
-      font-size: 18px;
-      text-align: center;
-      line-height: 30px;
-    }
-    .skill-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 3px;
-    }
-    .skill-value {
-      font-weight: bold;
-      cursor: pointer;
-    }
-    input.small-input {
-      width: 30px;
-      text-align: center;
       font-size: 14px;
-      padding: 2px;
-      margin: 0;
+      text-align: center;
+      line-height: 20px;
     }
     .tab-bar {
-      display: flex;
-      margin-bottom: 10px;
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      margin-bottom: 5px;
+      border-spacing: 1px;
     }
     .tab {
-      flex: 1;
+      display: table-cell;
       text-align: center;
-      padding: 5px;
+      padding: 2px;
       border: 1px solid black;
-      background: white;
       cursor: pointer;
     }
     .tab.active {
-      background: black;
-      color: white;
+      background: #ddd;
+      font-weight: bold;
     }
     .tab-content {
       display: none;
@@ -175,8 +151,8 @@
       margin-bottom: 2px;
     }
     .collapsible-header {
-      background: #f0f0f0;
-      padding: 5px;
+      background: white;
+      padding: 2px 5px;
       cursor: pointer;
       font-weight: bold;
     }
@@ -185,25 +161,38 @@
       display: none;
     }
     .collapsible-content p {
-      margin: 5px 0;
+      margin: 3px 0;
+    }
+    .skill-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      border-bottom: 1px solid #eee;
+    }
+    button, select {
+      background: white;
+      border: 1px solid black;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="character-column">
-      <h1>Ilio Xaenor</h1>
-      <p><b>Waldelf Gloom Stalker 4 / Rogue 1</b><br>RK <span class="editable" onclick="editValue(this, 'Rüstungsklasse')">16</span> | <span class="hp-control"><span class="hp-display">TP <span id="current-hp">16</span>/<span id="max-hp" class="editable" onclick="editValue(this, 'Max TP')">21</span></span> <span class="hp-buttons"><div class="hp-button" onclick="modifyHP(-1)">-</div><div class="hp-button" onclick="modifyHP(1)">+</div></span></span> | Bewegung <span class="editable" onclick="editValue(this, 'Bewegung')">35</span>ft</p>
-
-      <div class="tab-bar">
-        <div class="tab active" onclick="changeTab('main')">Haupt</div>
-        <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
-        <div class="tab" onclick="changeTab('spells')">Zauber</div>
-        <div class="tab" onclick="changeTab('class')">Klasse</div>
+      <h1 style="margin: 0 0 5px 0">Ilio Xaenor</h1>
+      <div style="margin-bottom: 5px">
+        <b>Waldelf Gloom Stalker 4 / Rogue 1</b><br>
+        RK: 16 | Bewegung: 35ft | 
+        <span class="hp-control">
+          TP: <span id="current-hp">16</span>/<span id="max-hp">21</span>
+          <span class="hp-buttons">
+            <button class="hp-button" onclick="modifyHP(-1)">-</button>
+            <button class="hp-button" onclick="modifyHP(1)">+</button>
+          </span>
+        </span>
       </div>
 
-      <div id="main" class="tab-content active">
-        <div class="attributes">
+      <div class="attributes">
+        <div class="attribute-row">
           <div class="attribute">
             <div class="attribute-name">STR</div>
             <div class="attribute-controls">
@@ -211,7 +200,7 @@
               <span class="attribute-value" id="str-value">10</span>
               <button class="attr-button" onclick="changeAttribute('str', 1)">+</button>
             </div>
-            <div class="attribute-mod" id="str-mod">+0</div>
+            <div id="str-mod">+0</div>
           </div>
           <div class="attribute">
             <div class="attribute-name">DEX</div>
@@ -220,7 +209,7 @@
               <span class="attribute-value" id="dex-value">18</span>
               <button class="attr-button" onclick="changeAttribute('dex', 1)">+</button>
             </div>
-            <div class="attribute-mod" id="dex-mod">+4</div>
+            <div id="dex-mod">+4</div>
           </div>
           <div class="attribute">
             <div class="attribute-name">CON</div>
@@ -229,8 +218,10 @@
               <span class="attribute-value" id="con-value">14</span>
               <button class="attr-button" onclick="changeAttribute('con', 1)">+</button>
             </div>
-            <div class="attribute-mod" id="con-mod">+2</div>
+            <div id="con-mod">+2</div>
           </div>
+        </div>
+        <div class="attribute-row">
           <div class="attribute">
             <div class="attribute-name">INT</div>
             <div class="attribute-controls">
@@ -238,7 +229,7 @@
               <span class="attribute-value" id="int-value">10</span>
               <button class="attr-button" onclick="changeAttribute('int', 1)">+</button>
             </div>
-            <div class="attribute-mod" id="int-mod">+0</div>
+            <div id="int-mod">+0</div>
           </div>
           <div class="attribute">
             <div class="attribute-name">WIS</div>
@@ -247,7 +238,7 @@
               <span class="attribute-value" id="wis-value">14</span>
               <button class="attr-button" onclick="changeAttribute('wis', 1)">+</button>
             </div>
-            <div class="attribute-mod" id="wis-mod">+2</div>
+            <div id="wis-mod">+2</div>
           </div>
           <div class="attribute">
             <div class="attribute-name">CHA</div>
@@ -256,159 +247,150 @@
               <span class="attribute-value" id="cha-value">10</span>
               <button class="attr-button" onclick="changeAttribute('cha', 1)">+</button>
             </div>
-            <div class="attribute-mod" id="cha-mod">+0</div>
+            <div id="cha-mod">+0</div>
           </div>
         </div>
+      </div>
 
+      <div class="tab-bar">
+        <div class="tab active" onclick="changeTab('main')">Haupt</div>
+        <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
+        <div class="tab" onclick="changeTab('class')">Klasse</div>
+      </div>
+
+      <div id="main" class="tab-content active">
         <div class="section">
-          <h2>Angriff – Schaltflächen aktivieren</h2>
-          <div class="toggle" id="hunter" onclick="toggle('hunter')">Hunter's Mark</div>
-          <div class="toggle" id="sneak" onclick="toggle('sneak')">Sneak Attack</div>
-          <div class="toggle" id="gloom" onclick="toggle('gloom')">Runde 1 (Gloom)</div>
+          <div>
+            <span class="toggle" id="hunter" onclick="toggle('hunter')">Hunter's Mark</span>
+            <span class="toggle" id="sneak" onclick="toggle('sneak')">Sneak Attack</span>
+            <span class="toggle" id="gloom" onclick="toggle('gloom')">Runde 1 (Gloom)</span>
+          </div>
+          
+          <div style="margin-top: 5px">
+            <div><b>Aktueller Schaden:</b> <span id="summary">1W8 (Waffe) + 4 (DEX) + 2 (Archery)</span></div>
+            <div><b>Angriffsbonus:</b> +<span id="attack-bonus">9</span> (+<span id="attack-dex">4</span> DEX, +3 PB, +2 Archery)</div>
+          </div>
         </div>
-
+        
         <div class="section">
-          <h2>Aktueller Schadenswurf</h2>
-          <div id="summary">1W8 (Waffe) + 4 (DEX)</div>
+          <h2>Zauber</h2>
+          <div>
+            <b>Bonusaktionen:</b> Hunter's Mark, Ensnaring Strike<br>
+            <b>Aktionen:</b> Fog Cloud, Cure Wounds, Beast Bond, Good Berries
+          </div>
         </div>
-
+        
         <div class="section">
-          <h2>Angriffsbonus</h2>
-          <div><b>+<span id="attack-bonus">9</span> Fernkampf</b></div>
-          <div class="note">(+<span id="attack-dex">4</span> DEX, +<span id="attack-pb" class="editable" onclick="editValue(this, 'Übungsbonus')">3</span> PB, +<span id="attack-archery" class="editable" onclick="editValue(this, 'Archery Bonus')">2</span> Archery)</div>
+          <h2>Fertigkeiten</h2>
+          <div class="skill-item">
+            <span>Akrobatik (DEX):</span>
+            <span>+10</span>
+          </div>
+          <div class="skill-item">
+            <span>Heimlichkeit (DEX):</span>
+            <span>+10</span>
+          </div>
+          <div class="skill-item">
+            <span>Wahrnehmung (WIS):</span>
+            <span>+8</span>
+          </div>
+          <div class="skill-item">
+            <span>Überlebenskunst (WIS):</span>
+            <span>+5</span>
+          </div>
+          <div class="skill-item">
+            <span>Athletik (STR):</span>
+            <span>+3</span>
+          </div>
         </div>
       </div>
 
       <div id="skills" class="tab-content">
         <div class="section">
-          <h2>Fertigkeiten & Werte</h2>
           <div class="skill-item">
-            <span>Akrobatik (DEX):</span>
-            <span class="skill-value" onclick="editSkill(this, 'acrobatics')">+10</span>
+            <span>Initiative:</span>
+            <span>+6 (+4 DEX, +2 WIS)</span>
           </div>
           <div class="skill-item">
-            <span>Heimlichkeit (DEX):</span>
-            <span class="skill-value" onclick="editSkill(this, 'stealth')">+10</span>
+            <span>RW Stärke:</span>
+            <span>+3</span>
           </div>
           <div class="skill-item">
-            <span>Wahrnehmung (WIS):</span>
-            <span class="skill-value" onclick="editSkill(this, 'perception')">+8</span>
+            <span>RW Geschicklichkeit:</span>
+            <span>+7</span>
           </div>
           <div class="skill-item">
-            <span>Überlebenskunst (WIS):</span>
-            <span class="skill-value" onclick="editSkill(this, 'survival')">+5</span>
+            <span>RW Konstitution:</span>
+            <span>+2</span>
           </div>
           <div class="skill-item">
-            <span>Athletik (STR):</span>
-            <span class="skill-value" onclick="editSkill(this, 'athletics')">+3</span>
+            <span>RW Intelligenz:</span>
+            <span>+0</span>
+          </div>
+          <div class="skill-item">
+            <span>RW Weisheit:</span>
+            <span>+2</span>
+          </div>
+          <div class="skill-item">
+            <span>RW Charisma:</span>
+            <span>+0</span>
           </div>
           <div class="skill-item">
             <span>Passive Wahrnehmung:</span>
-            <span class="skill-value" onclick="editSkill(this, 'passive-perception')">18</span>
+            <span>18</span>
           </div>
         </div>
 
         <div class="section">
-          <h2>Sprachen & Traits</h2>
-          <ul>
-            <li>Sprachen: Common, Elvish, Dwarvish, Orkish, Gebärdensprache, Diebessprache</li>
+          <h2>Traits</h2>
+          <ul style="margin: 0; padding-left: 20px">
             <li>Darkvision (120 ft)</li>
             <li>Invisible to Darkvision-only creatures</li>
-            <li>Fey Ancestry (Schutz vor Bezauberung & Schlaf)</li>
-            <li>Sharpshooter (2024)</li>
+            <li>Fey Ancestry (vs. Charm & Sleep)</li>
+            <li>Sharpshooter</li>
             <li>Trance statt Schlaf</li>
           </ul>
         </div>
-      </div>
-
-      <div id="spells" class="tab-content">
+        
         <div class="section">
-          <h2>Zauber (bekannt)</h2>
-          <ul>
-            <li><b>Bonusaktionen:</b> Hunter's Mark, Ensnaring Strike</li>
-            <li><b>Aktionen:</b> Fog Cloud, Cure Wounds, Beast Bond, Good Berries</li>
-          </ul>
+          <h2>Sprachen</h2>
+          <div>
+            Common, Elvish, Dwarvish, Orkish, Gebärdensprache, Diebessprache
+          </div>
         </div>
       </div>
 
       <div id="class" class="tab-content">
-        <h2>Ranger Klassenfähigkeiten (PHB 2024)</h2>
-        
         <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1: Spellcasting</div>
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1-2 Fähigkeiten</div>
           <div class="collapsible-content">
-            <p>Kanalisiere die magische Essenz der Natur, um Zauber zu wirken. PHB'24 S.119</p>
-            <p><b>Spell Slots:</b> Laut Ranger-Tabelle. Werden nach langer Rast zurückgewonnen.</p>
-            <p><b>Vorbereitete Zauber:</b> Beginne mit 2 Ranger-Zaubern Level 1. Empfohlen: Cure Wounds, Ensnaring Strike.</p>
-            <p><b>Spellcasting Ability:</b> Weisheit ist deine Spellcasting Ability.</p>
-            <p><b>Spellcasting Focus:</b> Du kannst einen Druidic Focus als Spellcasting Focus verwenden.</p>
+            <p><b>Spellcasting:</b> 2 Ranger-Zauber Level 1. Spellcasting Ability: Weisheit.</p>
+            <p><b>Favored Enemy:</b> Hunter's Mark immer vorbereitet, 2× ohne Spell Slot.</p>
+            <p><b>Weapon Mastery:</b> Nutze Mastery-Eigenschaften zweier Waffen.</p>
+            <p><b>Deft Explorer:</b> Expertise in einer Fertigkeit, 2 zusätzliche Sprachen.</p>
+            <p><b>Fighting Style:</b> +2 auf Fernkampfangriffe.</p>
           </div>
         </div>
         
         <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1: Favored Enemy</div>
-          <div class="collapsible-content">
-            <p>Du hast immer Hunter's Mark vorbereitet und kannst ihn zweimal ohne Spell Slot wirken. Regeneriert nach langer Rast.</p>
-          </div>
-        </div>
-        
-        <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1: Weapon Mastery</div>
-          <div class="collapsible-content">
-            <p>Du kannst die Mastery-Eigenschaften von zwei Waffen deiner Wahl nutzen, mit denen du profizient bist (z.B. Langbögen und Kurzschwerter).</p>
-            <p>Nach jeder langen Rast kannst du die gewählten Waffen ändern.</p>
-          </div>
-        </div>
-        
-        <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 2: Deft Explorer</div>
-          <div class="collapsible-content">
-            <p><b>Expertise:</b> Wähle eine Skill-Proficiency, in der du Expertise erhältst.</p>
-            <p><b>Languages:</b> Du kennst zwei weitere Sprachen deiner Wahl.</p>
-          </div>
-        </div>
-        
-        <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 2: Fighting Style</div>
-          <div class="collapsible-content">
-            <p>Du erhältst ein Fighting Style Feat deiner Wahl oder Druidic Warrior (2 Druid-Cantrips).</p>
-          </div>
-        </div>
-        
-        <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 3: Gloom Stalker Subclass</div>
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 3: Gloom Stalker</div>
           <div class="collapsible-content">
             <p><b>Dread Ambusher:</b></p>
-            <ul>
-              <li><b>Ambusher's Leap:</b> Zu Beginn deines ersten Zuges im Kampf erhöht sich deine Geschwindigkeit um 10 Fuß.</li>
-              <li><b>Dreadful Strike:</b> Einmal pro Zug kannst du bei einem Treffer mit einer Waffe zusätzlich 2W6 psychischen Schaden verursachen. WIS-Mod mal pro langer Rast.</li>
-              <li><b>Initiative Bonus:</b> Du kannst deinen WIS-Mod zur Initiative addieren.</li>
+            <ul style="margin: 3px 0; padding-left: 20px">
+              <li><b>Ambusher's Leap:</b> +10 ft. Bewegung in Runde 1</li>
+              <li><b>Dreadful Strike:</b> +2W6 psychischer Schaden 1×/Zug, WIS-Mod/lange Rast</li>
+              <li><b>Initiative Bonus:</b> +WIS zur Initiative</li>
             </ul>
-            <p><b>Gloom Stalker Spells:</b> Level 3: Disguise Self</p>
-            <p><b>Umbral Sight:</b> Du erhältst Darkvision mit 60 Fuß Reichweite oder +60 Fuß falls du bereits Darkvision hast. In Dunkelheit bist du für Kreaturen, die nur auf Darkvision angewiesen sind, unsichtbar.</p>
+            <p><b>Gloom Stalker Spells:</b> Disguise Self</p>
+            <p><b>Umbral Sight:</b> Darkvision +60 ft, unsichtbar für Kreaturen mit nur Darkvision.</p>
           </div>
         </div>
         
         <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 4: Ability Score Improvement</div>
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 4-5</div>
           <div class="collapsible-content">
-            <p>Du erhältst das Ability Score Improvement Feat oder ein anderes Feat deiner Wahl.</p>
-          </div>
-        </div>
-        
-        <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 5: Extra Attack</div>
-          <div class="collapsible-content">
-            <p>Du kannst zweimal angreifen, wenn du die Angriffsaktion in deinem Zug ausführst.</p>
-          </div>
-        </div>
-        
-        <div class="collapsible">
-          <div class="collapsible-header" onclick="toggleCollapsible(this)">Höhere Level</div>
-          <div class="collapsible-content">
-            <p><b>Level 6: Roving</b> - Geschwindigkeit +10 Fuß (ohne schwere Rüstung) plus Kletter- und Schwimmgeschwindigkeit.</p>
-            <p><b>Level 7: Iron Mind</b> - Weisheits-Rettungswürfe Proficiency.</p>
-            <p><b>Level 8-20:</b> Weitere Fähigkeiten wie Expertise, Tireless, Nature's Veil und mehr.</p>
+            <p><b>Level 4:</b> Ability Score Improvement oder Feat.</p>
+            <p><b>Level 5: Extra Attack</b> - Zwei Angriffe pro Angriffsaktion.</p>
           </div>
         </div>
       </div>
@@ -416,8 +398,9 @@
 
     <div class="image-column">
       <img src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Ilio Xaenor" class="character-image">
-      <div class="section">
-        <div class="result">Würfeln real – Ergebnis hier notieren</div>
+      <div class="section" style="text-align: center">
+        <div class="result">Würfelergebnis:</div>
+        <div id="dice-result" style="font-size: 24px; font-weight: bold">-</div>
       </div>
     </div>
   </div>
@@ -471,7 +454,8 @@
       
       const dexMod = parseInt(document.getElementById('dex-mod').innerText.replace('+', ''));
       
-      let dmg = `1W8 (Waffe) + ${dexMod} (DEX)`;
+      // Include +2 from Archery as requested
+      let dmg = `1W8 (Waffe) + ${dexMod} (DEX) + 2 (Archery)`;
       if (hunter) dmg += " + 1W6 (Hunter's Mark)";
       if (sneak) dmg += " + 1W6 (Sneak Attack)";
       if (gloom) dmg += " + 2W6 (Gloom Stalker)";
@@ -503,35 +487,6 @@
       }
     }
     
-    // Edit any value with prompt
-    function editValue(element, label) {
-      const currentValue = element.innerText;
-      const newValue = prompt(`Neuer Wert für ${label}:`, currentValue);
-      
-      if (newValue !== null && newValue !== '') {
-        element.innerText = newValue;
-        
-        // Special handling for max HP
-        if (element.id === 'max-hp') {
-          const currentHP = parseInt(document.getElementById('current-hp').innerText);
-          const maxHP = parseInt(newValue);
-          if (currentHP > maxHP) {
-            document.getElementById('current-hp').innerText = maxHP;
-          }
-        }
-      }
-    }
-    
-    // Edit skill value
-    function editSkill(element, skillName) {
-      const currentValue = element.innerText;
-      const newValue = prompt(`Neuer Wert für ${skillName}:`, currentValue);
-      
-      if (newValue !== null && newValue !== '') {
-        element.innerText = newValue;
-      }
-    }
-    
     // Modify HP
     function modifyHP(amount) {
       const currentHPElement = document.getElementById('current-hp');
@@ -547,8 +502,8 @@
     // Recalculate attack bonus
     function recalculateAttackBonus() {
       const dexMod = parseInt(document.getElementById('attack-dex').innerText);
-      const pb = parseInt(document.getElementById('attack-pb').innerText);
-      const archery = parseInt(document.getElementById('attack-archery').innerText);
+      const pb = 3; // Proficiency bonus
+      const archery = 2; // Archery bonus
       
       const total = dexMod + pb + archery;
       document.getElementById('attack-bonus').innerText = total;
