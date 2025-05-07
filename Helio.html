@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helio - Aasimar Paladin</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant:wght@400;600&display=swap');
+
+:root {
+  /* Elegantere, weniger grelle Farbpalette */
+  --divine-gold: #d4af37; /* Warmes, dezenteres Gold */
+  --celestial-white: #f8f6f0; /* Leicht warmes Weiß */
+  --pure-white: #ffffff; /* Für Akzente */
+  --celestial-blue: #345995; /* Tieferes, königliches Blau */
+  --deep-blue: #0e1c36; /* Für Hintergründe */
+  --shadow-dark: #141821; /* Fast schwarzes Dunkelblau */
+  --accent-light: #dbc388; /* Hellgoldener Akzent */
+  --accent-glow: rgba(212, 175, 55, 0.2); /* Subtile Glüheffekte */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+body {
+  font-family: 'Cormorant', serif;
+  background: linear-gradient(135deg, var(--shadow-dark) 0%, var(--deep-blue) 100%);
+  background-attachment: fixed;
+  color: var(--celestial-white);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+/* Subtiler Hintergrundeffekt statt der pulsierenden Animation */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(52, 89, 149, 0.05) 0%, transparent 50%);
+  z-index: -1;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cinzel', serif;
+  color: var(--divine-gold);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: 2.8rem;
+}
+
+h3 {
+  /* Goldlinie unter Überschriften */
+  position: relative;
+  padding-bottom: 0.2em;
+}
+
+h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--divine-gold), transparent);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Eleganterer Header */
+.header {
+  background: rgba(14, 28, 54, 0.9);
+  border: 1px solid var(--divine-gold);
+  border-radius: 6px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtiler Lichteffekt im Header */
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+  z-index: 0;
+}
+
+.char-name {
+  font-size: 3rem;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.char-desc {
+  font-size: 1.3rem;
+  color: var(--celestial-white);
+  position: relative;
+  z-index: 1;
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 25px;
+}
+
+/* Charakterportrait */
+.char-portrait {
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--divine-gold);
+}
+
+.char-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease-out;
+}
+
+.char-portrait:hover img {
+  transform: scale(1.03);
+}
+
+/* Subtilerer Overlay für radiant */
+.radiant-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.15), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radiant-active .radiant-overlay {
+  opacity: 1;
+}
+
+/* Karten/Panels */
+.card {
+  background: rgba(14, 28, 54, 0.9);
+  border: 1px solid var(--divine-gold);
+  border-radius: 6px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+/* Göttlichere Attributliste */
+.attributes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.attribute {
+  text-align: center;
+  padding: 15px;
+  border-radius: 6px;
+  background: rgba(20, 24, 33, 0.9);
+  border: 1px solid var(--divine-gold);
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.attribute:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  border-color: var(--pure-white);
+}
+
+.attribute-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--divine-gold);
+  letter-spacing: 0.1em;
+}
+
+.attribute-value {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--celestial-white);
+  margin: 5px 0;
+}
+
+.attribute-mod {
+  font-size: 1.6rem;
+  color: var(--accent-light);
+}
+
+/* Epische HP-Anzeige */
+.hp-container {
+  margin: 25px 0;
+}
+
+.hp-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.hp-bar {
+  flex: 1;
+  height: 30px;
+  background: rgba(10, 15, 25, 0.9);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--divine-gold);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Stilvolle HP-Füllung wie eine goldene Stange */
+.hp-fill-base {
+  height: 100%;
+  background: linear-gradient(90deg, #866d1b 0%, var(--divine-gold) 50%, #d9bc6c 100%);
+  background-size: 200% 100%;
+  position: absolute;
+  left: 0;
+  box-shadow: inset 0 1px 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Temporäre HP als bläuliches Schimmern */
+.hp-fill-temp {
+  height: 100%;
+  background: linear-gradient(90deg, var(--celestial-blue), #6883b0);
+  position: absolute;
+  box-shadow: inset 0 1px 10px rgba(255, 255, 255, 0.3);
+}
+
+.hp-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.hp-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.hp-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--divine-gold);
+  background: var(--deep-blue);
+  color: var(--divine-gold);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hp-btn:hover {
+  background: var(--celestial-blue);
+  color: var(--celestial-white);
+}
+
+.hp-values {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.hp-field {
+  flex: 1 1 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hp-field-label {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: var(--divine-gold);
+}
+
+.hp-input {
+  background: rgba(14, 28, 54, 0.9);
+  border: 1px solid var(--divine-gold);
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--celestial-white);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.hp-reset-btn {
+  padding: 8px 15px;
+  background: var(--deep-blue);
+  border: 1px solid var(--divine-gold);
+  border-radius: 4px;
+  color: var(--divine-gold);
+  cursor: pointer;
+  font-size: 0.9rem;
+  align-self: flex-start;
+}
+
+.hp-reset-btn:hover {
+  background: var(--celestial-blue);
+  color: var(--celestial-white);
+}
+
+/* Elegantere Reiter */
+.tabs {
+  display: flex;
+  margin-bottom: 25px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--divine-gold);
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  background: rgba(14, 28, 54, 0.9);
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--divine-gold);
+  letter-spacing: 0.05em;
+  border-right: 1px solid var(--divine-gold);
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+.tab.active {
+  background: var(--divine-gold);
+  color: var(--shadow-dark);
+}
+
+.tab:hover:not(.active) {
+  background: rgba(212, 175, 55, 0.2);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Toggle-Switches */
+.toggle-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.toggle {
+  background: var(--deep-blue);
+  border: 1px solid var(--divine-gold);
+  border-radius: 20px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--divine-gold);
+}
+
+.toggle.active {
+  background: var(--divine-gold);
+  color: var(--shadow-dark);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.toggle:hover:not(.active) {
+  background: rgba(52, 89, 149, 0.3);
+}
+
+/* Kampfstatistiken */
+.combat-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.stat-label {
+  flex: 1;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--divine-gold);
+}
+
+/* Eleganter Trenner */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--divine-gold), transparent);
+  margin: 20px 0;
+  opacity: 0.7;
+}
+
+/* Würfel-Bereich */
+.dice-container {
+  text-align: center;
+  padding: 20px;
+  background: rgba(14, 28, 54, 0.9);
+  border-radius: 6px;
+  margin-top: 20px;
+  border: 1px solid var(--divine-gold);
+}
+
+.dice-btn {
+  background: var(--deep-blue);
+  color: var(--divine-gold);
+  border: 1px solid var(--divine-gold);
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.dice-btn:hover {
+  background: var(--divine-gold);
+  color: var(--shadow-dark);
+}
+
+.dice-result {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 15px 0;
+  min-height: 50px;
+  color: var(--divine-gold);
+}
+
+/* Aktions-Buttons */
+.action-btn {
+  background: var(--divine-gold);
+  color: var(--shadow-dark);
+  border: none;
+  padding: 12px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 15px;
+  width: 100%;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'Cinzel', serif;
+}
+
+.action-btn:hover {
+  background: var(--celestial-blue);
+  color: var(--celestial-white);
+  transform: translateY(-2px);
+}
+
+.divine-smite-btn {
+  background: linear-gradient(45deg, #866d1b, var(--divine-gold), #d9bc6c);
+  position: relative;
+  overflow: hidden;
+}
+
+.divine-smite-btn::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.divine-smite-btn:hover::before {
+  opacity: 0.2;
+}
+
+.resource-counter {
+  font-size: 0.9rem;
+  margin-top: 5px;
+  color: var(--shadow-dark);
+}
+
+/* Infoboxen */
+.infobox {
+  position: absolute;
+  background: rgba(14, 28, 54, 0.95);
+  border: 1px solid var(--divine-gold);
+  border-radius: 4px;
+  padding: 15px;
+  width: 280px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: none;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Attribut-Kontrollen */
+.attribute-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.attr-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--deep-blue);
+  color: var(--divine-gold);
+  border: 1px solid var(--divine-gold);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px;
+}
+
+.attr-btn:hover {
+  background: var(--divine-gold);
+  color: var(--shadow-dark);
+}
+
+/* Aktionsökonomie */
+.action-economy {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(14, 28, 54, 0.9);
+  border-radius: 6px;
+  border: 1px solid var(--divine-gold);
+}
+
+.action-icons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.action-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.action-regular {
+  background-color: var(--divine-gold);
+  border-radius: 50%;
+}
+
+.action-bonus {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 18px solid var(--celestial-blue);
+}
+
+.action-reaction {
+  background-color: var(--accent-light);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: rgba(20, 24, 33, 0.9);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.action-details {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.action-name {
+  font-weight: bold;
+  color: var(--divine-gold);
+}
+
+.action-description {
+  font-size: 0.85rem;
+  color: var(--celestial-white);
+  opacity: 0.8;
+}
+
+.action-used {
+  opacity: 0.5;
+}
+
+.action-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.action-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: rgba(14, 28, 54, 0.9);
+  border: 1px solid var(--divine-gold);
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.action-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  color: var(--divine-gold);
+  font-size: 14px;
+  font-weight: bold;
+  top: -1px;
+  left: 2px;
+}
+
+.action-checkbox:hover {
+  background: rgba(52, 89, 149, 0.3);
+}
+
+.action-reset {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  background: var(--deep-blue);
+  border: 1px solid var(--divine-gold);
+  color: var(--divine-gold);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.action-reset:hover {
+  background: var(--celestial-blue);
+  color: var(--celestial-white);
+}
+
+/* Inventar */
+.inventory-container {
+  margin-top: 20px;
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+
+.inventory-table th {
+  text-align: left;
+  padding: 10px;
+  background-color: rgba(20, 24, 33, 0.9);
+  border-bottom: 1px solid var(--divine-gold);
+  font-weight: bold;
+  color: var(--divine-gold);
+}
+
+.inventory-table td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  vertical-align: middle;
+}
+
+.inventory-table tr:hover {
+  background-color: rgba(20, 24, 33, 0.5);
+}
+
+.inventory-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  align-items: flex-end;
+}
+
+.inventory-field {
+  flex: 2 1 150px;
+}
+
+.inventory-field:nth-child(2),
+.inventory-field:nth-child(3),
+.inventory-field:nth-child(4) {
+  flex: 1 1 80px;
+}
+
+.inventory-field label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: var(--divine-gold);
+}
+
+.inventory-input {
+  width: 100%;
+  background: rgba(14, 28, 54, 0.9);
+  border: 1px solid var(--divine-gold);
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--celestial-white);
+  font-size: 0.9rem;
+}
+
+.inventory-add-btn {
+  background: var(--divine-gold);
+  color: var(--shadow-dark);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.inventory-add-btn:hover {
+  background: var(--celestial-blue);
+  color: var(--celestial-white);
+}
+
+.inventory-summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(20, 24, 33, 0.9);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.weight-meter-container {
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+.weight-meter {
+  width: 100%;
+  height: 8px;
+  background: rgba(14, 28, 54, 0.9);
+  border-radius: 4px;
+  margin-top: 5px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.weight-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--divine-gold), #d9bc6c);
+}
+
+.weight-marker {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateX(-1px);
+}
+
+.weight-text {
+  margin-top: 5px;
+  font-size: 0.85rem;
+  color: var(--celestial-white);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.delete-item {
+  color: #d66464;
+  cursor: pointer;
+  padding: 0 5px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: inline-block;
+}
+
+.delete-item:hover {
+  color: #ff5555;
+}
+
+/* Zauberbereich */
+.spell-container {
+  margin-top: 20px;
+}
+
+.spell-level {
+  margin-bottom: 20px;
+}
+
+.spell-level h4 {
+  margin: 0 0 10px 0;
+  color: var(--divine-gold);
+}
+
+.spell-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spell-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: rgba(20, 24, 33, 0.9);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.spell-name {
+  flex: 1;
+  font-weight: bold;
+  color: var(--divine-gold);
+}
+
+.spell-cast-btn {
+  background: var(--deep-blue);
+  color: var(--divine-gold);
+  border: 1px solid var(--divine-gold);
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.spell-cast-btn:hover {
+  background: var(--divine-gold);
+  color: var(--shadow-dark);
+}
+
+.spell-slots {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.slot-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: rgba(14, 28, 54, 0.9);
+  border: 1px solid var(--divine-gold);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+.slot-checkbox:checked::after {
+  content: ' ';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: var(--divine-gold);
+  border-radius: 50%;
+}
+
+.slot-checkbox:hover {
+  background: rgba(52, 89, 149, 0.3);
+}
+
+.spell-slot-reset {
+  padding: 5px 10px;
+  background: var(--deep-blue);
+  border: 1px solid var(--divine-gold);
+  border-radius: 4px;
+  color: var(--divine-gold);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.spell-slot-reset:hover {
+  background: var(--celestial-blue);
+  color: var(--celestial-white);
+}
+
+/* Modal-Dialoge */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-content {
+  background: rgba(14, 28, 54, 0.98);
+  max-width: 600px;
+  width: 100%;
+  border-radius: 6px;
+  padding: 25px;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid var(--divine-gold);
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--divine-gold);
+  color: var(--shadow-dark);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.close-btn:hover {
+  background: var(--celestial-blue);
+  color: var(--celestial-white);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .attributes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .skills {
+    grid-template-columns: 1fr;
+  }
+
+  .char-name {
+    font-size: 2rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hp-values {
+    gap: 10px;
+  }
+
+  .hp-field {
+    flex-basis: calc(50% - 5px);
+    min-width: 0;
+  }
+
+  .inventory-add {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inventory-add-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .attributes {
+    grid-template-columns: 1fr;
+  }
+
+  .hp-field {
+    flex-basis: 100%;
+  }
+
+  .char-name {
+    font-size: 1.8rem;
+  }
+
+  .char-desc {
+    font-size: 1rem;
+  }
+
+  .dice-container .dice-btn {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1 class="char-name">Helio</h1>
+        <div class="char-desc">Aasimar Paladin 5 (Watchers) | Lawful Good | Folk Hero</div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="left-column">
+        <div class="card">
+          <div class="hp-container">
+            <div class="hp-values">
+              <div class="hp-field">
+                <label for="current-hp-input" class="hp-field-label">Aktuelle TP</label>
+                <div class="hp-input-group">
+                  <input type="number" id="current-hp-input" class="hp-input" value="38" min="0" max="38" onchange="updateHPDisplay()">
+                </div>
+              </div>
+              <div class="hp-field">
+                <label for="base-max-hp-input" class="hp-field-label">Basis Max-TP</label>
+                <div class="hp-input-group">
+                  <input type="number" id="base-max-hp-input" class="hp-input" value="38" min="1" onchange="updateMaxHP()">
+                </div>
+              </div>
+              <div class="hp-field">
+                <label for="temp-hp-input" class="hp-field-label">Temporäre TP</label>
+                <div class="hp-input-group">
+                  <input type="number" id="temp-hp-input" class="hp-input" value="0" min="0" onchange="updateHPDisplay()">
+                  <button class="hp-btn" onclick="openTempHPModal()" title="Temporäre TP hinzufügen/verwalten">+</button>
+                </div>
+              </div>
+              <div class="hp-field">
+                <label for="hp-bonus-input" class="hp-field-label">TP-Bonus</label>
+                <div class="hp-input-group">
+                  <input type="number" id="hp-bonus-input" class="hp-input" value="0" min="0" onchange="updateMaxHP()">
+                </div>
+              </div>
+            </div>
+            <div class="hp-bar-container">
+              <div class="hp-bar">
+                <div class="hp-fill-base" id="hp-fill-base"></div>
+                <div class="hp-fill-temp" id="hp-fill-temp"></div>
+                <div class="hp-text">
+                  <span id="display-current-hp">38</span>/<span id="display-max-hp">38</span> TP
+                  <span id="display-temp-hp"></span>
+                </div>
+              </div>
+              <div class="hp-controls">
+                <button class="hp-btn" onclick="modifyHP(-1)" title="1 TP Schaden">-</button>
+                <button class="hp-btn" onclick="modifyHP(-5)" title="5 TP Schaden">-5</button>
+                <button class="hp-btn" onclick="modifyHP(5)" title="5 TP Heilung">+5</button>
+                <button class="hp-btn" onclick="modifyHP(1)" title="1 TP Heilung">+</button>
+              </div>
+            </div>
+            <div id="temp-hp-effects" style="display: none;"></div>
+            <button class="hp-reset-btn" onclick="resetHP()">HP auf Maximum zurücksetzen</button>
+          </div>
+          <div class="hp-container">
+            <h3>Lay on Hands</h3>
+            <div class="hp-bar">
+              <div class="hp-fill-base" id="lay-on-hands-fill" style="width: 100%;"></div>
+              <div class="hp-text">
+                <span id="lay-on-hands-current">25</span>/<span id="lay-on-hands-max">25</span> Punkte
+              </div>
+            </div>
+            <div class="hp-controls">
+              <button class="hp-btn" onclick="useLayOnHands(-5)" title="5 Punkte verbrauchen">-5</button>
+              <button class="hp-btn" onclick="useLayOnHands(5)" title="5 Punkte heilen">+5</button>
+              <button class="hp-reset-btn" onclick="resetLayOnHands()">Auf Maximum zurücksetzen</button>
+            </div>
+          </div>
+        </div>
+        <div class="attributes">
+          <div class="attribute" onclick="showInfo('str-info', event)" title="Stärke Details anzeigen">
+            <div class="attribute-name">STR</div>
+            <div class="attribute-control">
+              <button class="attr-btn minus-btn" onclick="changeAttribute('str', -1); event.stopPropagation();" title="Stärke verringern">-</button>
+              <div class="attribute-value" id="str-value">15</div>
+              <button class="attr-btn plus-btn" onclick="changeAttribute('str', 1); event.stopPropagation();" title="Stärke erhöhen">+</button>
+            </div>
+            <div class="attribute-mod" id="str-mod">+2</div>
+            <div class="infobox" id="str-info">
+              <strong>Stärke</strong> repräsentiert körperliche Kraft, athletisches Training und das Ausmaß, in dem du rohe körperliche Kraft einsetzen kannst.<br><br>
+              <strong>Genutzt für:</strong> Nahkampfangriffe, Athletik, Tragen, Ziehen, Schieben
+            </div>
+          </div>
+          <div class="attribute" onclick="showInfo('dex-info', event)" title="Geschicklichkeit Details anzeigen">
+            <div class="attribute-name">DEX</div>
+            <div class="attribute-control">
+              <button class="attr-btn minus-btn" onclick="changeAttribute('dex', -1); event.stopPropagation();" title="Geschicklichkeit verringern">-</button>
+              <div class="attribute-value" id="dex-value">12</div>
+              <button class="attr-btn plus-btn" onclick="changeAttribute('dex', 1); event.stopPropagation();" title="Geschicklichkeit erhöhen">+</button>
+            </div>
+            <div class="attribute-mod" id="dex-mod">+1</div>
+            <div class="infobox" id="dex-info">
+              <strong>Geschicklichkeit</strong> repräsentiert Beweglichkeit, Reflexe und Balance.<br><br>
+              <strong>Genutzt für:</strong> Rüstungsklasse, Initiative, Fernkampfangriffe, Akrobatik, Heimlichkeit, Diebische Werkzeuge
+            </div>
+          </div>
+          <div class="attribute" onclick="showInfo('con-info', event)" title="Konstitution Details anzeigen">
+            <div class="attribute-name">CON</div>
+            <div class="attribute-control">
+              <button class="attr-btn minus-btn" onclick="changeAttribute('con', -1); event.stopPropagation();" title="Konstitution verringern">-</button>
+              <div class="attribute-value" id="con-value">10</div>
+              <button class="attr-btn plus-btn" onclick="changeAttribute('con', 1); event.stopPropagation();" title="Konstitution erhöhen">+</button>
+            </div>
+            <div class="attribute-mod" id="con-mod">+0</div>
+            <div class="infobox" id="con-info">
+              <strong>Konstitution</strong> repräsentiert Gesundheit, Ausdauer und Lebenskraft.<br><br>
+              <strong>Genutzt für:</strong> Trefferpunkte, Konzentrationswürfe für Zauber, Widerstand gegen Gifte und Krankheiten
+            </div>
+          </div>
+          <div class="attribute" onclick="showInfo('int-info', event)" title="Intelligenz Details anzeigen">
+            <div class="attribute-name">INT</div>
+            <div class="attribute-control">
+              <button class="attr-btn minus-btn" onclick="changeAttribute('int', -1); event.stopPropagation();" title="Intelligenz verringern">-</button>
+              <div class="attribute-value" id="int-value">10</div>
+              <button class="attr-btn plus-btn" onclick="changeAttribute('int', 1); event.stopPropagation();" title="Intelligenz erhöhen">+</button>
+            </div>
+            <div class="attribute-mod" id="int-mod">+0</div>
+            <div class="infobox" id="int-info">
+              <strong>Intelligenz</strong> repräsentiert mentale Schärfe, logisches Denken und Gedächtnis.<br><br>
+              <strong>Genutzt für:</strong> Arkana, Geschichte, Untersuchung, Natur, Religion
+            </div>
+          </div>
+          <div class="attribute" onclick="showInfo('wis-info', event)" title="Weisheit Details anzeigen">
+            <div class="attribute-name">WIS</div>
+            <div class="attribute-control">
+              <button class="attr-btn minus-btn" onclick="changeAttribute('wis', -1); event.stopPropagation();" title="Weisheit verringern">-</button>
+              <div class="attribute-value" id="wis-value">10</div>
+              <button class="attr-btn plus-btn" onclick="changeAttribute('wis', 1); event.stopPropagation();" title="Weisheit erhöhen">+</button>
+            </div>
+            <div class="attribute-mod" id="wis-mod">+0</div>
+            <div class="infobox" id="wis-info">
+              <strong>Weisheit</strong> repräsentiert Wahrnehmung, Intuition und Einsicht.<br><br>
+              <strong>Genutzt für:</strong> Tierkunde, Heilkunde, Wahrnehmung, Überlebenskunst
+            </div>
+          </div>
+          <div class="attribute" onclick="showInfo('cha-info', event)" title="Charisma Details anzeigen">
+            <div class="attribute-name">CHA</div>
+            <div class="attribute-control">
+              <button class="attr-btn minus-btn" onclick="changeAttribute('cha', -1); event.stopPropagation();" title="Charisma verringern">-</button>
+              <div class="attribute-value" id="cha-value">18</div>
+              <button class="attr-btn plus-btn" onclick="changeAttribute('cha', 1); event.stopPropagation();" title="Charisma erhöhen">+</button>
+            </div>
+            <div class="attribute-mod" id="cha-mod">+4</div>
+            <div class="infobox" id="cha-info">
+              <strong>Charisma</strong> repräsentiert Persönlichkeit, persönliche Magnetismus und die Fähigkeit, andere zu beeinflussen.<br><br>
+              <strong>Genutzt für:</strong> Täuschung, Einschüchterung, Auftreten, Überreden
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <div class="tab active" onclick="changeTab('combat')">Kampf</div>
+          <div class="tab" onclick="changeTab('skills')">Fertigkeiten</div>
+          <div class="tab" onclick="changeTab('abilities')">Fähigkeiten</div>
+          <div class="tab" onclick="changeTab('inventory')">Inventar</div>
+          <div class="tab" onclick="changeTab('spells')">Zauber</div>
+        </div>
+        <div id="combat" class="tab-content active">
+          <div class="card">
+            <div class="toggle-container">
+              <div class="toggle" id="smite-toggle" onclick="toggleSmite()" title="Göttlicher Schlag aktivieren">Divine Smite</div>
+            </div>
+            <div class="combat-stats">
+              <div class="stat">
+                <div class="stat-label">Rüstungsklasse</div>
+                <div class="stat-value" id="ac-value">20</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Initiative</div>
+                <div class="stat-value" id="initiative-value">+4</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Bewegungsrate</div>
+                <div class="stat-value" id="speed-value">30 ft.</div>
+              </div>
+              <div class="section-divider"></div>
+              <div class="stat">
+                <div class="stat-label">Angriffsbonus (Sun Blade)</div>
+                <div class="stat-value" id="attack-bonus">+6</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Schaden (Sun Blade)</div>
+                <div class="stat-value" id="damage-formula">1d8 + 2 + 2d8 (Smite)</div>
+              </div>
+            </div>
+            <div class="section-divider"></div>
+            <button class="action-btn divine-smite-btn" onclick="useDivineSmite()" title="Göttlicher Schlag ausführen">
+              GÖTTLICHER SCHLAG
+              <div class="resource-counter" id="spell-slots-counter">4/4 1st, 2/2 2nd</div>
+            </button>
+            <button class="action-btn" onclick="rollAttack()" title="Angriff mit Sun Blade würfeln">ANGRIFF WÜRFELN</button>
+          </div>
+          <div class="card dice-container">
+            <h3>Schnellwürfel</h3>
+            <div class="dice-result" id="dice-result">-</div>
+            <div>
+              <button class="dice-btn" onclick="rollDice(4)">D4</button>
+              <button class="dice-btn" onclick="rollDice(6)">D6</button>
+              <button class="dice-btn" onclick="rollDice(8)">D8</button>
+              <button class="dice-btn" onclick="rollDice(10)">D10</button>
+              <button class="dice-btn" onclick="rollDice(12)">D12</button>
+              <button class="dice-btn" onclick="rollDice(20)">D20</button>
+              <button class="dice-btn" onclick="rollDice(100)">D100</button>
+            </div>
+          </div>
+          <div class="card action-economy">
+            <h3>Aktionsökonomie (pro Runde)</h3>
+            <div class="action-icons">
+              <div><span class="action-icon action-regular"></span> Aktion</div>
+              <div><span class="action-icon action-bonus"></span> Bonusaktion</div>
+              <div><span class="action-icon action-reaction"></span> Reaktion</div>
+            </div>
+            <div class="action-list">
+              <div class="action-item" id="action-attack">
+                <span class="action-icon action-regular"></span>
+                <div class="action-details">
+                  <div class="action-name">Angriff</div>
+                  <div class="action-description">Führe einen oder mehrere Angriffe aus</div>
+                </div>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Angriff verwenden">
+                </div>
+              </div>
+              <div class="action-item" id="action-cast-spell">
+                <span class="action-icon action-regular"></span>
+                <div class="action-details">
+                  <div class="action-name">Zauber wirken</div>
+                  <div class="action-description">Wirke einen Zauber mit Wirkzeit 1 Aktion</div>
+                </div>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Zauber wirken">
+                </div>
+              </div>
+              <div class="action-item" id="action-dash">
+                <span class="action-icon action-regular"></span>
+                <div class="action-details">
+                  <div class="action-name">Spurt</div>
+                  <div class="action-description">Bewege dich zusätzlich um deine Bewegungsrate</div>
+                </div>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Spurt verwenden">
+                </div>
+              </div>
+              <div class="action-item" id="action-disengage">
+                <span class="action-icon action-regular"></span>
+                <div class="action-details">
+                  <div class="action-name">Lösen</div>
+                  <div class="action-description">Bewege dich weg, ohne Gelegenheitsangriffe zu provozieren</div>
+                </div>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Lösen verwenden">
+                </div>
+              </div>
+              <div class="action-item" id="action-dodge">
+                <span class="action-icon action-regular"></span>
+                <div class="action-details">
+                  <div class="action-name">Ausweichen</div>
+                  <div class="action-description">Angriffe gegen dich haben Nachteil</div>
+                </div>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Ausweichen verwenden">
+                </div>
+              </div>
+              <div class="action-item" id="action-lay-on-hands">
+                <span class="action-icon action-regular"></span>
+                <div class="action-details">
+                  <div class="action-name">Handauflegen</div>
+                  <div class="action-description">Heile oder hebe Krankheiten auf</div>
+                </div>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'regular')" title="Aktion: Handauflegen verwenden">
+                </div>
+              </div>
+              <div class="action-item" id="action-opportunity">
+                <span class="action-icon action-reaction"></span>
+                <div class="action-details">
+                  <div class="action-name">Gelegenheitsangriff</div>
+                  <div class="action-description">Greife an, wenn ein Feind deinen Nahkampfbereich verlässt</div>
+                </div>
+                <div class="checkbox-wrapper">
+                  <input type="checkbox" class="action-checkbox" onchange="toggleActionUsed(this, 'reaction')" title="Reaktion: Gelegenheitsangriff verwenden">
+                </div>
+              </div>
+            </div>
+            <button class="action-reset" onclick="resetActions()" title="Alle Aktionen für die neue Runde zurücksetzen">Aktionen zurücksetzen</button>
+          </div>
+        </div>
+        <div id="skills" class="tab-content">
+          <div class="card">
+            <h3>Fertigkeiten</h3>
+            <div class="skills" id="skills-list"></div>
+            <div class="section-divider"></div>
+            <h3>Rettungswürfe</h3>
+            <div class="skills" id="saves-list"></div>
+          </div>
+          <div class="card">
+            <h3>Andere Eigenschaften</h3>
+            <div class="skills">
+              <div class="skill">
+                <span class="skill-name">Passive Wahrnehmung</span>
+                <span id="passive-perception">14</span>
+              </div>
+              <div class="skill">
+                <span class="skill-name">Übungsbonus</span>
+                <span id="proficiency-bonus">+3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="abilities" class="tab-content">
+          <div class="card">
+            <h3>Rasseneigenschaften (Aasimar)</h3>
+            <div class="ability" onclick="showModal('darkvision')" title="Details zu Dunkelsicht anzeigen">
+              <div class="ability-name">Dunkelsicht <span class="info-icon">i</span></div>
+              <div class="ability-desc">Kann bis 60 Fuß im Dunkeln sehen.</div>
+            </div>
+            <div class="ability" onclick="showModal('celestial-resistance')" title="Details zu Himmlische Resistenz anzeigen">
+              <div class="ability-name">Himmlische Resistenz <span class="info-icon">i</span></div>
+              <div class="ability-desc">Resistenz gegen Nekrotischen und Strahlenden Schaden.</div>
+            </div>
+            <div class="ability" onclick="showModal('healing-hands')" title="Details zu Heilende Hände anzeigen">
+              <div class="ability-name">Heilende Hände <span class="info-icon">i</span></div>
+              <div class="ability-desc">Einmal pro langer Rast: Berühre eine Kreatur, um TP in Höhe deiner Stufe zu heilen.</div>
+            </div>
+            <div class="ability" onclick="showModal('radiant-soul')" title="Details zu Strahlende Seele anzeigen">
+              <div class="ability-name">Strahlende Seele <span class="info-icon">i</span></div>
+              <div class="ability-desc">1 Minute, 1x/lange Rast: Fliegen (30 ft.), +Stufe Strahlend-Schaden bei Angriff/Zauber.</div>
+            </div>
+            <h3>Klassenmerkmale (Paladin - Oath of the Watchers)</h3>
+            <div class="ability" onclick="showModal('divine-sense')" title="Details zu Göttlicher Sinn anzeigen">
+              <div class="ability-name">Göttlicher Sinn (Stufe 1) <span class="info-icon">i</span></div>
+              <div class="ability-desc">Erkenne Himmlische, Feen, Untote in 60 ft., 1 + CHA-Mod pro langer Rast.</div>
+            </div>
+            <div class="ability" onclick="showModal('lay-on-hands')" title="Details zu Handauflegen anzeigen">
+              <div class="ability-name">Handauflegen (Stufe 1) <span class="info-icon">i</span></div>
+              <div class="ability-desc">Heile bis zu 5 × Stufe TP oder hebe Krankheiten/Gifte auf, pro langer Rast.</div>
+            </div>
+            <div class="ability" onclick="showModal('divine-smite')" title="Details zu Göttlicher Schlag anzeigen">
+              <div class="ability-name">Göttlicher Schlag (Stufe 2) <span class="info-icon">i</span></div>
+              <div class="ability-desc">Verbrauche Zauberslot für +2d8 Strahlend-Schaden (+1d8 pro Slot-Stufe).</div>
+            </div>
+            <div class="ability" onclick="showModal('aura-of-protection')" title="Details zu Aura des Schutzes anzeigen">
+              <div class="ability-name">Aura des Schutzes (Stufe 3) <span class="info-icon">i</span></div>
+              <div class="ability-desc">Verbündete in 10 ft. erhalten +CHA-Mod auf Rettungswürfe.</div>
+            </div>
+            <div class="ability" onclick="showModal('watchers-will')" title="Details zu Willen der Wächter anzeigen">
+              <div class="ability-name">Willen der Wächter (Stufe 3) <span class="info-icon">i</span></div>
+              <div class="ability-desc">Vorteil auf INT/WIS/CHA-Rettungswürfe für Verbündete in 10 ft., 1x/lange Rast.</div>
+            </div>
+            <div class="ability" onclick="showModal('extra-attack')" title="Details zu Extra-Angriff anzeigen">
+              <div class="ability-name">Extra-Angriff (Stufe 5) <span class="info-icon">i</span></div>
+              <div class="ability-desc">Kann zweimal angreifen statt einmal bei Angriffsaktion.</div>
+            </div>
+            <h3>Talente (Feats)</h3>
+            <div class="ability" onclick="showModal('alert')" title="Details zu Wachsam anzeigen">
+              <div class="ability-name">Wachsam <span class="info-icon">i</span></div>
+              <div class="ability-desc">+5 Initiative, nicht überrascht, versteckte Kreaturen beeinträchtigen dich nicht.</div>
+            </div>
+          </div>
+        </div>
+        <div id="inventory" class="tab-content">
+          <div class="card inventory-container">
+            <h3>Inventar</h3>
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Menge</th>
+                  <th>Gewicht</th>
+                  <th>Wert</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="inventory-body">
+                <tr>
+                  <td>Sun Blade</td>
+                  <td>1</td>
+                  <td>2 lb</td>
+                  <td>Magisch</td>
+                  <td><span class="delete-item" onclick="deleteItem(this)">✖</span></td>
+                </tr>
+                <tr>
+                  <td>Plattenrüstung</td>
+                  <td>1</td>
+                  <td>65 lb</td>
+                  <td>1500 GM</td>
+                  <td><span class="delete-item" onclick="deleteItem(this)">✖</span></td>
+                </tr>
+                <tr>
+                  <td>Schild</td>
+                  <td>1</td>
+                  <td>6 lb</td>
+                  <td>10 GM</td>
+                  <td><span class="delete-item" onclick="deleteItem(this)">✖</span></td>
+                </tr>
+                <tr>
+                  <td>Abenteurerpack</td>
+                  <td>1</td>
+                  <td>10 lb</td>
+                  <td>5 GM</td>
+                  <td><span class="delete-item" onclick="deleteItem(this)">✖</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="inventory-add">
+              <div class="inventory-field">
+                <label for="item-name">Item</label>
+                <input type="text" id="item-name" class="inventory-input" placeholder="z.B. Heiltrank">
+              </div>
+              <div class="inventory-field">
+                <label for="item-quantity">Menge</label>
+                <input type="number" id="item-quantity" class="inventory-input" value="1" min="1">
+              </div>
+              <div class="inventory-field">
+                <label for="item-weight">Gewicht (lb)</label>
+                <input type="number" id="item-weight" class="inventory-input" value="0" min="0" step="0.1">
+              </div>
+              <div class="inventory-field">
+                <label for="item-value">Wert</label>
+                <input type="text" id="item-value" class="inventory-input" placeholder="z.B. 50 GM">
+              </div>
+              <button class="inventory-add-btn" onclick="addItem()">Hinzufügen</button>
+            </div>
+            <div class="inventory-summary">
+              <div>
+                <div>Gesamtgewicht: <span id="total-weight">83</span> lb</div>
+                <div>Gesamtwert: <span id="total-value">1515 GM + Magisch</span></div>
+              </div>
+              <div class="weight-meter-container">
+                <div>Tragfähigkeit</div>
+                <div class="weight-meter">
+                  <div class="weight-fill" id="weight-fill" style="width: 36.89%;"></div>
+                  <div class="weight-marker" style="left: 66.67%;"></div>
+                </div>
+                <div class="weight-text">
+                  <span>83 lb</span>
+                  <span>225 lb</span>
+                  <span>450 lb</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="spells" class="tab-content">
+          <div class="card spell-container">
+            <h3>Zauber</h3>
+            <div class="spell-level">
+              <h4>1. Stufe (4 Slots)</h4>
+              <div class="spell-slots" id="spell-slots-1">
+                <input type="checkbox" class="slot-checkbox">
+                <input type="checkbox" class="slot-checkbox">
+                <input type="checkbox" class="slot-checkbox">
+                <input type="checkbox" class="slot-checkbox">
+                <button class="spell-slot-reset" onclick="resetSpellSlots(1)">Slots zurücksetzen</button>
+              </div>
+              <div class="spell-list">
+                <div class="spell-item">
+                  <span class="spell-name">Schild des Glaubens</span>
+                  <button class="spell-cast-btn" onclick="castSpell('Schild des Glaubens', 1)">Wirken</button>
+                </div>
+                <div class="spell-item">
+                  <span class="spell-name">Segnen</span>
+                  <button class="spell-cast-btn" onclick="castSpell('Segnen', 1)">Wirken</button>
+                </div>
+                <div class="spell-item">
+                  <span class="spell-name">Schutz vor Gut und Böse</span>
+                  <button class="spell-cast-btn" onclick="castSpell('Schutz vor Gut und Böse', 1)">Wirken</button>
+                </div>
+              </div>
+            </div>
+            <div class="spell-level">
+              <h4>2. Stufe (2 Slots)</h4>
+              <div class="spell-slots" id="spell-slots-2">
+                <input type="checkbox" class="slot-checkbox">
+                <input type="checkbox" class="slot-checkbox">
+                <button class="spell-slot-reset" onclick="resetSpellSlots(2)">Slots zurücksetzen</button>
+              </div>
+              <div class="spell-list">
+                <div class="spell-item">
+                  <span class="spell-name">Geringere Heilung</span>
+                  <button class="spell-cast-btn" onclick="castSpell('Geringere Heilung', 2)">Wirken</button>
+                </div>
+                <div class="spell-item">
+                  <span class="spell-name">Magische Waffe</span>
+                  <button class="spell-cast-btn" onclick="castSpell('Magische Waffe', 2)">Wirken</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right-column">
+        <div class="card char-portrait">
+          <img src="https://via.placeholder.com/300x600?text=Helio+Portrait" alt="Helio Portrait">
+          <div class="radiant-overlay"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="temp-hp-modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeTempHPModal()">×</button>
+      <h3>Temporäre Trefferpunkte verwalten</h3>
+      <div class="hp-field">
+        <label for="temp-hp-amount">Anzahl</label>
+        <input type="number" id="temp-hp-amount" class="hp-input" value="0" min="0">
+      </div>
+      <div class="hp-field">
+        <label for="temp-hp-source">Quelle</label>
+        <input type="text" id="temp-hp-source" class="hp-input" placeholder="z.B. Zauber, Fähigkeit">
+      </div>
+      <div class="hp-field">
+        <label for="temp-hp-duration">Dauer</label>
+        <input type="text" id="temp-hp-duration" class="hp-input" placeholder="z.B. 1 Stunde">
+      </div>
+      <button class="action-btn" onclick="addTempHPEffect()">Hinzufügen</button>
+    </div>
+  </div>
+
+  <script>
+    const attributes = {
+      str: { value: 15, mod: 2 },
+      dex: { value: 12, mod: 1 },
+      con: { value: 10, mod: 0 },
+      int: { value: 10, mod: 0 },
+      wis: { value: 10, mod: 0 },
+      cha: { value: 18, mod: 4 }
+    };
+
+    const skillsData = [
+      { name: 'Athletik', mod: 'str', proficient: true, bonus: 5 },
+      { name: 'Wahrnehmung', mod: 'wis', proficient: true, bonus: 3 },
+      { name: 'Überreden', mod: 'cha', proficient: true, bonus: 7 },
+      { name: 'Einschüchterung', mod: 'cha', proficient: true, bonus: 7 }
+    ];
+
+    const savesData = [
+      { name: 'Weisheit', mod: 'wis', proficient: true, bonus: 4 },
+      { name: 'Charisma', mod: 'cha', proficient: true, bonus: 7 }
+    ];
+
+    const modalContent = {
+      darkvision: `<h3>Dunkelsicht</h3><p>Dank deiner himmlischen Herkunft kannst du im Dunkeln bis zu 60 Fuß weit sehen. In völliger Dunkelheit siehst du in Grautönen, ohne Farben zu unterscheiden.</p>`,
+      'celestial-resistance': `<h3>Himmlische Resistenz</h3><p>Du hast Resistenz gegen nekrotischen und strahlenden Schaden, was deine himmlische Natur widerspiegelt.</p>`,
+      'healing-hands': `<h3>Heilende Hände</h3><p>Als Aktion kannst du eine Kreatur berühren und ihr Trefferpunkte in Höhe deiner Stufe (5) wiederherstellen. Diese Fähigkeit kann einmal pro langer Rast verwendet werden.</p>`,
+      'radiant-soul': `<h3>Strahlende Seele</h3><p>Als Aktion kannst du deine innere himmlische Kraft entfesseln. Für 1 Minute erhältst du eine Fluggeschwindigkeit von 30 Fuß, und einmal pro Runde, wenn du Schaden mit einem Angriff oder Zauber verursachst, kannst du zusätzlichen Strahlend-Schaden in Höhe deiner Stufe (5) zufügen. Diese Fähigkeit kann einmal pro langer Rast verwendet werden.</p>`,
+      'divine-sense': `<h3>Göttlicher Sinn</h3><p>Als Aktion kannst du deine Sinne öffnen, um die Anwesenheit von Himmlischen, Feen oder Untoten innerhalb von 60 Fuß zu erkennen, die nicht hinter totaler Deckung sind. Du erfährst auch die genaue Position und Art dieser Kreaturen. Diese Fähigkeit kann 1 + CHA-Modifikator (5) Mal pro langer Rast verwendet werden.</p>`,
+      'lay-on-hands': `<h3>Handauflegen</h3><p>Du hast einen Vorrat an Heilenergie, der 5 × deine Paladinstufe (25) Trefferpunkte umfasst. Als Aktion kannst du eine Kreatur berühren, um aus diesem Vorrat TP zu heilen, oder 5 Punkte verwenden, um ein Gift oder eine Krankheit zu neutralisieren. Der Vorrat wird nach einer langen Rast wieder aufgefrischt.</p>`,
+      'divine-smite': `<h3>Göttlicher Schlag</h3><p>Wenn du mit einer Nahkampfwaffe triffst, kannst du einen Zauberslot verbrauchen, um zusätzlichen Strahlend-Schaden zu verursachen: 2d8 für einen Slot der 1. Stufe, +1d8 pro weitere Stufe. Der Schaden erhöht sich um 1d8, wenn das Ziel ein Untoter oder ein Teufel ist.</p>`,
+      'aura-of-protection': `<h3>Aura des Schutzes</h3><p>Du und freundliche Kreaturen innerhalb von 10 Fuß erhalten einen Bonus auf alle Rettungswürfe, der deinem CHA-Modifikator (+4) entspricht, solange du bei Bewusstsein bist.</p>`,
+      'watchers-will': `<h3>Willen der Wächter</h3><p>Als Aktion kannst du für 1 Minute dir und Verbündeten innerhalb von 10 Fuß Vorteil auf Intelligenz-, Weisheits- und Charisma-Rettungswürfe gewähren. Diese Fähigkeit kann einmal pro langer Rast verwendet werden.</p>`,
+      'extra-attack': `<h3>Extra-Angriff</h3><p>Wenn du die Angriffsaktion ausführst, kannst du zweimal statt einmal angreifen.</p>`,
+      alert: `<h3>Wachsam</h3><p>Du erhältst +5 auf Initiativewürfe, kannst nicht überrascht werden, solange du bei Bewusstsein bist, und versteckte Kreaturen erhalten keinen Vorteil auf Angriffswürfe gegen dich.</p>`
+    };
+
+    let radiantSoulActive = false;
+    let smiteActive = false;
+    let spellSlots = { 1: 4, 2: 2 };
+    let inventory = [
+      { name: 'Sun Blade', quantity: 1, weight: 2, value: 'Magisch' },
+      { name: 'Plattenrüstung', quantity: 1, weight: 65, value: '1500 GM' },
+      { name: 'Schild', quantity: 1, weight: 6, value: '10 GM' },
+      { name: 'Abenteurerpack', quantity: 1, weight: 10, value: '5 GM' }
+    ];
+    let tempHPEffects = [];
+
+    function calculateModifier(score) {
+      return Math.floor((score - 10) / 2);
+    }
+
+    function updateAttribute(id) {
+      const value = attributes[id].value;
+      const mod = calculateModifier(value);
+      attributes[id].mod = mod;
+      document.getElementById(`${id}-value`).textContent = value;
+      document.getElementById(`${id}-mod`).textContent = mod >= 0 ? `+${mod}` : mod;
+      updateSkills();
+      updateCombatStats();
+      updateInventorySummary();
+    }
+
+    function changeAttribute(id, change) {
+      attributes[id].value = Math.max(1, attributes[id].value + change);
+      updateAttribute(id);
+    }
+
+    function updateSkills() {
+      const skillsList = document.getElementById('skills-list');
+      skillsList.innerHTML = '';
+      skillsData.forEach(skill => {
+        const bonus = attributes[skill.mod].mod + (skill.proficient ? 3 : 0);
+        skillsList.innerHTML += `
+          <div class="skill">
+            <span class="skill-name">${skill.name}</span>
+            <span>${bonus >= 0 ? '+' : ''}${bonus}</span>
+          </div>
+        `;
+      });
+
+      const savesList = document.getElementById('saves-list');
+      savesList.innerHTML = '';
+      savesData.forEach(save => {
+        const bonus = attributes[save.mod].mod + (save.proficient ? 3 : 0) + attributes.cha.mod;
+        savesList.innerHTML += `
+          <div class="skill">
+            <span class="skill-name">${save.name}</span>
+            <span>${bonus >= 0 ? '+' : ''}${bonus}</span>
+          </div>
+        `;
+      });
+
+      document.getElementById('passive-perception').textContent = 10 + attributes.wis.mod + (skillsData.find(s => s.name === 'Wahrnehmung').proficient ? 3 : 0);
+    }
+
+    function updateCombatStats() {
+      const strMod = attributes.str.mod;
+      const profBonus = 3;
+      const attackBonus = strMod + profBonus;
+      document.getElementById('attack-bonus').textContent = `+${attackBonus}`;
+      document.getElementById('damage-formula').textContent = `1d8 + ${strMod}${smiteActive ? ' + 2d8 (Smite)' : ''}`;
+      document.getElementById('initiative-value').textContent = `+${attributes.dex.mod + 5}`;
+    }
+
+    function updateHPDisplay() {
+      const currentHP = parseInt(document.getElementById('current-hp-input').value) || 0;
+      const maxHP = parseInt(document.getElementById('base-max-hp-input').value) + parseInt(document.getElementById('hp-bonus-input').value) || 1;
+      const tempHP = parseInt(document.getElementById('temp-hp-input').value) || 0;
+
+      document.getElementById('current-hp-input').max = maxHP;
+      document.getElementById('display-current-hp').textContent = currentHP;
+      document.getElementById('display-max-hp').textContent = maxHP;
+      document.getElementById('display-temp-hp').textContent = tempHP > 0 ? ` (+${tempHP} Temp)` : '';
+
+      const basePercent = Math.min(100, (currentHP / maxHP) * 100);
+      const tempPercent = tempHP > 0 ? Math.min(100, ((currentHP + tempHP) / maxHP) * 100) : basePercent;
+      document.getElementById('hp-fill-base').style.width = `${basePercent}%`;
+      document.getElementById('hp-fill-temp').style.width = tempHP > 0 ? `${tempPercent}%` : '0%';
+    }
+
+    function updateMaxHP() {
+      const baseMaxHP = parseInt(document.getElementById('base-max-hp-input').value) || 1;
+      const hpBonus = parseInt(document.getElementById('hp-bonus-input').value) || 0;
+      const maxHP = baseMaxHP + hpBonus;
+      const currentHP = parseInt(document.getElementById('current-hp-input').value) || 0;
+
+      if (currentHP > maxHP) {
+        document.getElementById('current-hp-input').value = maxHP;
+      }
+      updateHPDisplay();
+    }
+
+    function modifyHP(amount) {
+      const currentHPInput = document.getElementById('current-hp-input');
+      const maxHP = parseInt(document.getElementById('base-max-hp-input').value) + parse
+      // Complete the modifyHP function that was cut off
+function modifyHP(amount) {
+  const currentHPInput = document.getElementById('current-hp-input');
+  const tempHPInput = document.getElementById('temp-hp-input');
+  const maxHP = parseInt(document.getElementById('base-max-hp-input').value) + parseInt(document.getElementById('hp-bonus-input').value) || 1;
+  const currentHP = parseInt(currentHPInput.value) || 0;
+  const tempHP = parseInt(tempHPInput.value) || 0;
+
+  // If we're taking damage (negative amount)
+  if (amount < 0) {
+    const damage = Math.abs(amount);
+    // If we have temp HP, damage goes to that first
+    if (tempHP > 0) {
+      if (tempHP >= damage) {
+        tempHPInput.value = tempHP - damage;
+      } else {
+        // Remaining damage after temp HP is gone
+        const remainingDamage = damage - tempHP;
+        tempHPInput.value = 0;
+        currentHPInput.value = Math.max(0, currentHP - remainingDamage);
+      }
+    } else {
+      // No temp HP, damage straight to current HP
+      currentHPInput.value = Math.max(0, currentHP - damage);
+    }
+  } else if (amount > 0) {
+    // Healing can't go above max HP
+    currentHPInput.value = Math.min(maxHP, currentHP + amount);
+  }
+
+  updateHPDisplay();
+}
+
+function resetHP() {
+  const maxHP = parseInt(document.getElementById('base-max-hp-input').value) + parseInt(document.getElementById('hp-bonus-input').value) || 1;
+  document.getElementById('current-hp-input').value = maxHP;
+  updateHPDisplay();
+}
+
+function showInfo(infoId, event) {
+  const info = document.getElementById(infoId);
+  const allInfos = document.querySelectorAll('.infobox');
+  
+  // Hide all other infos
+  allInfos.forEach(box => {
+    if (box.id !== infoId) {
+      box.style.display = 'none';
+    }
+  });
+  
+  // Toggle this info
+  if (info.style.display === 'block') {
+    info.style.display = 'none';
+  } else {
+    // Position the info near the cursor
+    const x = event.clientX;
+    const y = event.clientY;
+    
+    info.style.top = `${y + 20}px`;
+    info.style.left = `${x - 125}px`;
+    info.style.display = 'block';
+  }
+  
+  event.stopPropagation();
+}
+
+function showModal(contentId) {
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+  
+  content.innerHTML = modalContent[contentId] || 'No content available';
+  modal.style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+function openTempHPModal() {
+  document.getElementById('temp-hp-modal').style.display = 'flex';
+}
+
+function closeTempHPModal() {
+  document.getElementById('temp-hp-modal').style.display = 'none';
+}
+
+function addTempHPEffect() {
+  const amount = parseInt(document.getElementById('temp-hp-amount').value) || 0;
+  const source = document.getElementById('temp-hp-source').value;
+  const duration = document.getElementById('temp-hp-duration').value;
+  
+  if (amount > 0 && source && duration) {
+    tempHPEffects.push({
+      amount,
+      source,
+      duration
+    });
+    
+    document.getElementById('temp-hp-input').value = Math.max(parseInt(document.getElementById('temp-hp-input').value) || 0, amount);
+    updateTempHPEffects();
+    updateHPDisplay();
+    closeTempHPModal();
+  }
+}
+
+function updateTempHPEffects() {
+  const container = document.getElementById('temp-hp-effects');
+  
+  if (tempHPEffects.length > 0) {
+    container.style.display = 'block';
+    container.innerHTML = '';
+    
+    tempHPEffects.forEach((effect, index) => {
+      const effectElement = document.createElement('div');
+      effectElement.className = 'temp-hp-timer';
+      effectElement.innerHTML = `
+        <div class="temp-hp-source">${effect.source} (${effect.amount} TP)</div>
+        <div class="temp-hp-duration">${effect.duration}</div>
+        <button class="hp-btn" onclick="removeTempHPEffect(${index})">×</button>
+      `;
+      container.appendChild(effectElement);
+    });
+  } else {
+    container.style.display = 'none';
+  }
+}
+
+function removeTempHPEffect(index) {
+  tempHPEffects.splice(index, 1);
+  updateTempHPEffects();
+  
+  // Recalculate highest temp HP
+  if (tempHPEffects.length > 0) {
+    const highestTempHP = Math.max(...tempHPEffects.map(effect => effect.amount));
+    document.getElementById('temp-hp-input').value = highestTempHP;
+  } else {
+    document.getElementById('temp-hp-input').value = 0;
+  }
+  
+  updateHPDisplay();
+}
+
+function rollDice(sides) {
+  const result = Math.floor(Math.random() * sides) + 1;
+  document.getElementById('dice-result').textContent = `${result} (d${sides})`;
+  return result;
+}
+
+function rollAttack() {
+  const strMod = attributes.str.mod;
+  const profBonus = 3;
+  const attackBonus = strMod + profBonus;
+  
+  const attackRoll = rollDice(20);
+  const attackTotal = attackRoll + attackBonus;
+  
+  let damageRoll = rollDice(8);
+  let damageTotal = damageRoll + strMod;
+  
+  let message = `Angriff: ${attackRoll} + ${attackBonus} = ${attackTotal}`;
+  message += `<br>Schaden: ${damageRoll} + ${strMod} = ${damageTotal}`;
+  
+  if (smiteActive) {
+    const smiteDamage = rollDice(8) + rollDice(8);
+    damageTotal += smiteDamage;
+    message += `<br>Smite: ${smiteDamage} Strahlend`;
+    message += `<br>Gesamt: ${damageTotal}`;
+  }
+  
+  document.getElementById('dice-result').innerHTML = message;
+}
+
+function toggleSmite() {
+  smiteActive = !smiteActive;
+  const smiteToggle = document.getElementById('smite-toggle');
+  
+  if (smiteActive) {
+    smiteToggle.classList.add('active');
+  } else {
+    smiteToggle.classList.remove('active');
+  }
+  
+  updateCombatStats();
+}
+
+function useDivineSmite() {
+  if (spellSlots[1] > 0 || spellSlots[2] > 0) {
+    if (spellSlots[1] > 0) {
+      spellSlots[1]--;
+    } else if (spellSlots[2] > 0) {
+      spellSlots[2]--;
+    }
+    
+    updateSpellSlots();
+    toggleSmite();
+    rollAttack();
+    toggleSmite();
+  } else {
+    alert('Keine Zauberslots mehr verfügbar!');
+  }
+}
+
+function useLayOnHands(amount) {
+  const currentValue = parseInt(document.getElementById('lay-on-hands-current').textContent);
+  const maxValue = parseInt(document.getElementById('lay-on-hands-max').textContent);
+  
+  if (amount < 0 && currentValue >= Math.abs(amount)) {
+    // Using points for healing
+    document.getElementById('lay-on-hands-current').textContent = currentValue + amount;
+    document.getElementById('lay-on-hands-fill').style.width = `${((currentValue + amount) / maxValue) * 100}%`;
+    
+    // If using for healing, also add HP to current character
+    if (amount < 0) {
+      modifyHP(Math.abs(amount));
+    }
+  } else if (amount > 0 && currentValue < maxValue) {
+    // Restoring points
+    const newValue = Math.min(maxValue, currentValue + amount);
+    document.getElementById('lay-on-hands-current').textContent = newValue;
+    document.getElementById('lay-on-hands-fill').style.width = `${(newValue / maxValue) * 100}%`;
+  }
+}
+
+function resetLayOnHands() {
+  const maxValue = parseInt(document.getElementById('lay-on-hands-max').textContent);
+  document.getElementById('lay-on-hands-current').textContent = maxValue;
+  document.getElementById('lay-on-hands-fill').style.width = '100%';
+}
+
+function toggleActionUsed(checkbox, type) {
+  const actionItem = checkbox.closest('.action-item');
+  
+  if (checkbox.checked) {
+    actionItem.classList.add('action-used');
+    
+    // Disable other actions of same type
+    if (type === 'regular') {
+      document.querySelectorAll('.action-item:not(.action-used) .action-icon.action-regular').forEach(icon => {
+        const item = icon.closest('.action-item');
+        item.classList.add('action-disabled');
+      });
+    } else if (type === 'bonus') {
+      document.querySelectorAll('.action-item:not(.action-used) .action-icon.action-bonus').forEach(icon => {
+        const item = icon.closest('.action-item');
+        item.classList.add('action-disabled');
+      });
+    } else if (type === 'reaction') {
+      document.querySelectorAll('.action-item:not(.action-used) .action-icon.action-reaction').forEach(icon => {
+        const item = icon.closest('.action-item');
+        item.classList.add('action-disabled');
+      });
+    }
+  } else {
+    actionItem.classList.remove('action-used');
+    
+    // Re-enable other actions of same type
+    document.querySelectorAll(`.action-item.action-disabled .action-icon.action-${type}`).forEach(icon => {
+      const item = icon.closest('.action-item');
+      item.classList.remove('action-disabled');
+    });
+  }
+}
+
+function resetActions() {
+  document.querySelectorAll('.action-item').forEach(item => {
+    item.classList.remove('action-used', 'action-disabled');
+  });
+  
+  document.querySelectorAll('.action-checkbox').forEach(checkbox => {
+    checkbox.checked = false;
+  });
+}
+
+function addItem() {
+  const name = document.getElementById('item-name').value;
+  const quantity = parseInt(document.getElementById('item-quantity').value) || 1;
+  const weight = parseFloat(document.getElementById('item-weight').value) || 0;
+  const value = document.getElementById('item-value').value || '-';
+  
+  if (name) {
+    inventory.push({
+      name,
+      quantity,
+      weight,
+      value
+    });
+    
+    updateInventoryTable();
+    updateInventorySummary();
+    
+    // Clear inputs
+    document.getElementById('item-name').value = '';
+    document.getElementById('item-quantity').value = '1';
+    document.getElementById('item-weight').value = '0';
+    document.getElementById('item-value').value = '';
+  }
+}
+
+function deleteItem(button) {
+  const row = button.closest('tr');
+  const index = Array.from(row.parentNode.children).indexOf(row);
+  
+  inventory.splice(index, 1);
+  updateInventoryTable();
+  updateInventorySummary();
+}
+
+function updateInventoryTable() {
+  const tbody = document.getElementById('inventory-body');
+  tbody.innerHTML = '';
+  
+  inventory.forEach(item => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${item.name}</td>
+      <td>${item.quantity}</td>
+      <td>${item.weight} lb</td>
+      <td>${item.value}</td>
+      <td><span class="delete-item" onclick="deleteItem(this)">✖</span></td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+function updateInventorySummary() {
+  let totalWeight = 0;
+  let totalGold = 0;
+  let hasMagicItems = false;
+  
+  inventory.forEach(item => {
+    totalWeight += (item.weight * item.quantity);
+    if (item.value.includes('GM')) {
+      const goldValue = parseInt(item.value) || 0;
+      totalGold += goldValue * item.quantity;
+    } else if (item.value.includes('Magisch')) {
+      hasMagicItems = true;
+    }
+  });
+  
+  const strengthScore = attributes.str.value;
+  const carryCapacity = strengthScore * 15;
+  const pushCapacity = strengthScore * 30;
+  
+  document.getElementById('total-weight').textContent = totalWeight.toFixed(1);
+  document.getElementById('total-value').textContent = `${totalGold} GM${hasMagicItems ? ' + Magisch' : ''}`;
+  
+  // Update weight meter
+  const weightFill = document.getElementById('weight-fill');
+  const weightPercent = (totalWeight / carryCapacity) * 100;
+  weightFill.style.width = `${weightPercent}%`;
+  
+  if (weightPercent > 90) {
+    weightFill.style.background = 'linear-gradient(90deg, #FF0000, #FF4500)';
+  } else if (weightPercent > 66) {
+    weightFill.style.background = 'linear-gradient(90deg, #FFA500, #FFD700)';
+  } else {
+    weightFill.style.background = 'linear-gradient(90deg, #4CAF50, #8BC34A)';
+  }
+  
+  // Update weight markers and text
+  const weightText = document.querySelector('.weight-text');
+  weightText.innerHTML = `
+    <span>${totalWeight.toFixed(1)} lb</span>
+    <span>${carryCapacity} lb</span>
+    <span>${pushCapacity} lb</span>
+  `;
+}
+
+function castSpell(spellName, level) {
+  if (spellSlots[level] > 0) {
+    spellSlots[level]--;
+    updateSpellSlots();
+    
+    let message = `${spellName} gewirkt (Stufe ${level})`;
+    
+    if (spellName === 'Segnen') {
+      message += '<br>Verbündete erhalten +1d4 auf Angriffe und Rettungswürfe für 1 Minute (Konzentration)';
+    } else if (spellName === 'Schild des Glaubens') {
+      message += '<br>Ziel erhält +2 RK für 10 Minuten (Konzentration)';
+    } else if (spellName === 'Geringere Heilung') {
+      const healing = 2 * (level) + rollDice(4) + rollDice(4);
+      message += `<br>Heilt ${healing} TP`;
+      // Optional: You could auto-apply this healing using modifyHP(healing)
+    }
+    
+    document.getElementById('dice-result').innerHTML = message;
+    
+    const slotCheckboxes = document.querySelectorAll(`#spell-slots-${level} .slot-checkbox`);
+    slotCheckboxes[spellSlots[level]].checked = true;
+  } else {
+    alert(`Keine Zauberslots der Stufe ${level} mehr verfügbar!`);
+  }
+}
+
+function updateSpellSlots() {
+  document.getElementById('spell-slots-counter').textContent = `${spellSlots[1]}/4 1st, ${spellSlots[2]}/2 2nd`;
+  
+  // Update spell slot checkboxes
+  const level1Slots = document.querySelectorAll('#spell-slots-1 .slot-checkbox');
+  const level2Slots = document.querySelectorAll('#spell-slots-2 .slot-checkbox');
+  
+  for (let i = 0; i < 4; i++) {
+    level1Slots[i].checked = i >= spellSlots[1];
+  }
+  
+  for (let i = 0; i < 2; i++) {
+    level2Slots[i].checked = i >= spellSlots[2];
+  }
+}
+
+function resetSpellSlots(level) {
+  if (level === 1) {
+    spellSlots[1] = 4;
+  } else if (level === 2) {
+    spellSlots[2] = 2;
+  }
+  
+  updateSpellSlots();
+}
+
+function changeTab(tabName) {
+  // Hide all tab contents
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
+  });
+  
+  // Deactivate all tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  // Show selected tab content
+  document.getElementById(tabName).classList.add('active');
+  
+  // Activate selected tab
+  document.querySelector(`.tab[onclick="changeTab('${tabName}')"]`).classList.add('active');
+}
+
+// Close infos when clicking elsewhere
+document.addEventListener('click', function() {
+  const allInfos = document.querySelectorAll('.infobox');
+  allInfos.forEach(box => {
+    box.style.display = 'none';
+  });
+});
+
+// Initialize the character sheet
+window.onload = function() {
+  Object.keys(attributes).forEach(updateAttribute);
+  updateSkills();
+  updateHPDisplay();
+  updateInventorySummary();
+  updateSpellSlots();
+  
+  // Add event listeners to close modals when clicking outside
+  window.onclick = function(event) {
+    const modal = document.getElementById('modal');
+    const tempHPModal = document.getElementById('temp-hp-modal');
+    
+    if (event.target === modal) {
+      closeModal();
+    }
+    
+    if (event.target === tempHPModal) {
+      closeTempHPModal();
+    }
+  };
+};
+    </script>
+</html>
