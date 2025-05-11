@@ -1205,75 +1205,9 @@
         </div>
       </div>
     </div>
-  
+    <script src="srd_monster_data_output.js"></script>
     <script>
-      // Sample data - Normally this would be loaded from a JSON file or database
-      const monsterData = [
-        {
-          id: 1,
-          name: "Aramil",
-          type: "Medium Aasimar (Fallen)",
-          alignment: "Neutral",
-          cr: "—", // NPC, no CR
-          ac: 18,
-          hp: 130,
-          speed: "40 ft., climb 30 ft.",
-          attributes: {
-            str: 20,
-            dex: 16,
-            con: 14,
-            int: 10,
-            wis: 10,
-            cha: 20
-          },
-          saves: {
-            str: 0,
-            dex: 9,
-            con: 0,
-            int: 0,
-            wis: 0,
-            cha: 11
-          },
-          skills: "Acrobatics +9, Athletics +17, Deception +11, Intimidation +17, Perception +6, Survival +6",
-          damage_res: "necrotic, radiant",
-          damage_imm: "bludgeoning, piercing, and slashing from nonmagical attacks that aren't silvered",
-          condition_imm: "charmed",
-          senses: "Devil's Sight 120 ft., Witch Sight 30 ft., passive Perception 16",
-          languages: "Common, Celestial, Sylvan",
-          features: [
-            "Alert",
-            "Eldritch Invocation",
-            "Feywild Connection",
-            "Gift of the Protectors",
-            "Jack of All Trades",
-            "Keen Smell",
-            "Multiattack"
-          ],
-          actions: [
-            "Necrotic Shroud",
-            "Fey Presence",
-            "Dark Delirium",
-            "+3 Rod of the Pact Keeper",
-            "Magical Strikes",
-            "Bite",
-            "Claw"
-          ],
-          bonus_actions: [
-            "Bardic Inspiration",
-            "Eldritch Maul"
-          ],
-          reactions: [
-            "Misty Escape",
-            "Beguiling Defenses"
-          ],
-          spellcasting: true,
-          details: "Ein mächtiger NPC mit einer Mischung aus Warlock- und Barden-Fähigkeiten."
-        },
-        // More monster data would be added here
-        // HINWEIS: Du kannst hier weitere Monster hinzufügen, um die Bibliothek zu erweitern.
-      ];
-  
-      // State management
+       // State management 
       let state = {
         activeBattleIndex: -1,
         monsters: [...monsterData],
