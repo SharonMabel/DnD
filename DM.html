@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DM Helper - D&D Campaign Manager</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400;600&display=swap');
+
+    :root {
+      --primary: #1a1a1a;
+      --secondary: #121212;
+      --accent: #c0c0c0;
+      --accent-dark: #707070;
+      --accent-glow: #e0e0e0;
+      --text: #e0e0e0;
+      --text-muted: #909090;
+      --danger: #a83232;
+      --success: #32a852;
+      --warning: #a88c32;
+      --info: #3264a8;
+      --border-radius: 8px;
+      --shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      --border: 1px solid rgba(192, 192, 192, 0.3);
+      --font-title: 'Cinzel', serif;
+      --font-body: 'Raleway', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--primary);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCIgZmlsbD0idHJhbnNwYXJlbnQiLz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSI0MCIgZmlsbD0icmdiYSg2MCw2MCw2MCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+      background-attachment: fixed;
+    }
+
+    header {
+      background: var(--secondary);
+      padding: 15px 20px;
+      border-bottom: var(--border);
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-title);
+      color: var(--accent);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      border-radius: var(--border-radius);
+      background: var(--secondary);
+      padding: 2px;
+      box-shadow: var(--shadow);
+      border: var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px 15px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: calc(var(--border-radius) - 2px);
+      transition: all 0.3s ease;
+      font-family: var(--font-title);
+    }
+
+    .tab:hover {
+      background-color: rgba(192, 192, 192, 0.1);
+    }
+
+    .tab.active {
+      background: linear-gradient(to bottom, rgba(192, 192, 192, 0.3), rgba(192, 192, 192, 0.1));
+      color: var(--accent-glow);
+      box-shadow: 0 0 10px rgba(192, 192, 192, 0.2);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Buttons */
+    .btn {
+      background: linear-gradient(to bottom, rgba(192, 192, 192, 0.3), rgba(192, 192, 192, 0.1));
+      color: var(--text);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      padding: 8px 15px;
+      cursor: pointer;
+      font-family: var(--font-title);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 5px;
+      min-width: 80px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(to bottom, rgba(192, 192, 192, 0.4), rgba(192, 192, 192, 0.2));
+      box-shadow: 0 0 15px rgba(192, 192, 192, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      min-width: 60px;
+    }
+
+    .btn-lg {
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      min-width: 120px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to bottom, rgba(50, 100, 168, 0.6), rgba(50, 100, 168, 0.3));
+    }
+
+    .btn-danger {
+      background: linear-gradient(to bottom, rgba(168, 50, 50, 0.6), rgba(168, 50, 50, 0.3));
+    }
+
+    .btn-success {
+      background: linear-gradient(to bottom, rgba(50, 168, 82, 0.6), rgba(50, 168, 82, 0.3));
+    }
+
+    .btn-warning {
+      background: linear-gradient(to bottom, rgba(168, 140, 50, 0.6), rgba(168, 140, 50, 0.3));
+    }
+
+    /* Monster Library Styles */
+    .search-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .search-input {
+      flex-grow: 1;
+      background: var(--secondary);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      color: var(--text);
+      padding: 10px 15px;
+      font-size: 1rem;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(192, 192, 192, 0.2);
+    }
+
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--border-radius);
+      border: var(--border);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .filter-label {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .filter-select {
+      background: var(--secondary);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      color: var(--text);
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      min-width: 120px;
+    }
+
+    .monster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .monster-card {
+      background: var(--secondary);
+      border-radius: var(--border-radius);
+      border: var(--border);
+      padding: 15px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .monster-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+      border-color: var(--accent);
+    }
+
+    .monster-card:hover::before {
+      opacity: 0.1;
+    }
+
+    .monster-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(192, 192, 192, 0.1) 70%, transparent 90%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    /* KORREKTUR: Stil für ausgewählte Monsterkarten hinzugefügt */
+    .monster-card.selected {
+      border-color: var(--success) !important; /* Wichtig, um Hover-Effekt zu überschreiben */
+      box-shadow: 0 0 15px rgba(50, 168, 82, 0.7);
+    }
+
+    .monster-name {
+      font-family: var(--font-title);
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 10px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .monster-type {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .monster-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin: 10px 0;
+    }
+
+    .monster-stat {
+      text-align: center;
+      padding: 5px;
+      border-radius: var(--border-radius);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .monster-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .monster-stat-value {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .monster-actions {
+      margin-top: 10px;
+      border-top: 1px solid rgba(192, 192, 192, 0.1);
+      padding-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .monster-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      background: rgba(50, 100, 168, 0.3);
+      color: var(--text);
+      margin-right: 5px;
+    }
+
+    /* Battle Tracker Styles */
+    .battle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: var(--border-radius);
+      border: var(--border);
+    }
+
+    .round-tracker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .round-number {
+      font-size: 1.8rem;
+      font-weight: bold;
+      font-family: var(--font-title);
+      color: var(--accent);
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .battle-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .initiative-list {
+      background: var(--secondary);
+      border-radius: var(--border-radius);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      max-height: calc(100vh - 300px);
+      overflow-y: auto;
+    }
+
+    .initiative-item {
+      padding: 15px;
+      border-bottom: 1px solid rgba(192, 192, 192, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .initiative-item:last-child {
+      border-bottom: none;
+    }
+
+    .initiative-item.active {
+      background: linear-gradient(to right, rgba(192, 192, 192, 0.15), rgba(192, 192, 192, 0));
+      border-left: 4px solid var(--accent);
+    }
+
+    .initiative-item.monster {
+      /* Additional styling for monster items */
+    }
+
+    .initiative-item.player {
+      /* Additional styling for player items */
+    }
+
+    .initiative-item-drag {
+      cursor: grab;
+      padding: 0 5px;
+      color: var(--text-muted);
+    }
+
+    .initiative-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--accent);
+      flex: 2;
+    }
+
+    .initiative-info {
+      display: flex;
+      gap: 15px;
+      flex: 3;
+      align-items: center;
+    }
+
+    .initiative-stat {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .initiative-stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      min-width: 30px;
+    }
+
+    .initiative-stat-value {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--text);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .initiative-controls {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .initiative-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 50%;
+      color: var(--text);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .initiative-btn:hover {
+      background: rgba(192, 192, 192, 0.2);
+      transform: scale(1.1);
+    }
+
+    .initiative-btn:active {
+      transform: scale(0.95);
+    }
+
+    .initiative-status {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex: 2;
+    }
+
+    .status-badge {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .status-badge.active {
+      width: 12px;
+      height: 12px;
+      box-shadow: 0 0 5px currentColor;
+    }
+
+    .status-badge[data-status="poisoned"] {
+      background-color: #4caf50;
+    }
+
+    .status-badge[data-status="charmed"] {
+      background-color: #e91e63;
+    }
+
+    .status-badge[data-status="frightened"] {
+      background-color: #9c27b0;
+    }
+
+    .status-badge[data-status="stunned"] {
+      background-color: #ffc107;
+    }
+
+    .status-badge[data-status="paralyzed"] {
+      background-color: #607d8b;
+    }
+
+    .status-badge[data-status="invisible"] {
+      background-color: #00bcd4;
+    }
+
+    .status-badge[data-status="concentrating"] {
+      background-color: #3f51b5;
+    }
+
+    .status-badge[data-status="blessed"] {
+      background-color: #ffeb3b;
+    }
+
+    .status-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--secondary);
+      color: var(--text);
+      padding: 5px 10px;
+      border-radius: var(--border-radius);
+      font-size: 0.8rem;
+      white-space: nowrap;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .status-badge:hover .status-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-5px);
+    }
+
+    .add-creature-form {
+      background: var(--secondary);
+      border-radius: var(--border-radius);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      color: var(--text-muted);
+    }
+
+    .form-input {
+      background: var(--primary);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* Environment Effects Styles */
+    .environment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .environment-card {
+      background: var(--secondary);
+      border-radius: var(--border-radius);
+      border: var(--border);
+      padding: 15px;
+      box-shadow: var(--shadow);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .environment-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
+    }
+
+    .environment-name {
+      font-weight: bold;
+      font-size: 1rem;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .environment-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    /* Battle Stats Styles */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .stats-card {
+      background: var(--secondary);
+      border-radius: var(--border-radius);
+      border: var(--border);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .stats-title {
+      font-family: var(--font-title);
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(192, 192, 192, 0.2);
+      padding-bottom: 10px;
+    }
+
+    .stats-list {
+      list-style: none;
+    }
+
+    .stats-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(192, 192, 192, 0.1);
+    }
+
+    .stats-item:last-child {
+      border-bottom: none;
+    }
+
+    .stats-label {
+      color: var(--text-muted);
+    }
+
+    .stats-value {
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--secondary);
+      border-radius: var(--border-radius);
+      border: var(--border);
+      max-width: 90%;
+      width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      position: relative;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(168, 50, 50, 0.6);
+      transform: rotate(90deg);
+    }
+
+    .modal-header {
+      border-bottom: 1px solid rgba(192, 192, 192, 0.2);
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      color: var(--accent);
+      font-family: var(--font-title);
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+    }
+
+    .modal-footer {
+      border-top: 1px solid rgba(192, 192, 192, 0.2);
+      padding-top: 15px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Group Management Styles */
+    .group-container {
+      margin: 20px 0;
+    }
+
+    .group-list {
+      background: var(--secondary);
+      border-radius: var(--border-radius);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .group-item {
+      padding: 15px;
+      border-bottom: 1px solid rgba(192, 192, 192, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .group-item:last-child {
+      border-bottom: none;
+    }
+
+    .group-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    .group-details {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .group-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .tabs {
+        flex-wrap: wrap;
+      }
+      
+      .monster-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+      
+      .initiative-info {
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .battle-header {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .environment-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DM Helper</h1>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" data-tab="battle">Kampf</div>
+      <div class="tab" data-tab="monsters">Monster</div>
+      <div class="tab" data-tab="environment">Umgebung</div>
+      <div class="tab" data-tab="stats">Statistiken</div>
+    </div>
+
+    <div id="battle" class="tab-content active">
+      <div class="battle-header">
+        <div class="round-tracker">
+          <div class="round-number" id="round-count">1</div>
+          <div>Runde</div>
+        </div>
+        <div class="battle-actions">
+          <button class="btn btn-primary" id="next-turn">Nächster</button>
+          <button class="btn" id="next-round">Nächste Runde</button>
+          <button class="btn btn-danger" id="end-battle">Kampf beenden</button>
+        </div>
+      </div>
+
+      <div class="add-creature-form">
+        <h3>Kampfteilnehmer hinzufügen</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-input" id="creature-name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Initiative</label>
+            <input type="number" class="form-input" id="creature-initiative" placeholder="Wert">
+          </div>
+          <div class="form-group">
+            <label class="form-label">HP</label>
+            <input type="number" class="form-input" id="creature-hp" placeholder="Trefferpunkte">
+          </div>
+          <div class="form-group">
+            <label class="form-label">AC</label>
+            <input type="number" class="form-input" id="creature-ac" placeholder="Rüstungsklasse">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Typ</label>
+            <select class="form-input" id="creature-type">
+              <option value="monster">Monster</option>
+              <option value="player">Spieler</option>
+              <option value="ally">Verbündeter</option>
+              <option value="npc">NPC</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-success" id="add-creature">Hinzufügen</button>
+        <button class="btn" id="add-from-monster">Aus Monsterliste wählen</button>
+        <button class="btn" id="add-from-group">Aus Gruppe wählen</button>
+      </div>
+
+      <div class="initiative-list" id="initiative-list">
+        </div>
+    </div>
+    <div id="monsters" class="tab-content">
+        <div class="search-container">
+          <input type="text" class="search-input" id="monster-search" placeholder="Monster suchen...">
+          <button class="btn" id="clear-search">Zurücksetzen</button>
+        </div>
+  
+        <div class="filter-container">
+          <div class="filter-group">
+            <label class="filter-label">CR:</label>
+            <select class="filter-select" id="cr-filter">
+              <option value="">Alle</option>
+              <option value="0-1">0-1</option>
+              <option value="2-5">2-5</option>
+              <option value="6-10">6-10</option>
+              <option value="11-15">11-15</option>
+              <option value="16-20">16-20</option>
+              <option value="21+">21+</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Typ:</label>
+            <select class="filter-select" id="type-filter">
+              <option value="">Alle</option>
+              <option value="aberration">Aberration</option>
+              <option value="beast">Bestie</option>
+              <option value="celestial">Himmlisch</option>
+              <option value="construct">Konstrukt</option>
+              <option value="dragon">Drache</option>
+              <option value="elemental">Elementar</option>
+              <option value="fey">Feenwesen</option>
+              <option value="fiend">Unhold</option>
+              <option value="giant">Riese</option>
+              <option value="humanoid">Humanoid</option>
+              <option value="monstrosity">Monstrosität</option>
+              <option value="ooze">Schleim</option>
+              <option value="plant">Pflanze</option>
+              <option value="undead">Untot</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <button class="btn" id="save-group">Als Gruppe speichern</button>
+            <button class="btn" id="manage-groups">Gruppen verwalten</button>
+          </div>
+        </div>
+  
+        <div class="monster-grid" id="monster-grid">
+          </div>
+      </div>
+  
+      <div id="environment" class="tab-content">
+        <h2>Umgebungseffekte</h2>
+        <p>Füge Umgebungseffekte hinzu, die sich auf den aktuellen Kampf auswirken können.</p>
+        
+        <div class="environment-grid">
+          <div class="environment-card" data-effect="darkness">
+            <h3 class="environment-name">Dunkelheit</h3>
+            <p class="environment-desc">Kreaturen ohne Dunkelsicht haben Nachteil auf Wahrnehmungs- und Angriffswürfe.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="difficult_terrain">
+            <h3 class="environment-name">Schwieriges Gelände</h3>
+            <p class="environment-desc">Die Bewegung kostet doppelt so viele Fuß wie normal.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="extreme_heat">
+            <h3 class="environment-name">Extreme Hitze</h3>
+            <p class="environment-desc">Am Ende jeder Runde: CON-Rettungswurf (DC 10) oder 1 Grad Erschöpfung.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="underwater">
+            <h3 class="environment-name">Unterwasser</h3>
+            <p class="environment-desc">Wesen ohne Unterwasseratmung können nur begrenzt Zeit unter Wasser verbringen.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="magical_darkness">
+            <h3 class="environment-name">Magische Dunkelheit</h3>
+            <p class="environment-desc">Normale Dunkelsicht funktioniert nicht. Selbst Wesen mit Dunkelsicht können nicht sehen.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="magical_silence">
+            <h3 class="environment-name">Magische Stille</h3>
+            <p class="environment-desc">Verbal-Komponenten von Zaubern können nicht gesprochen werden.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="antimagic_field">
+            <h3 class="environment-name">Antimagiefeld</h3>
+            <p class="environment-desc">Zauber und magische Effekte sind in diesem Bereich unterdrückt.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="fog">
+            <h3 class="environment-name">Dichter Nebel</h3>
+            <p class="environment-desc">Schwer verhülltes Gebiet, bietet volle Deckung über 5 Fuß.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="poisonous_gas">
+            <h3 class="environment-name">Giftige Gase</h3>
+            <p class="environment-desc">CON-Rettungswurf (DC 13) zu Beginn jedes Zuges oder 1W10 Giftschaden.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="slippery_ice">
+            <h3 class="environment-name">Rutschiges Eis</h3>
+            <p class="environment-desc">DEX-Rettungswurf (DC 10) oder hinfallen, wenn sich bewegt wird.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="wild_magic">
+            <h3 class="environment-name">Wilde Magie</h3>
+            <p class="environment-desc">Bei jedem Zauber W20: Bei 1 tritt ein Effekt der Wilden Magie ein.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+          
+          <div class="environment-card" data-effect="hallowed_ground">
+            <h3 class="environment-name">Geheiligter Boden</h3>
+            <p class="environment-desc">Untote und Unheilige haben Nachteil auf Angriffs- und Attributswürfe.</p>
+            <button class="btn btn-sm toggle-effect">Aktivieren</button>
+          </div>
+        </div>
+        
+        <h3>Eigenen Effekt hinzufügen</h3>
+        <div class="add-creature-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-input" id="effect-name" placeholder="Effektname">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Beschreibung</label>
+              <input type="text" class="form-input" id="effect-desc" placeholder="Effektbeschreibung">
+            </div>
+          </div>
+          <button class="btn btn-success" id="add-effect">Hinzufügen</button>
+        </div>
+      </div>
+  
+      <div id="stats" class="tab-content">
+        <h2>Kampfstatistiken</h2>
+        <p>Hier werden Statistiken zum aktuellen oder letzten Kampf angezeigt.</p>
+        
+        <div class="stats-container">
+          <div class="stats-card">
+            <h3 class="stats-title">Allgemeine Infos</h3>
+            <ul class="stats-list">
+              <li class="stats-item">
+                <span class="stats-label">Kampfdauer</span>
+                <span class="stats-value" id="stat-combat-duration">0 Runden</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Teilnehmer</span>
+                <span class="stats-value" id="stat-participants">0</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Initiative Durchschnitt</span>
+                <span class="stats-value" id="stat-avg-initiative">0</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Status</span>
+                <span class="stats-value" id="stat-status">Aktiv</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="stats-card">
+            <h3 class="stats-title">Schaden & Heilung</h3>
+            <ul class="stats-list">
+              <li class="stats-item">
+                <span class="stats-label">Verursachter Schaden (Spieler)</span>
+                <span class="stats-value" id="stat-player-damage">0</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Verursachter Schaden (Monster)</span>
+                <span class="stats-value" id="stat-monster-damage">0</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Heilung gewirkt</span>
+                <span class="stats-value" id="stat-healing">0</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Höchster Schaden (Einzelangriff)</span>
+                <span class="stats-value" id="stat-highest-damage">0</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="stats-card">
+            <h3 class="stats-title">Kampfverlauf</h3>
+            <ul class="stats-list">
+              <li class="stats-item">
+                <span class="stats-label">Besiegte Monster</span>
+                <span class="stats-value" id="stat-defeated-monsters">0</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Bewusstlose Spieler</span>
+                <span class="stats-value" id="stat-unconscious-players">0</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Kritische Treffer (Spieler)</span>
+                <span class="stats-value" id="stat-player-crits">0</span>
+              </li>
+              <li class="stats-item">
+                <span class="stats-label">Kritische Treffer (Monster)</span>
+                <span class="stats-value" id="stat-monster-crits">0</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <button class="btn btn-lg" id="export-stats">Statistiken exportieren</button>
+      </div>
+    </div>
+  
+    <div class="modal-overlay" id="monster-details-modal">
+      <div class="modal">
+        <button class="modal-close">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title" id="modal-monster-name">Monstername</h2>
+        </div>
+        <div class="modal-body" id="modal-monster-details">
+          </div>
+        <div class="modal-footer">
+          <button class="btn" id="modal-add-to-battle">Zum Kampf hinzufügen</button>
+          <button class="btn" id="modal-close-btn">Schließen</button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="modal-overlay" id="save-group-modal">
+      <div class="modal">
+        <button class="modal-close">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title">Monster-Gruppe speichern</h2>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Gruppenname</label>
+            <input type="text" class="form-input" id="group-name" placeholder="Name der Gruppe">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beschreibung</label>
+            <input type="text" class="form-input" id="group-desc" placeholder="Kurze Beschreibung der Gruppe">
+          </div>
+          <div id="group-monsters-list">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" id="save-group-btn">Speichern</button>
+          <button class="btn" id="cancel-group-btn">Abbrechen</button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="modal-overlay" id="manage-groups-modal">
+      <div class="modal">
+        <button class="modal-close">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title">Monster-Gruppen verwalten</h2>
+        </div>
+        <div class="modal-body">
+          <div id="groups-list">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" id="close-groups-btn">Schließen</button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="modal-overlay" id="end-battle-modal">
+      <div class="modal">
+        <button class="modal-close">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title">Kampf beenden</h2>
+        </div>
+        <div class="modal-body">
+          <p>Bist du sicher, dass du den aktuellen Kampf beenden möchtest? Es werden Statistiken erstellt und die Initiative-Liste wird zurückgesetzt.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" id="confirm-end-battle">Kampf beenden</button>
+          <button class="btn" id="cancel-end-battle">Abbrechen</button>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+      // Sample data - Normally this would be loaded from a JSON file or database
+      const monsterData = [
+        {
+          id: 1,
+          name: "Aramil",
+          type: "Medium Aasimar (Fallen)",
+          alignment: "Neutral",
+          cr: "—", // NPC, no CR
+          ac: 18,
+          hp: 130,
+          speed: "40 ft., climb 30 ft.",
+          attributes: {
+            str: 20,
+            dex: 16,
+            con: 14,
+            int: 10,
+            wis: 10,
+            cha: 20
+          },
+          saves: {
+            str: 0,
+            dex: 9,
+            con: 0,
+            int: 0,
+            wis: 0,
+            cha: 11
+          },
+          skills: "Acrobatics +9, Athletics +17, Deception +11, Intimidation +17, Perception +6, Survival +6",
+          damage_res: "necrotic, radiant",
+          damage_imm: "bludgeoning, piercing, and slashing from nonmagical attacks that aren't silvered",
+          condition_imm: "charmed",
+          senses: "Devil's Sight 120 ft., Witch Sight 30 ft., passive Perception 16",
+          languages: "Common, Celestial, Sylvan",
+          features: [
+            "Alert",
+            "Eldritch Invocation",
+            "Feywild Connection",
+            "Gift of the Protectors",
+            "Jack of All Trades",
+            "Keen Smell",
+            "Multiattack"
+          ],
+          actions: [
+            "Necrotic Shroud",
+            "Fey Presence",
+            "Dark Delirium",
+            "+3 Rod of the Pact Keeper",
+            "Magical Strikes",
+            "Bite",
+            "Claw"
+          ],
+          bonus_actions: [
+            "Bardic Inspiration",
+            "Eldritch Maul"
+          ],
+          reactions: [
+            "Misty Escape",
+            "Beguiling Defenses"
+          ],
+          spellcasting: true,
+          details: "Ein mächtiger NPC mit einer Mischung aus Warlock- und Barden-Fähigkeiten."
+        },
+        // More monster data would be added here
+        // HINWEIS: Du kannst hier weitere Monster hinzufügen, um die Bibliothek zu erweitern.
+      ];
+  
+      // State management
+      let state = {
+        activeBattleIndex: -1,
+        monsters: [...monsterData],
+        filteredMonsters: [...monsterData],
+        savedGroups: [],
+        activeBattle: {
+          round: 1,
+          initiative: [],
+          activeEffects: [],
+          stats: {
+            playerDamage: 0,
+            monsterDamage: 0,
+            healing: 0,
+            highestDamage: 0,
+            defeatedMonsters: 0,
+            unconsciousPlayers: 0,
+            playerCrits: 0,
+            monsterCrits: 0
+          }
+        }
+      };
+  
+      // Get UI elements
+      const tabs = document.querySelectorAll('.tab');
+      const tabContents = document.querySelectorAll('.tab-content');
+      const monsterGrid = document.getElementById('monster-grid');
+      const monsterSearch = document.getElementById('monster-search');
+      const crFilter = document.getElementById('cr-filter');
+      const typeFilter = document.getElementById('type-filter');
+      const clearSearchBtn = document.getElementById('clear-search');
+      const initiativeList = document.getElementById('initiative-list');
+      const roundCounter = document.getElementById('round-count');
+      const nextTurnBtn = document.getElementById('next-turn');
+      const nextRoundBtn = document.getElementById('next-round');
+      const endBattleBtn = document.getElementById('end-battle');
+      const addCreatureBtn = document.getElementById('add-creature');
+      const addFromMonsterBtn = document.getElementById('add-from-monster');
+      const creatureNameInput = document.getElementById('creature-name');
+      const creatureInitiativeInput = document.getElementById('creature-initiative');
+      const creatureHpInput = document.getElementById('creature-hp');
+      const creatureAcInput = document.getElementById('creature-ac');
+      const creatureTypeSelect = document.getElementById('creature-type');
+      const environmentCards = document.querySelectorAll('.environment-card'); // Initial static cards
+      const addEffectBtn = document.getElementById('add-effect');
+      const effectNameInput = document.getElementById('effect-name');
+      const effectDescInput = document.getElementById('effect-desc');
+      const saveGroupBtn = document.getElementById('save-group');
+      const manageGroupsBtn = document.getElementById('manage-groups');
+      const modalCloseButtons = document.querySelectorAll('.modal-close, #modal-close-btn, #cancel-group-btn, #close-groups-btn, #cancel-end-battle');
+      const monsterDetailsModal = document.getElementById('monster-details-modal');
+      const saveGroupModal = document.getElementById('save-group-modal');
+      const manageGroupsModal = document.getElementById('manage-groups-modal');
+      const endBattleModal = document.getElementById('end-battle-modal');
+      const confirmEndBattleBtn = document.getElementById('confirm-end-battle');
+      const saveGroupModalBtn = document.getElementById('save-group-btn'); // Korrigiert von save-group-btn zu saveGroupModalBtn für Klarheit
+      const exportStatsBtn = document.getElementById('export-stats');
+  
+      // Initialize the application
+      function init() {
+        loadState();
+        renderMonsterGrid();
+        renderInitiativeList();
+        renderActiveEnvironmentEffects(); // HINWEIS: Stellt sicher, dass aktive Effekte beim Laden angezeigt werden
+        updateStats();
+        setupEventListeners();
+      }
+  
+      // Save/Load State
+      function saveState() {
+        try {
+          localStorage.setItem('dmHelper', JSON.stringify(state));
+        } catch (e) {
+          console.error("Error saving state to localStorage:", e);
+        }
+      }
+  
+      function loadState() {
+        const savedState = localStorage.getItem('dmHelper');
+        if (savedState) {
+          try {
+            const parsedState = JSON.parse(savedState);
+            
+            // KORREKTUR: Bessere Zusammenführung von Monsterdaten und Validierung des geladenen Zustands
+            const baseMonsterIds = monsterData.map(md => md.id);
+            const savedUserMonsters = parsedState.monsters ? parsedState.monsters.filter(m => !baseMonsterIds.includes(m.id)) : [];
+            state.monsters = [...monsterData, ...savedUserMonsters];
+            state.filteredMonsters = parsedState.filteredMonsters && parsedState.filteredMonsters.length > 0 ? [...parsedState.filteredMonsters] : [...state.monsters];
+            state.savedGroups = Array.isArray(parsedState.savedGroups) ? parsedState.savedGroups : [];
+            
+            if (parsedState.activeBattle) {
+                state.activeBattle = {
+                    round: parsedState.activeBattle.round || 1,
+                    initiative: Array.isArray(parsedState.activeBattle.initiative) ? parsedState.activeBattle.initiative : [],
+                    activeEffects: Array.isArray(parsedState.activeBattle.activeEffects) ? parsedState.activeBattle.activeEffects : [],
+                    stats: parsedState.activeBattle.stats || { playerDamage: 0, monsterDamage: 0, healing: 0, highestDamage: 0, defeatedMonsters: 0, unconsciousPlayers: 0, playerCrits: 0, monsterCrits: 0 }
+                };
+            } else {
+                 state.activeBattle = { round: 1, initiative: [], activeEffects: [], stats: { playerDamage: 0, monsterDamage: 0, healing: 0, highestDamage: 0, defeatedMonsters: 0, unconsciousPlayers: 0, playerCrits: 0, monsterCrits: 0 } };
+            }
+            state.activeBattleIndex = typeof parsedState.activeBattleIndex === 'number' ? parsedState.activeBattleIndex : -1;
+
+          } catch (e) {
+            console.error('Error loading saved state from localStorage. Resetting to default state.', e);
+            // localStorage.removeItem('dmHelper'); // Optional: Beschädigte Daten entfernen
+            // Standardzustand explizit setzen
+            state = {
+                activeBattleIndex: -1,
+                monsters: [...monsterData],
+                filteredMonsters: [...monsterData],
+                savedGroups: [],
+                activeBattle: { round: 1, initiative: [], activeEffects: [], stats: { playerDamage: 0, monsterDamage: 0, healing: 0, highestDamage: 0, defeatedMonsters: 0, unconsciousPlayers: 0, playerCrits: 0, monsterCrits: 0 } }
+            };
+          }
+        }
+      }
+  
+      // Event Listeners
+      function setupEventListeners() {
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabId = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+          });
+        });
+  
+        monsterSearch.addEventListener('input', filterMonsters);
+        crFilter.addEventListener('change', filterMonsters);
+        typeFilter.addEventListener('change', filterMonsters);
+        clearSearchBtn.addEventListener('click', clearFilters);
+  
+        nextTurnBtn.addEventListener('click', nextTurn);
+        nextRoundBtn.addEventListener('click', nextRound);
+        endBattleBtn.addEventListener('click', () => endBattleModal.classList.add('active'));
+        confirmEndBattleBtn.addEventListener('click', endBattle);
+  
+        addCreatureBtn.addEventListener('click', addCreatureToBattle);
+        addFromMonsterBtn.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tabContents.forEach(tc => tc.classList.remove('active'));
+          document.querySelector('.tab[data-tab="monsters"]').classList.add('active');
+          document.getElementById('monsters').classList.add('active');
+        });
+         document.getElementById('add-from-group').addEventListener('click', () => { // Event listener for add from group
+            manageGroupsModal.classList.add('active'); // Open manage groups modal to select a group
+            renderSavedGroups(); // Populate it
+        });
+  
+        // Event Listeners für initial geladene Umgebungseffekte
+        document.querySelectorAll('.environment-card .toggle-effect').forEach(button => {
+            const card = button.closest('.environment-card');
+            button.addEventListener('click', () => {
+                card.classList.toggle('active');
+                toggleEnvironmentEffect(card.dataset.effect, card.querySelector('.environment-name').textContent, card.querySelector('.environment-desc').textContent);
+            });
+        });
+        addEffectBtn.addEventListener('click', addCustomEffect);
+  
+        modalCloseButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+              modal.classList.remove('active');
+            });
+          });
+        });
+  
+        saveGroupBtn.addEventListener('click', () => {
+          saveGroupModal.classList.add('active');
+          renderGroupPreview();
+        });
+        manageGroupsBtn.addEventListener('click', () => {
+          manageGroupsModal.classList.add('active');
+          renderSavedGroups();
+        });
+        saveGroupModalBtn.addEventListener('click', saveMonsterGroup); // Korrigiert: saveGroupBtn (Button im Filterbereich) vs saveGroupModalBtn (Button im Modal)
+  
+        exportStatsBtn.addEventListener('click', exportStatistics);
+      }
+  
+      // Monster Grid Functions
+      function renderMonsterGrid() {
+        monsterGrid.innerHTML = '';
+        
+        if (!state.filteredMonsters || state.filteredMonsters.length === 0) { // HINWEIS: Zusätzliche Prüfung
+          monsterGrid.innerHTML = '<p style="padding:20px; text-align:center;">Keine Monster gefunden. Bitte andere Suchkriterien verwenden oder Monsterdaten prüfen.</p>';
+          return;
+        }
+        
+        state.filteredMonsters.forEach(monster => {
+          if (!monster) return; // HINWEIS: Überspringt undefinierte Monster im Array
+          const card = document.createElement('div');
+          card.className = 'monster-card';
+          if (monster.isSelectedForGroup) { // HINWEIS: Behält Auswahlstatus bei Neudarstellung
+              card.classList.add('selected');
+          }
+          card.dataset.id = monster.id;
+          
+          card.innerHTML = `
+            <div class="monster-name">
+              ${monster.name || 'Unbenanntes Monster'}
+              <span class="monster-badge">${monster.cr || 'N/A'}</span>
+            </div>
+            <div class="monster-type">${monster.type || 'Unbekannt'} ${monster.alignment || ''}</div>
+            <div class="monster-stats">
+              <div class="monster-stat">
+                <div class="monster-stat-label">AC</div>
+                <div class="monster-stat-value">${monster.ac || 'N/A'}</div>
+              </div>
+              <div class="monster-stat">
+                <div class="monster-stat-label">HP</div>
+                <div class="monster-stat-value">${monster.hp || 'N/A'}</div>
+              </div>
+              <div class="monster-stat">
+                <div class="monster-stat-label">Speed</div>
+                <div class="monster-stat-value">${(monster.speed || 'N/A').split(' ')[0]}</div>
+              </div>
+            </div>
+            <div class="monster-actions">
+              <button class="btn btn-sm btn-primary" data-action="add">Zum Kampf</button>
+              <button class="btn btn-sm" data-action="details">Details</button>
+            </div>
+          `;
+          
+          card.querySelector('[data-action="add"]').addEventListener('click', (e) => {
+            e.stopPropagation();
+            addMonsterToBattle(monster);
+          });
+          
+          card.querySelector('[data-action="details"]').addEventListener('click', (e) => {
+            e.stopPropagation();
+            showMonsterDetails(monster);
+          });
+          
+          // KORREKTUR: Event Listener für Kartenauswahl für Gruppen
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('.btn')) { // Ignoriert Klicks auf Buttons in der Karte
+              return;
+            }
+            card.classList.toggle('selected');
+            monster.isSelectedForGroup = card.classList.contains('selected'); // Zustand im Monsterobjekt speichern (optional, aber nützlich)
+
+            // Wenn das "Gruppe speichern"-Modal offen ist, die Vorschau aktualisieren
+            if (saveGroupModal.classList.contains('active')) {
+                renderGroupPreview();
+            }
+          });
+          
+          monsterGrid.appendChild(card);
+        });
+      }
+  
+      function filterMonsters() {
+        const searchTerm = monsterSearch.value.toLowerCase();
+        const crValue = crFilter.value;
+        const typeValue = typeFilter.value;
+        
+        state.filteredMonsters = state.monsters.filter(monster => {
+          if (!monster || !monster.name) return false; // HINWEIS: Sicherheit gegen undefinierte Monster
+
+          const matchesSearch = searchTerm === '' || 
+            monster.name.toLowerCase().includes(searchTerm) ||
+            (monster.type && monster.type.toLowerCase().includes(searchTerm)) ||
+            (monster.alignment && monster.alignment.toLowerCase().includes(searchTerm));
+          
+          let matchesCR = true;
+          if (crValue) {
+            // KORREKTUR: Verbesserte CR-Verarbeitung
+            let crNum;
+            if (monster.cr === "—" || typeof monster.cr === 'undefined' || monster.cr === null || String(monster.cr).trim() === "") {
+                crNum = -1; // Spezieller Wert für "kein CR" oder um es von CR 0 zu unterscheiden, falls nötig
+            } else if (String(monster.cr).includes('/')) {
+                const parts = String(monster.cr).split('/');
+                if (parts.length === 2 && !isNaN(parseFloat(parts[0])) && !isNaN(parseFloat(parts[1])) && parseFloat(parts[1]) !== 0) {
+                    crNum = parseFloat(parts[0]) / parseFloat(parts[1]);
+                } else {
+                    crNum = -2; // Ungültiger Bruch
+                }
+            } else {
+                crNum = parseFloat(monster.cr);
+            }
+            if (isNaN(crNum)) crNum = -2; // Fallback für ungültige numerische Werte
+
+            const [minStr, maxStr] = crValue.split('-');
+            const minNum = parseFloat(minStr); // parseFloat("21+") ergibt 21
+
+            if (crNum < -1) { // Wenn CR ungültig war, nicht matchen
+                matchesCR = false;
+            } else if (maxStr) { // Bereich, z.B. "0-1"
+                const maxNum = parseFloat(maxStr);
+                matchesCR = crNum >= minNum && crNum <= maxNum;
+            } else { // Einzelner Mindestwert, z.B. "21+"
+                matchesCR = crNum >= minNum;
+            }
+          }
+          
+          const matchesType = typeValue === '' || (monster.type && monster.type.toLowerCase().includes(typeValue));
+          
+          return matchesSearch && matchesCR && matchesType;
+        });
+        
+        renderMonsterGrid();
+      }
+  
+      function clearFilters() {
+        monsterSearch.value = '';
+        crFilter.value = '';
+        typeFilter.value = '';
+        state.filteredMonsters = [...state.monsters];
+        renderMonsterGrid();
+      }
+  
+      function showMonsterDetails(monster) {
+        const modalTitle = document.getElementById('modal-monster-name');
+        const modalBody = document.getElementById('modal-monster-details');
+        modalTitle.textContent = monster.name || "Unbekanntes Monster";
+        
+        // KORREKTUR: Doppelte "Sinne"-Zeile entfernt und sicherere Attributszugriffe
+        modalBody.innerHTML = `
+          <div class="monster-type">${monster.type || 'N/A'} ${monster.alignment || ''}</div>
+          <div class="monster-stats" style="margin: 15px 0;">
+            <div class="monster-stat">
+              <div class="monster-stat-label">AC</div>
+              <div class="monster-stat-value">${monster.ac || 'N/A'}</div>
+            </div>
+            <div class="monster-stat">
+              <div class="monster-stat-label">HP</div>
+              <div class="monster-stat-value">${monster.hp || 'N/A'}</div>
+            </div>
+            <div class="monster-stat">
+              <div class="monster-stat-label">CR</div>
+              <div class="monster-stat-value">${monster.cr || 'N/A'}</div>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <strong>Bewegung:</strong> ${monster.speed || 'N/A'}
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin: 15px 0;">
+            <div class="monster-stat"><div class="monster-stat-label">STR</div><div class="monster-stat-value">${monster.attributes?.str || 'N/A'}</div></div>
+            <div class="monster-stat"><div class="monster-stat-label">DEX</div><div class="monster-stat-value">${monster.attributes?.dex || 'N/A'}</div></div>
+            <div class="monster-stat"><div class="monster-stat-label">CON</div><div class="monster-stat-value">${monster.attributes?.con || 'N/A'}</div></div>
+            <div class="monster-stat"><div class="monster-stat-label">INT</div><div class="monster-stat-value">${monster.attributes?.int || 'N/A'}</div></div>
+            <div class="monster-stat"><div class="monster-stat-label">WIS</div><div class="monster-stat-value">${monster.attributes?.wis || 'N/A'}</div></div>
+            <div class="monster-stat"><div class="monster-stat-label">CHA</div><div class="monster-stat-value">${monster.attributes?.cha || 'N/A'}</div></div>
+          </div>
+          
+          <div style="margin-bottom: 10px;"><strong>Fertigkeiten:</strong> ${monster.skills || 'Keine'}</div>
+          <div style="margin-bottom: 10px;"><strong>Schadensresistenzen:</strong> ${monster.damage_res || 'Keine'}</div>
+          <div style="margin-bottom: 10px;"><strong>Schadensimmunitäten:</strong> ${monster.damage_imm || 'Keine'}</div>
+          <div style="margin-bottom: 10px;"><strong>Zustandsimmunitäten:</strong> ${monster.condition_imm || 'Keine'}</div>
+          <div style="margin-bottom: 10px;"><strong>Sinne:</strong> ${monster.senses || 'Keine'}</div>
+          <div style="margin-bottom: 10px;"><strong>Sprachen:</strong> ${monster.languages || 'Keine'}</div>
+        
+        ${monster.features && monster.features.length > 0 ? `
+        <div style="margin: 15px 0;">
+          <h3 style="border-bottom: 1px solid rgba(192, 192, 192, 0.2); padding-bottom: 5px;">Eigenschaften</h3>
+          <ul style="list-style-type: none; padding-left: 0;">${monster.features.map(feature => `<li style="margin-bottom: 5px;">• ${feature}</li>`).join('')}</ul>
+        </div>` : ''}
+        
+        ${monster.actions && monster.actions.length > 0 ? `
+        <div style="margin: 15px 0;">
+          <h3 style="border-bottom: 1px solid rgba(192, 192, 192, 0.2); padding-bottom: 5px;">Aktionen</h3>
+          <ul style="list-style-type: none; padding-left: 0;">${monster.actions.map(action => `<li style="margin-bottom: 5px;">• ${action}</li>`).join('')}</ul>
+        </div>` : ''}
+        
+        ${monster.bonus_actions && monster.bonus_actions.length > 0 ? `
+        <div style="margin: 15px 0;">
+          <h3 style="border-bottom: 1px solid rgba(192, 192, 192, 0.2); padding-bottom: 5px;">Bonusaktionen</h3>
+          <ul style="list-style-type: none; padding-left: 0;">${monster.bonus_actions.map(action => `<li style="margin-bottom: 5px;">• ${action}</li>`).join('')}</ul>
+        </div>` : ''}
+        
+        ${monster.reactions && monster.reactions.length > 0 ? `
+        <div style="margin: 15px 0;">
+          <h3 style="border-bottom: 1px solid rgba(192, 192, 192, 0.2); padding-bottom: 5px;">Reaktionen</h3>
+          <ul style="list-style-type: none; padding-left: 0;">${monster.reactions.map(reaction => `<li style="margin-bottom: 5px;">• ${reaction}</li>`).join('')}</ul>
+        </div>` : ''}
+        
+        ${monster.spellcasting ? `
+        <div style="margin: 15px 0;">
+          <h3 style="border-bottom: 1px solid rgba(192, 192, 192, 0.2); padding-bottom: 5px;">Zaubersprüche</h3>
+          <p>Dieses Monster kann Zauber wirken. Siehe Monsterdatenblatt für Details.</p>
+        </div>` : ''}
+        
+        ${monster.details ? `<div style="margin: 15px 0;"><h3 style="border-bottom: 1px solid rgba(192, 192, 192, 0.2); padding-bottom: 5px;">Zusätzliche Informationen</h3><p>${monster.details}</p></div>` : ''}
+      `;
+      
+      const addToBattleBtn = document.getElementById('modal-add-to-battle');
+      // HINWEIS: Event-Listener neu zuweisen oder klonen, um alte Listener zu entfernen, falls die Funktion mehrfach aufgerufen wird
+      const newAddToBattleBtn = addToBattleBtn.cloneNode(true);
+      addToBattleBtn.parentNode.replaceChild(newAddToBattleBtn, addToBattleBtn);
+      newAddToBattleBtn.addEventListener('click', () => {
+        addMonsterToBattle(monster);
+        monsterDetailsModal.classList.remove('active');
+      });
+      
+      monsterDetailsModal.classList.add('active');
+    }
+
+    // HINWEIS: Eindeutige ID Generierung könnte verbessert werden (z.B. UUID)
+    let nextCreatureIdCounter = Date.now(); 
+    function generateUniqueId() {
+        return nextCreatureIdCounter++;
+    }
+
+    // Battle Management Functions
+    function addCreatureToBattle() {
+      const name = creatureNameInput.value.trim();
+      const initiative = parseInt(creatureInitiativeInput.value) || Math.floor(Math.random() * 20) + 1; // Default zu Zufallswurf
+      const hp = parseInt(creatureHpInput.value) || 10;
+      const ac = parseInt(creatureAcInput.value) || 10;
+      const type = creatureTypeSelect.value;
+      
+      if (!name) {
+        alert('Bitte gib einen Namen ein.');
+        return;
+      }
+      
+      const newCreature = {
+        id: generateUniqueId(),
+        name,
+        initiative,
+        currentHp: hp,
+        maxHp: hp,
+        ac,
+        type,
+        statuses: []
+      };
+      
+      state.activeBattle.initiative.push(newCreature);
+      sortInitiative();
+      renderInitiativeList();
+      updateStats();
+      
+      creatureNameInput.value = '';
+      creatureInitiativeInput.value = '';
+      creatureHpInput.value = '';
+      creatureAcInput.value = '';
+      
+      saveState();
+    }
+
+    function addMonsterToBattle(monster) {
+      const dexMod = monster.attributes && typeof monster.attributes.dex === 'number' ? Math.floor((monster.attributes.dex - 10) / 2) : 0;
+      const initiative = Math.floor(Math.random() * 20) + 1 + dexMod;
+      
+      const newCreature = {
+        id: generateUniqueId(), 
+        name: monster.name,
+        initiative,
+        currentHp: monster.hp,
+        maxHp: monster.hp,
+        ac: monster.ac,
+        type: 'monster',
+        monsterId: monster.id,
+        statuses: []
+      };
+      
+      state.activeBattle.initiative.push(newCreature);
+      sortInitiative();
+      renderInitiativeList();
+      updateStats();
+      
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(tc => tc.classList.remove('active'));
+      document.querySelector('.tab[data-tab="battle"]').classList.add('active');
+      document.getElementById('battle').classList.add('active');
+      
+      saveState();
+    }
+
+    function sortInitiative() {
+      state.activeBattle.initiative.sort((a, b) => b.initiative - a.initiative);
+      if (state.activeBattle.initiative.length > 0 && (state.activeBattleIndex < 0 || state.activeBattleIndex >= state.activeBattle.initiative.length) ) {
+        state.activeBattleIndex = 0; 
+      } else if (state.activeBattle.initiative.length === 0) {
+        state.activeBattleIndex = -1;
+      }
+    }
+
+    function renderInitiativeList() {
+      initiativeList.innerHTML = '';
+      
+      if (state.activeBattle.initiative.length === 0) {
+        initiativeList.innerHTML = '<div style="padding: 20px; text-align: center;">Keine Kampfteilnehmer vorhanden. Füge Spieler oder Monster hinzu, um zu beginnen.</div>';
+        updateStats(); // Stellt sicher, dass Stats auch bei leerer Liste aktualisiert werden
+        return;
+      }
+      
+      state.activeBattle.initiative.forEach((creature, index) => {
+        const item = document.createElement('div');
+        item.className = `initiative-item ${creature.type || 'unknown'} ${index === state.activeBattleIndex ? 'active' : ''}`;
+        item.dataset.creatureId = creature.id; // Für Drag & Drop oder andere direkte Manipulationen
+        
+        const hpPercentage = creature.maxHp > 0 ? (creature.currentHp / creature.maxHp) * 100 : 100; // Division durch Null vermeiden
+        let hpColor = '#4CAF50';
+        if (hpPercentage <= 0) hpColor = '#757575'; // Grau für 0 HP
+        else if (hpPercentage < 25) hpColor = '#F44336';
+        else if (hpPercentage < 50) hpColor = '#FF9800';
+        else if (hpPercentage < 75) hpColor = '#FFC107';
+        
+        item.innerHTML = `
+          <div class="initiative-item-drag">⋮</div>
+          <div class="initiative-name">${creature.name}
+            <small style="font-size: 0.8rem; color: var(--text-muted); display: block;">${creature.type} | Ini: ${creature.initiative}</small>
+          </div>
+          <div class="initiative-info">
+            <div class="initiative-stat">
+              <span class="initiative-stat-label">HP</span>
+              <input type="number" class="form-input initiative-hp-input" value="${creature.currentHp}" style="width: 60px; text-align: center; color: ${hpColor}; padding: 2px 5px; font-size: 0.9rem;" data-index="${index}">
+              <div class="initiative-controls">
+                <button class="initiative-btn" data-action="hp-dmg" title="Schaden zufügen">-</button>
+                <button class="initiative-btn" data-action="hp-heal" title="Heilen">+</button>
+              </div>
+            </div>
+            <div class="initiative-stat">
+              <span class="initiative-stat-label">AC</span>
+              <input type="number" class="form-input initiative-ac-input" value="${creature.ac}" style="width: 50px; text-align: center; padding: 2px 5px; font-size: 0.9rem;" data-index="${index}">
+            </div>
+          </div>
+          <div class="initiative-status">
+            ${['poisoned', 'charmed', 'frightened', 'stunned', 'paralyzed', 'invisible', 'concentrating', 'blessed'].map(status => `
+              <div class="status-badge ${creature.statuses && creature.statuses.includes(status) ? 'active' : ''}" data-status="${status}" title="${status.charAt(0).toUpperCase() + status.slice(1)}">
+                <span class="status-tooltip">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+              </div>
+            `).join('')}
+          </div>
+          <button class="btn btn-sm btn-danger" data-action="remove-creature" title="Entfernen" style="margin-left:10px; padding: 5px 8px; min-width:auto;">×</button>
+        `;
+        
+        item.querySelector('.initiative-hp-input').addEventListener('change', (e) => handleHpInputChange(index, parseInt(e.target.value)));
+        item.querySelector('.initiative-ac-input').addEventListener('change', (e) => handleAcInputChange(index, parseInt(e.target.value)));
+
+        item.querySelector('[data-action="hp-dmg"]').addEventListener('click', () => {
+            const dmgAmount = parseInt(prompt("Schadensmenge:", "5")) || 0;
+            if (dmgAmount > 0) modifyCreatureHP(index, -dmgAmount);
+        });
+        item.querySelector('[data-action="hp-heal"]').addEventListener('click', () => {
+            const healAmount = parseInt(prompt("Heilungsmenge:", "5")) || 0;
+            if (healAmount > 0) modifyCreatureHP(index, healAmount);
+        });
+        item.querySelector('[data-action="remove-creature"]').addEventListener('click', () => removeCreatureFromBattle(index));
+        
+        const statusBadges = item.querySelectorAll('.status-badge');
+        statusBadges.forEach(badge => {
+          badge.addEventListener('click', () => toggleCreatureStatus(index, badge.dataset.status));
+        });
+        
+        initiativeList.appendChild(item);
+      });
+      updateStats(); // Stellt sicher, dass Stats nach dem Rendern aktualisiert werden
+    }
+
+    function handleHpInputChange(index, newHp) {
+        if (isNaN(newHp)) return;
+        const creature = state.activeBattle.initiative[index];
+        const oldHp = creature.currentHp;
+        creature.currentHp = Math.max(0, newHp); // HP nicht negativ
+
+        // Update battle stats based on change
+        const diff = creature.currentHp - oldHp;
+        if (diff < 0) { // Damage
+            if (creature.type === 'monster') state.activeBattle.stats.playerDamage += Math.abs(diff);
+            else state.activeBattle.stats.monsterDamage += Math.abs(diff);
+            if (creature.currentHp === 0 && oldHp > 0 && creature.type !== 'monster') state.activeBattle.stats.unconsciousPlayers++;
+        } else if (diff > 0) { // Healing
+            state.activeBattle.stats.healing += diff;
+             if (creature.currentHp > 0 && oldHp === 0 && creature.type !== 'monster') state.activeBattle.stats.unconsciousPlayers = Math.max(0, state.activeBattle.stats.unconsciousPlayers -1);
+        }
+        if (creature.currentHp > creature.maxHp) creature.currentHp = creature.maxHp; // HP nicht über MaxHP
+
+        renderInitiativeList(); // Re-render to update color etc.
+        updateStats();
+        saveState();
+    }
+
+    function handleAcInputChange(index, newAc) {
+        if (isNaN(newAc)) return;
+        state.activeBattle.initiative[index].ac = Math.max(0, newAc);
+        // No re-render needed just for AC text, but if visual cues depend on it, call renderInitiativeList()
+        updateStats(); // AC might be part of some stat
+        saveState();
+    }
+    
+    function removeCreatureFromBattle(index) {
+        if (confirm(`"${state.activeBattle.initiative[index].name}" wirklich aus dem Kampf entfernen?`)) {
+            state.activeBattle.initiative.splice(index, 1);
+            // Wenn der aktive Kämpfer entfernt wird oder der Index verschoben wird
+            if (index < state.activeBattleIndex) {
+                state.activeBattleIndex--;
+            } else if (index === state.activeBattleIndex && state.activeBattleIndex >= state.activeBattle.initiative.length) {
+                state.activeBattleIndex = state.activeBattle.initiative.length > 0 ? 0 : -1; // Zum Anfang oder Niemand
+            }
+            if (state.activeBattle.initiative.length === 0) state.activeBattleIndex = -1;
+            
+            sortInitiative(); // Neu sortieren und activeBattleIndex ggf. anpassen
+            renderInitiativeList();
+            updateStats();
+            saveState();
+        }
+    }
+
+
+    function modifyCreatureHP(index, amount) {
+      const creature = state.activeBattle.initiative[index];
+      if (!creature) return;
+      const oldHp = creature.currentHp;
+      
+      creature.currentHp += amount;
+      if (creature.currentHp < 0) creature.currentHp = 0;
+      if (creature.currentHp > creature.maxHp) creature.currentHp = creature.maxHp;
+      
+      if (amount < 0) { // Damage
+        const damage = Math.abs(amount);
+        if (creature.type === 'monster') state.activeBattle.stats.playerDamage += damage;
+        else state.activeBattle.stats.monsterDamage += damage;
+        if (creature.currentHp === 0 && oldHp > 0 && creature.type !== 'monster') state.activeBattle.stats.unconsciousPlayers++;
+        if (damage > state.activeBattle.stats.highestDamage) state.activeBattle.stats.highestDamage = damage;
+        if (creature.type === 'monster' && creature.currentHp === 0 && oldHp > 0) state.activeBattle.stats.defeatedMonsters++;
+
+      } else if (amount > 0) { // Healing
+        state.activeBattle.stats.healing += amount;
+         if (creature.currentHp > 0 && oldHp === 0 && creature.type !== 'monster') state.activeBattle.stats.unconsciousPlayers = Math.max(0, state.activeBattle.stats.unconsciousPlayers -1);
+      }
+      
+      renderInitiativeList();
+      updateStats();
+      saveState();
+    }
+
+    function modifyCreatureAC(index, amount) { // Diese Funktion wird nicht mehr direkt von Buttons genutzt, AC wird per Input geändert
+      const creature = state.activeBattle.initiative[index];
+      if (!creature) return;
+      creature.ac = Math.max(0, creature.ac + amount);
+      renderInitiativeList(); // AC-Änderung könnte visuelle Updates erfordern
+      saveState();
+    }
+
+    function toggleCreatureStatus(index, status) {
+      const creature = state.activeBattle.initiative[index];
+      if (!creature) return;
+      if (!creature.statuses) creature.statuses = []; // Sicherstellen, dass statuses Array existiert
+      
+      const statusIndex = creature.statuses.indexOf(status);
+      if (statusIndex > -1) {
+        creature.statuses.splice(statusIndex, 1);
+      } else {
+        creature.statuses.push(status);
+      }
+      
+      renderInitiativeList();
+      saveState();
+    }
+
+    function nextTurn() {
+      if (state.activeBattle.initiative.length === 0) return;
+      
+      state.activeBattleIndex++;
+      if (state.activeBattleIndex >= state.activeBattle.initiative.length) {
+        state.activeBattleIndex = 0;
+        // HINWEIS: nextRound() hier NICHT automatisch aufrufen, das macht der "Nächste Runde" Button
+      }
+      
+      renderInitiativeList();
+      saveState();
+    }
+
+    function nextRound() {
+      if (state.activeBattle.initiative.length === 0) { // Nur Runden zählen, wenn Kämpfer da sind
+          alert("Füge zuerst Kämpfer hinzu, um Runden zu starten.");
+          return;
+      }
+      state.activeBattle.round++;
+      roundCounter.textContent = state.activeBattle.round;
+      state.activeBattleIndex = state.activeBattle.initiative.length > 0 ? 0 : -1; // Zurück zum ersten Kämpfer
+      renderInitiativeList(); // Markiert den ersten Kämpfer als aktiv
+      updateStats();
+      saveState();
+    }
+
+    function endBattle() {
+      updateStats(); 
+      
+      // HINWEIS: Man könnte hier eine Zusammenfassung des Kampfes im localStorage speichern oder anbieten
+      // const battleSummary = { ...state.activeBattle, endedAt: new Date().toISOString() };
+      // state.pastBattles = state.pastBattles || [];
+      // state.pastBattles.push(battleSummary);
+      
+      state.activeBattle = {
+        round: 1,
+        initiative: [],
+        activeEffects: [],
+        stats: { playerDamage: 0, monsterDamage: 0, healing: 0, highestDamage: 0, defeatedMonsters: 0, unconsciousPlayers: 0, playerCrits: 0, monsterCrits: 0 }
+      };
+      state.activeBattleIndex = -1;
+      
+      roundCounter.textContent = '1';
+      renderInitiativeList();
+      renderActiveEnvironmentEffects(); // Setzt auch die UI der Umgebungseffekte zurück
+      endBattleModal.classList.remove('active');
+      
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(tc => tc.classList.remove('active'));
+      document.querySelector('.tab[data-tab="stats"]').classList.add('active');
+      document.getElementById('stats').classList.add('active');
+      
+      saveState();
+    }
+
+    function updateStats() {
+      const totalParticipants = state.activeBattle.initiative.length;
+      const avgInitiative = totalParticipants > 0 
+        ? (state.activeBattle.initiative.reduce((sum, creature) => sum + (creature.initiative || 0), 0) / totalParticipants)
+        : 0;
+      
+      document.getElementById('stat-combat-duration').textContent = `${state.activeBattle.round} Runden`;
+      document.getElementById('stat-participants').textContent = totalParticipants;
+      document.getElementById('stat-avg-initiative').textContent = avgInitiative.toFixed(1);
+      document.getElementById('stat-status').textContent = totalParticipants > 0 && state.activeBattle.round > 0 ? 'Aktiv' : 'Beendet/Inaktiv';
+      
+      document.getElementById('stat-player-damage').textContent = state.activeBattle.stats.playerDamage;
+      document.getElementById('stat-monster-damage').textContent = state.activeBattle.stats.monsterDamage;
+      document.getElementById('stat-healing').textContent = state.activeBattle.stats.healing;
+      document.getElementById('stat-highest-damage').textContent = state.activeBattle.stats.highestDamage;
+      
+      document.getElementById('stat-defeated-monsters').textContent = state.activeBattle.stats.defeatedMonsters;
+      document.getElementById('stat-unconscious-players').textContent = state.activeBattle.stats.unconsciousPlayers;
+      document.getElementById('stat-player-crits').textContent = state.activeBattle.stats.playerCrits; // Diese werden noch nicht gezählt
+      document.getElementById('stat-monster-crits').textContent = state.activeBattle.stats.monsterCrits; // Diese werden noch nicht gezählt
+    }
+
+    function exportStatistics() {
+      const statsToExport = {
+        battleEnded: new Date().toLocaleString(),
+        totalRounds: state.activeBattle.round,
+        totalParticipants: state.activeBattle.initiative.length,
+        initiativeDetails: state.activeBattle.initiative.map(c => ({name: c.name, type: c.type, ini: c.initiative, finalHp: c.currentHp, maxHp: c.maxHp})),
+        damageByPlayers: state.activeBattle.stats.playerDamage,
+        damageByMonsters: state.activeBattle.stats.monsterDamage,
+        totalHealing: state.activeBattle.stats.healing,
+        highestSingleDamage: state.activeBattle.stats.highestDamage,
+        monstersDefeated: state.activeBattle.stats.defeatedMonsters,
+        playersUnconscious: state.activeBattle.stats.unconsciousPlayers,
+        // playerCrits: state.activeBattle.stats.playerCrits, // Wenn implementiert
+        // monsterCrits: state.activeBattle.stats.monsterCrits, // Wenn implementiert
+        activeEnvironmentEffects: state.activeBattle.activeEffects.map(ef => ef.name)
+      };
+      
+      const statsText = JSON.stringify(statsToExport, null, 2);
+      const blob = new Blob([statsText], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kampfstatistik_${new Date().toISOString().replace(/:/g,'-').split('.')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Environment Effects Functions
+    function toggleEnvironmentEffect(effectId, effectName, effectDesc) { // Name und Desc für neue Effekte
+        const effectIndex = state.activeBattle.activeEffects.findIndex(e => e.id === effectId);
+
+        if (effectIndex > -1) { // Effekt ist aktiv, also deaktivieren
+            state.activeBattle.activeEffects.splice(effectIndex, 1);
+        } else { // Effekt ist nicht aktiv, also aktivieren
+            state.activeBattle.activeEffects.push({
+                id: effectId,
+                name: effectName, 
+                description: effectDesc 
+            });
+        }
+        saveState();
+    }
+    
+    function renderActiveEnvironmentEffects() {
+        document.querySelectorAll('.environment-card').forEach(card => {
+            if (state.activeBattle.activeEffects.some(e => e.id === card.dataset.effect)) {
+                card.classList.add('active');
+                card.querySelector('.toggle-effect').textContent = 'Deaktivieren';
+            } else {
+                card.classList.remove('active');
+                card.querySelector('.toggle-effect').textContent = 'Aktivieren';
+            }
+        });
+    }
+
+
+    function addCustomEffect() {
+      const name = effectNameInput.value.trim();
+      const desc = effectDescInput.value.trim();
+      
+      if (!name) {
+        alert('Bitte gib einen Namen für den Effekt ein.');
+        return;
+      }
+      
+      const effectId = `custom_${generateUniqueId()}`;
+      
+      const card = document.createElement('div');
+      card.className = 'environment-card';
+      card.dataset.effect = effectId;
+      
+      card.innerHTML = `
+        <h3 class="environment-name">${name}</h3>
+        <p class="environment-desc">${desc}</p>
+        <button class="btn btn-sm toggle-effect">Aktivieren</button>
+      `;
+      
+      const toggleBtn = card.querySelector('.toggle-effect');
+      toggleBtn.addEventListener('click', () => {
+        card.classList.toggle('active');
+        toggleBtn.textContent = card.classList.contains('active') ? 'Deaktivieren' : 'Aktivieren';
+        toggleEnvironmentEffect(effectId, name, desc); // Name und Desc übergeben
+      });
+      
+      document.querySelector('.environment-grid').appendChild(card);
+      
+      effectNameInput.value = '';
+      effectDescInput.value = '';
+      
+      // HINWEIS: Nicht direkt zum State hinzufügen, da toggleEnvironmentEffect das bei Aktivierung macht.
+      // saveState(); // Wird durch toggleEnvironmentEffect erledigt
+    }
+
+    // Group Management Functions
+    function renderGroupPreview() {
+      const selectedMonstersForGroup = state.monsters.filter(monster => {
+        const cardElement = document.querySelector(`.monster-card[data-id="${monster.id}"]`);
+        return cardElement && cardElement.classList.contains('selected');
+      });
+      
+      const groupList = document.getElementById('group-monsters-list');
+      groupList.innerHTML = '';
+      
+      if (selectedMonstersForGroup.length === 0) {
+        groupList.innerHTML = '<p style="padding:10px 0;">Keine Monster für die Gruppe ausgewählt. Klicke auf Monsterkarten in der Monsterliste, um sie auszuwählen.</p>';
+        return;
+      }
+      
+      groupList.innerHTML = '<h4 style="margin-top:10px; margin-bottom:5px;">Ausgewählte Monster:</h4><ul style="list-style-type: none; padding-left: 0;">' + 
+        selectedMonstersForGroup.map(monster => `
+          <li style="padding: 5px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+            ${monster.name} (CR ${monster.cr})
+          </li>
+        `).join('') + 
+        '</ul>';
+    }
+
+    function saveMonsterGroup() {
+      const name = document.getElementById('group-name').value.trim();
+      const desc = document.getElementById('group-desc').value.trim();
+      
+      if (!name) {
+        alert('Bitte gib einen Namen für die Gruppe ein.');
+        return;
+      }
+      
+      const selectedMonsterIdsForGroup = state.monsters
+        .filter(monster => {
+            const cardElement = document.querySelector(`.monster-card[data-id="${monster.id}"]`);
+            return cardElement && cardElement.classList.contains('selected');
+        })
+        .map(monster => monster.id);
+      
+      if (selectedMonsterIdsForGroup.length === 0) {
+        alert('Keine Monster ausgewählt. Klicke auf Monsterkarten, um sie der Gruppe hinzuzufügen.');
+        return;
+      }
+      
+      const newGroup = {
+        id: generateUniqueId(),
+        name,
+        description: desc,
+        monsters: selectedMonsterIdsForGroup 
+      };
+      
+      state.savedGroups.push(newGroup);
+      saveState();
+      
+      saveGroupModal.classList.remove('active');
+      document.getElementById('group-name').value = '';
+      document.getElementById('group-desc').value = '';
+      
+      document.querySelectorAll('.monster-card.selected').forEach(card => {
+        card.classList.remove('selected');
+        const monsterId = card.dataset.id;
+        const monsterInState = state.monsters.find(m => String(m.id) === String(monsterId));
+        if (monsterInState) monsterInState.isSelectedForGroup = false;
+      });
+      renderMonsterGrid(); // Um Auswahl aufzuheben
+    }
+
+    function renderSavedGroups() {
+      const groupsListContainer = document.getElementById('groups-list');
+      groupsListContainer.innerHTML = '';
+      
+      if (state.savedGroups.length === 0) {
+        groupsListContainer.innerHTML = '<p style="padding:20px; text-align:center;">Keine gespeicherten Gruppen gefunden.</p>';
+        return;
+      }
+      
+      state.savedGroups.forEach(group => {
+        const groupItem = document.createElement('div');
+        groupItem.className = 'group-item';
+        
+        const monsterDetails = group.monsters.map(id => {
+          const monster = state.monsters.find(m => String(m.id) === String(id)); // String-Vergleich für IDs sicherer
+          return monster ? `${monster.name} (CR ${monster.cr || 'N/A'})` : 'Unbekanntes Monster';
+        }).join(', ');
+        
+        groupItem.innerHTML = `
+          <div>
+            <div class="group-name">${group.name}</div>
+            <div class="group-details">${group.description || 'Keine Beschreibung'}</div>
+            <div class="group-details" style="font-size:0.8em; max-height: 50px; overflow-y:auto;">${group.monsters.length} Monster: ${monsterDetails || 'Keine'}</div>
+          </div>
+          <div class="group-actions">
+            <button class="btn btn-sm btn-primary" data-action="add-group">Zu Kampf</button>
+            <button class="btn btn-sm btn-danger" data-action="delete-group">Löschen</button>
+          </div>
+        `;
+        
+        groupItem.querySelector('[data-action="add-group"]').addEventListener('click', () => {
+          addGroupToBattle(group);
+          manageGroupsModal.classList.remove('active');
+        });
+        
+        groupItem.querySelector('[data-action="delete-group"]').addEventListener('click', () => {
+          deleteGroup(group.id);
+        });
+        
+        groupsListContainer.appendChild(groupItem);
+      });
+    }
+
+    function addGroupToBattle(group) {
+      if (!group || !group.monsters) return;
+      group.monsters.forEach(monsterId => {
+        const monster = state.monsters.find(m => String(m.id) === String(monsterId));
+        if (monster) {
+          addMonsterToBattle(JSON.parse(JSON.stringify(monster))); // Kopie des Monsters hinzufügen
+        } else {
+            console.warn(`Monster mit ID ${monsterId} aus Gruppe "${group.name}" nicht in Hauptliste gefunden.`);
+        }
+      });
+       // Nach Hinzufügen zur Schlacht wechseln
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(tc => tc.classList.remove('active'));
+        document.querySelector('.tab[data-tab="battle"]').classList.add('active');
+        document.getElementById('battle').classList.add('active');
+    }
+
+    function deleteGroup(groupId) {
+      if (confirm('Bist du sicher, dass du diese Gruppe löschen möchtest?')) {
+        state.savedGroups = state.savedGroups.filter(group => group.id !== groupId);
+        saveState();
+        renderSavedGroups(); // Liste im Modal neu rendern
+      }
+    }
+
+    // Initialize the application
+    init();
+  </script>
+</body>
+</html>
