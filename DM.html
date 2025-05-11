@@ -2174,6 +2174,301 @@
 
     // Initialize the application
     init();
+
+    let nextGeneratedId = Date.now(); // Einfache Basis für IDs
+
+function generateUniqueId() {
+    return nextGeneratedId++;
+}
+
+// Bestehende Funktion addCreatureToBattle - bleibt größtenteils gleich, nutzt generateUniqueId
+function addCreatureToBattle() {
+    const name = creatureNameInput.value.trim();
+    // Initiative: Zufallswurf 1W20, wenn nichts eingegeben wird.
+    const initiative = creatureInitiativeInput.value === '' ? (Math.floor(Math.random() * 20) + 1) : parseInt(creatureInitiativeInput.value);
+    const hp = parseInt(creatureHpInput.value) || 10;
+    const ac = parseInt(creatureAcInput.value) || 10;
+    const type = creatureTypeSelect.value;
+
+    if (!name) {
+        alert('Bitte gib einen Namen ein.');
+        return;
+    }
+
+    const newCreature = {
+        id: generateUniqueId(), // Eindeutige ID
+        name,
+        initiative,
+        currentHp: hp,
+        maxHp: hp,
+        ac,
+        type,
+        statuses: []
+    };
+
+    state.activeBattle.initiative.push(newCreature);
+    sortInitiative(newCreature.id); // Sortieren und versuchen, den neuen Eintrag aktiv zu machen (oder zumindest Fokus zu behalten)
+    renderInitiativeList();
+    updateStats();
+
+    // Eingabefelder zurücksetzen
+    creatureNameInput.value = '';
+    creatureInitiativeInput.value = ''; // Initiative-Feld auch zurücksetzen
+    creatureHpInput.value = '';
+    creatureAcInput.value = '';
+    // creatureTypeSelect.value = 'monster'; // Optional: Typ zurücksetzen
+
+    saveState();
+}
+
+
+// Überarbeitete Funktion sortInitiative
+function sortInitiative(focusedCreatureId = null) {
+    let activeCreatureIdToPreserve = focusedCreatureId;
+
+    // Wenn kein spezieller Fokus gesetzt ist, versuche den aktuellen aktiven Kämpfer beizubehalten
+    if (!activeCreatureIdToPreserve && state.activeBattleIndex >= 0 && state.activeBattle.initiative[state.activeBattleIndex]) {
+        activeCreatureIdToPreserve = state.activeBattle.initiative[state.activeBattleIndex].id;
+    }
+
+    state.activeBattle.initiative.sort((a, b) => {
+        // Primäre Sortierung nach Initiative (absteigend)
+        if (b.initiative !== a.initiative) {
+            return b.initiative - a.initiative;
+        }
+        // Sekundäre Sortierung (optional, z.B. nach Name oder DEX bei Gleichstand)
+        // Hier lassen wir es bei der stabilen Sortierung der Engine für gleiche Werte.
+        return 0;
+    });
+
+    // Finde den neuen Index des (potenziell) fokussierten oder vorher aktiven Kämpfers
+    if (activeCreatureIdToPreserve) {
+        const newActiveIndex = state.activeBattle.initiative.findIndex(c => c.id === activeCreatureIdToPreserve);
+        state.activeBattleIndex = (newActiveIndex !== -1) ? newActiveIndex : (state.activeBattle.initiative.length > 0 ? 0 : -1);
+    } else if (state.activeBattle.initiative.length > 0) {
+        state.activeBattleIndex = 0; // Standardmäßig zum ersten, wenn kein Fokus oder nicht gefunden
+    } else {
+        state.activeBattleIndex = -1; // Kein Kämpfer mehr da
+    }
+}
+
+// Neue Funktion zum Behandeln von Initiative-Änderungen in der Liste
+function handleIniInputChange(creatureId, newIniString) {
+    const newIni = parseInt(newIniString);
+    if (isNaN(newIni)) return; // Ungültige Eingabe ignorieren
+
+    const creatureIndex = state.activeBattle.initiative.findIndex(c => c.id === creatureId);
+    if (creatureIndex === -1) return;
+
+    state.activeBattle.initiative[creatureIndex].initiative = newIni;
+    
+    sortInitiative(state.activeBattle.initiative[creatureIndex].id); // Neu sortieren, Fokus auf geändertem Element behalten
+    renderInitiativeList();
+    updateStats(); // Durchschnittsinitiative etc. könnten sich ändern
+    saveState();
+}
+
+// Neue Funktion zum Entfernen eines Kämpfers
+function removeCreatureFromBattle(creatureIdToRemove) {
+    const indexToRemove = state.activeBattle.initiative.findIndex(c => c.id === creatureIdToRemove);
+    if (indexToRemove === -1) return;
+
+    const creatureToPreserveFocus = (state.activeBattleIndex === indexToRemove) ? 
+                                   (state.activeBattle.initiative[indexToRemove + 1]?.id || state.activeBattle.initiative[0]?.id) 
+                                   : state.activeBattle.initiative[state.activeBattleIndex]?.id;
+
+    state.activeBattle.initiative.splice(indexToRemove, 1);
+
+    if (state.activeBattle.initiative.length === 0) {
+        state.activeBattleIndex = -1;
+    } else {
+        // Versuche, den Fokus beizubehalten oder sinnvoll neu zu setzen
+        const newFocusedIndex = state.activeBattle.initiative.findIndex(c => c.id === creatureToPreserveFocus);
+        if (newFocusedIndex !== -1) {
+            state.activeBattleIndex = newFocusedIndex;
+        } else if (indexToRemove < state.activeBattleIndex) {
+            state.activeBattleIndex--;
+        } else if (state.activeBattleIndex >= state.activeBattle.initiative.length) {
+             // Wenn der letzte aktive Eintrag entfernt wurde oder der Index jetzt außerhalb liegt
+            state.activeBattleIndex = state.activeBattle.initiative.length -1;
+        }
+         if (state.activeBattleIndex < 0 && state.activeBattle.initiative.length > 0) state.activeBattleIndex = 0;
+
+    }
+    
+    sortInitiative(state.activeBattle.initiative[state.activeBattleIndex]?.id); // Neu sortieren nach Entfernung
+    renderInitiativeList();
+    updateStats();
+    saveState();
+}
+
+
+// Überarbeitete Funktion renderInitiativeList
+function renderInitiativeList() {
+    initiativeList.innerHTML = '';
+
+    if (state.activeBattle.initiative.length === 0) {
+        initiativeList.innerHTML = '<div style="padding: 20px; text-align: center;">Keine Kampfteilnehmer vorhanden. Füge Spieler oder Monster hinzu, um zu beginnen.</div>';
+        updateStats();
+        return;
+    }
+
+    state.activeBattle.initiative.forEach((creature, index) => {
+        const item = document.createElement('div');
+        item.className = `initiative-item ${creature.type || 'unknown'} ${index === state.activeBattleIndex ? 'active' : ''}`;
+        item.dataset.creatureId = creature.id;
+
+        const hpPercentage = creature.maxHp > 0 ? (creature.currentHp / creature.maxHp) * 100 : (creature.currentHp > 0 ? 100 : 0);
+        let hpColor = '#4CAF50'; // Green
+        if (creature.currentHp <= 0) hpColor = '#757575'; // Grey for 0 HP
+        else if (hpPercentage < 25) hpColor = '#F44336'; // Red
+        else if (hpPercentage < 50) hpColor = '#FF9800'; // Orange
+        else if (hpPercentage < 75) hpColor = '#FFC107'; // Yellow
+
+        // Tooltip-Texte für Status-Badges erstellen
+        const statusTooltips = {
+            poisoned: "Vergiftet", charmed: "Verzaubert", frightened: "Verängstigt",
+            stunned: "Betäubt", paralyzed: "Gelähmt", invisible: "Unsichtbar",
+            concentrating: "Konzentriert", blessed: "Gesegnet"
+        };
+        const statusBadgeHTML = Object.keys(statusTooltips).map(statusKey => `
+            <div class="status-badge ${creature.statuses && creature.statuses.includes(statusKey) ? 'active' : ''}" data-status="${statusKey}" title="${statusTooltips[statusKey]}">
+                <span class="status-tooltip">${statusTooltips[statusKey]}</span>
+            </div>
+        `).join('');
+
+        item.innerHTML = `
+            <div class="initiative-item-drag">⋮</div>
+            <div class="initiative-name">${creature.name}
+                <small style="font-size: 0.8rem; color: var(--text-muted); display: block;">Typ: ${creature.type}</small>
+            </div>
+            <div class="initiative-info">
+                <div class="initiative-stat">
+                    <span class="initiative-stat-label">Ini</span>
+                    <input type="number" class="form-input initiative-value-input" value="${creature.initiative}" data-field="initiative" style="width: 55px;">
+                </div>
+                <div class="initiative-stat">
+                    <span class="initiative-stat-label">HP</span>
+                    <input type="number" class="form-input initiative-value-input" value="${creature.currentHp}" data-field="hp" style="width: 60px; color: ${hpColor};">
+                    <div class="initiative-controls">
+                        <button class="initiative-btn" data-action="hp-dmg" title="Schaden">-</button>
+                        <button class="initiative-btn" data-action="hp-heal" title="Heilen">+</button>
+                    </div>
+                </div>
+                <div class="initiative-stat">
+                    <span class="initiative-stat-label">AC</span>
+                    <input type="number" class="form-input initiative-value-input" value="${creature.ac}" data-field="ac" style="width: 50px;">
+                </div>
+            </div>
+            <div class="initiative-status">${statusBadgeHTML}</div>
+            <button class="btn btn-sm btn-danger initiative-remove-btn" data-action="remove-creature" title="Entfernen">×</button>
+        `;
+
+        // Event Listener für die neuen Input-Felder (HP, AC, Initiative)
+        item.querySelectorAll('.initiative-value-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const field = e.target.dataset.field;
+                const value = parseInt(e.target.value);
+                if (isNaN(value)) return;
+
+                if (field === 'hp') handleHpInputChange(creature.id, value); // Funktion angepasst, um ID zu verwenden
+                if (field === 'ac') handleAcInputChange(creature.id, value); // Funktion angepasst, um ID zu verwenden
+                if (field === 'initiative') handleIniInputChange(creature.id, value);
+            });
+             input.addEventListener('focus', () => state.activeBattleIndex = index); // Fokus auf Element setzt es als aktiv (optional)
+        });
+        
+        // Event Listener für HP-Schnelländerungstasten
+        item.querySelector('[data-action="hp-dmg"]').addEventListener('click', () => {
+            const dmgAmount = parseInt(prompt(`Schaden für ${creature.name}:`, "5")) || 0;
+            if (dmgAmount > 0) modifyCreatureHP(creature.id, -dmgAmount);
+        });
+        item.querySelector('[data-action="hp-heal"]').addEventListener('click', () => {
+            const healAmount = parseInt(prompt(`Heilung für ${creature.name}:`, "5")) || 0;
+            if (healAmount > 0) modifyCreatureHP(creature.id, healAmount);
+        });
+
+        // Event Listener für Status-Badges
+        item.querySelectorAll('.status-badge').forEach(badge => {
+            badge.addEventListener('click', () => toggleCreatureStatus(creature.id, badge.dataset.status));
+        });
+
+        // Event Listener für Entfernen-Button
+        item.querySelector('[data-action="remove-creature"]').addEventListener('click', (e) => {
+            e.stopPropagation();
+            removeCreatureFromBattle(creature.id);
+        });
+
+        initiativeList.appendChild(item);
+    });
+    updateStats();
+}
+
+
+// Anpassungen für HP und AC Handler, um mit creatureId statt Index zu arbeiten
+function findCreatureAndIndex(creatureId) {
+    const index = state.activeBattle.initiative.findIndex(c => c.id === creatureId);
+    return index !== -1 ? { creature: state.activeBattle.initiative[index], index } : null;
+}
+
+function handleHpInputChange(creatureId, newHp) {
+    if (isNaN(newHp)) return;
+    const data = findCreatureAndIndex(creatureId);
+    if (!data) return;
+    
+    const { creature } = data;
+    const oldHp = creature.currentHp;
+    creature.currentHp = Math.max(0, newHp);
+
+    const diff = creature.currentHp - oldHp;
+    if (diff < 0) {
+        if (creature.type === 'monster') state.activeBattle.stats.playerDamage += Math.abs(diff);
+        else state.activeBattle.stats.monsterDamage += Math.abs(diff);
+        if (creature.currentHp === 0 && oldHp > 0 && creature.type !== 'monster') state.activeBattle.stats.unconsciousPlayers++;
+        if (Math.abs(diff) > state.activeBattle.stats.highestDamage) state.activeBattle.stats.highestDamage = Math.abs(diff);
+        if (creature.type === 'monster' && creature.currentHp === 0 && oldHp > 0) state.activeBattle.stats.defeatedMonsters++;
+    } else if (diff > 0) {
+        state.activeBattle.stats.healing += diff;
+        if (creature.currentHp > 0 && oldHp === 0 && creature.type !== 'monster') state.activeBattle.stats.unconsciousPlayers = Math.max(0, state.activeBattle.stats.unconsciousPlayers - 1);
+    }
+    if (creature.currentHp > creature.maxHp) creature.currentHp = creature.maxHp;
+
+    renderInitiativeList();
+    updateStats();
+    saveState();
+}
+
+function handleAcInputChange(creatureId, newAc) {
+    if (isNaN(newAc)) return;
+    const data = findCreatureAndIndex(creatureId);
+    if (!data) return;
+    data.creature.ac = Math.max(0, newAc);
+    renderInitiativeList(); // Nur neu rendern, falls AC-Anzeige sich ändert (z.B. durch Effekte)
+    saveState();
+}
+
+function modifyCreatureHP(creatureId, amount) {
+    const data = findCreatureAndIndex(creatureId);
+    if (!data) return;
+    const { creature } = data;
+    handleHpInputChange(creatureId, creature.currentHp + amount); // Nutzt die bestehende Logik
+}
+
+function toggleCreatureStatus(creatureId, status) {
+    const data = findCreatureAndIndex(creatureId);
+    if (!data) return;
+    const { creature } = data;
+
+    if (!creature.statuses) creature.statuses = [];
+    const statusIndex = creature.statuses.indexOf(status);
+    if (statusIndex > -1) {
+        creature.statuses.splice(statusIndex, 1);
+    } else {
+        creature.statuses.push(status);
+    }
+    renderInitiativeList();
+    saveState();
+}
   </script>
 </body>
 </html>
