@@ -1546,70 +1546,105 @@
     </div>
     <script>
         // --- Character Data ---
-        const characterData = {
-            name: "Bren Varakhaal",
-            race: "Goliath",
-            class: "Barbarian",
-            level: 5,
-            alignment: "Chaotic Neutral",
-            background: "Far Traveler",
-            attributes: {
-                str: 18, dex: 14, con: 14, int: 8, wis: 10, cha: 12
-            },
-            hp: {
-                baseMax: 46, // Barbarian 12 + 4*7 = 40 + CON*5 = 40 + 10 = 50? Recheck calculation. Let's assume 46 based on sheet.
-                current: 46,
-                temp: 0,
-                bonus: 0, // For effects like Aid
-                hitDiceMax: 5,
-                hitDiceCurrent: 5,
-                hitDiceType: 12,
-            },
-            proficiencies: {
-                saves: ["str", "con"],
-                skills: ["Athletics", "Intimidation", "Perception", "Survival"], // Add background proficiencies if applicable
-                weapons: ["Simple", "Martial"],
-                armor: ["Light", "Medium", "Shields"],
-                tools: ["Gaming set (Dragonchess)"] // Example, adjust based on background/choices
-            },
-            features: [
-                // Add racial, class, feat features here with brief descriptions or link IDs
-                { id: "powerful-build", name: "Powerful Build", source: "Goliath" },
-                { id: "mountain-born", name: "Mountain Born", source: "Goliath" },
-                { id: "stones-endurance", name: "Stone's Endurance", source: "Goliath" },
-                { id: "rage-ability", name: "Rage", source: "Barbarian 1", usesMax: 3, usesCurrent: 3, resetOn: "long" },
-                { id: "unarmored-defense", name: "Unarmored Defense", source: "Barbarian 1" },
-                { id: "reckless-attack", name: "Reckless Attack", source: "Barbarian 2" },
-                { id: "danger-sense", name: "Danger Sense", source: "Barbarian 2" },
-                { id: "primal-path", name: "Primal Path (Zealot)", source: "Barbarian 3" },
-                { id: "divine-fury", name: "Divine Fury", source: "Zealot 3" },
-                { id: "warrior-of-the-gods", name: "Warrior of the Gods", source: "Zealot 3" },
-                { id: "asi", name: "Ability Score Improvement/Feat", source: "Barbarian 4" }, // Placeholder
-                { id: "great-weapon-master", name: "Great Weapon Master", source: "Feat" },
-                { id: "extra-attack", name: "Extra Attack", source: "Barbarian 5" },
-                { id: "fast-movement", name: "Fast Movement", source: "Barbarian 5" },
-            ],
-            inventory: [
-                { name: "Greatsword", weight: 6, quantity: 1, location: "equipped", type: "weapon" },
-                { name: "Handaxe", weight: 2, quantity: 2, location: "carried", type: "weapon" },
-                { name: "Scale Mail", weight: 45, quantity: 1, location: "equipped", type: "armor" }, // Assume Scale Mail if AC is 16 (14 + Dex 2)
-                { name: "Explorer's Pack", weight: 59, quantity: 1, location: "backpack", type: "pack", contains: ["Backpack", "Bedroll", "Mess kit", "Tinderbox", "Torches (10)", "Rations (10 days)", "Waterskin", "Hempen rope (50 feet)"] },
-                { name: "Dragonchess set", weight: 0.5, quantity: 1, location: "backpack", type: "tool" },
-                 { name: "Traveler's Clothes", weight: 4, quantity: 1, location: "backpack", type: "gear"},
-                { name: "Pouch", weight: 1, quantity: 1, location: "equipped", type: "container"},
-                { name: "Gold Pieces", weight: 0.02, quantity: 15, location: "pouch", type: "currency", abbreviation: "GP" } // Example currency
-            ],
-             speed: 40, // Base 30 + 10 from Fast Movement
-             tempHPEffects: [], // Store temporary HP effects { source, amount, type, duration }
-             resources: { // Track resources like Rage uses
-                 rage: { current: 3, max: 3, resetOn: 'long' }
-             },
-             activeToggles: { // Track status of toggles
-                rage: false,
-                gwm: false,
-                reckless: false
-             }
-        };
+     
+const characterData = {
+    name: "Bren", // Vom PDF
+    race: "Goliath",
+    class: "Barbarian",
+    level: 5,
+    alignment: "Chaotic Neutral", // Aus HTML, nicht im PDF
+    background: "Far Traveler", // Aus HTML, nicht im PDF
+    attributes: {
+        str: 18, dex: 14, con: 14, int: 8, wis: 10, cha: 12 // Vom PDF
+    },
+    hp: {
+        baseMax: 56, // Vom PDF
+        current: 56, // Annahme: startet voll
+        temp: 0,
+        bonus: 0,
+        hitDiceMax: 5, // Vom PDF (00000)
+        hitDiceCurrent: 5, // Annahme: startet voll
+        hitDiceType: 12, // Vom PDF (D12)
+    },
+    proficiencies: {
+        saves: ["str", "con"], // STR +7 (4+3), CON +5 (2+3) vom PDF
+        skills: ["Athletics", "Intimidation", "Perception", "Survival", "Animal Handling", "Nature"], // Vom PDF abgeleitet
+        weapons: ["Simple", "Martial"], // Standard Barbar
+        armor: ["Light", "Medium", "Shields"], // Standard Barbar
+        tools: ["Lute", "Gaming set (Dragonchess)"] // Lute vom PDF Inventar, Dragonchess vom HTML (Far Traveler gibt ein Musikinstrument oder Gaming Set)
+    },
+    features: [
+        // Goliath Traits
+        { id: "powerful-build", name: "Powerful Build", source: "Goliath", description: "Zählt als eine Größenkategorie größer für Tragfähigkeit." },
+        { id: "mountain-born", name: "Mountain Born", source: "Goliath", description: "Resistenz gegen Kälteschaden, akklimatisiert an große Höhen." },
+        { id: "stones-endurance", name: "Stone's Endurance", source: "Goliath", usesMax: 1, usesCurrent: 1, resetOn: "short", description: "Reaktion: Schaden reduzieren um 1W12 + KON-Mod." },
+        // Barbarian Class Features
+        { id: "rage-ability", name: "Rage", source: "Barbarian 1", description: "Siehe Rage Details unter Bonusaktionen." }, // Nutzungen etc. unter resources
+        { id: "unarmored-defense", name: "Unarmored Defense", source: "Barbarian 1", description: "Ohne Rüstung: RK = 10 + GES-Mod + KON-Mod." }, // Bren trägt Scale Mail laut AC und Inventar
+        { id: "reckless-attack", name: "Reckless Attack", source: "Barbarian 2", description: "Vorteil auf STR-Nahkampfangriffe; Angriffe gegen dich haben Vorteil." },
+        { id: "danger-sense", name: "Danger Sense", source: "Barbarian 2", description: "Vorteil auf GES-Rettungswürfe gegen Effekte, die du sehen kannst." },
+        { id: "primal-path", name: "Primal Path (Zealot Variant)", source: "Barbarian 3", description: "Pfad des Zeloten (Variante gemäß DM-Sheet)." },
+        // Zealot Variant Features (gemäß PDF)
+        { id: "divine-fury-pdf", name: "Divine Fury (Rage Trait)", source: "Zealot Variant 3", description: "Während Rage: Erster Treffer pro Zug +1W6 + halbe Barbaren-Stufe (aktuell +2) Feuerschaden. Entzündet Objekte." },
+        { id: "rage-str-skills-pdf", name: "Rage - Strength for Skills", source: "Zealot Variant 3", description: "Während Rage: Kann STR für Akrobatik, Einschüchterung, Wahrnehmung, Heimlichkeit, Überlebenskunst verwenden." },
+        { id: "warrior-of-the-gods-pdf", name: "Warrior of the Gods (Heal)", source: "Zealot Variant 3", usesMax: 1, usesCurrent: 1, resetOn: "long", description: "Kann W12 aus einem Pool (Annahme: Trefferwürfelpool?) ausgeben, würfeln und HP i.H.d. Wurfs regenerieren." }, // "0000/long" deutet auf mehrfache Nutzung hin, aber "expend D12 from the pool" klingt eher wie 1x pro Tag einen Würfel. Ich setze mal 1 Nutzung, kann angepasst werden.
+        // Level Features
+        { id: "asi", name: "Ability Score Improvement/Feat", source: "Barbarian 4", description: "Feat: Great Weapon Master angenommen (aus HTML und Hew-Fähigkeit)" },
+        { id: "great-weapon-master", name: "Great Weapon Master", source: "Feat", description: "Bonusaktion Angriff nach Krit/Kill (Hew); optional -5 Angriff für +10 Schaden." }, // "Hew" ist Teil davon
+        { id: "extra-attack", name: "Extra Attack", source: "Barbarian 5", description: "Kann zweimal angreifen statt einmal bei Angriffsaktion." },
+        { id: "fast-movement", name: "Fast Movement", source: "Barbarian 5", description: "+10 Fuß Bewegungsrate ohne schwere Rüstung." },
+        // Items mit speziellen Eigenschaften
+        { id: "cloak-of-displacement", name: "Cloak of Displacement (Attuned)", source: "Magic Item", description: "Angriffe haben Nachteil, bis Schaden genommen wird / Speed 0." },
+        { id: "boots-of-the-vigilant", name: "Boots of the Vigilant", source: "Magic Item", description: "Nach Initiativewurf 1W8 zur Initiative addieren (1x pro Dämmerung)." },
+        { id: "goggles-of-the-night", name: "Goggles of the Night", source: "Magic Item", description: "Gewährt Dunkelsicht 60ft." }
+    ],
+    inventory: [ // Basierend auf PDF Seite 2 und Standardausrüstung
+        { name: "Greataxe", weight: 7, quantity: 1, location: "equipped", type: "weapon", notes: "PDF: Atk +7, Dmg 1W12+7 (inkl. Rage?)" },
+        { name: "Handaxe", weight: 2, quantity: 2, location: "carried", type: "weapon", notes: "PDF: Atk +7, Dmg 1W6+4" },
+        { name: "Cast-off Scale Mail", weight: 45, quantity: 1, location: "equipped", type: "armor" },
+        { name: "Lute", weight: 2, quantity: 1, location: "backpack", type: "tool" },
+        { name: "Boots of the Vigilant", weight: 1, quantity: 1, location: "equipped", type: "magic-item" }, // Gewicht geschätzt
+        { name: "Goggles of the Night", weight: 0.5, quantity: 1, location: "equipped", type: "magic-item" }, // Gewicht geschätzt
+        { name: "Cloak of Displacement", weight: 1, quantity: 1, location: "equipped", type: "magic-item", attunement: true }, // Gewicht geschätzt
+        { name: "Common Clothes", weight: 3, quantity: 1, location: "backpack", type: "gear"},
+        { name: "Bedroll", weight: 7, quantity: 1, location: "backpack", type: "gear"},
+        { name: "Tent", weight: 20, quantity: 1, location: "backpack", type: "gear"}, // PDF sagt 70, das ist sehr viel für ein Zelt, Standard ist 20lb. Ich nehme 20.
+        { name: "Rope, Hempen (50 feet)", weight: 10, quantity: 1, location: "backpack", type: "gear"}, // PDF "Soft. Rone lam Rucksack" 5lb, Standard 50ft Seil ist 10lb.
+        { name: "Iron Pot", weight: 10, quantity: 1, location: "backpack", type: "gear"},
+        { name: "Backpack", weight: 5, quantity: 1, location: "equipped", type: "container"}, // Rucksack selbst
+        { name: "Mess kit", weight: 1, quantity: 1, location: "backpack", type: "gear"}, // Standard Explorer's Pack Inhalt, nicht explizit aber wahrscheinlich
+        { name: "Tinderbox", weight: 1, quantity: 1, location: "backpack", type: "gear"},
+        { name: "Torches", weight: 1, quantity: 10, location: "backpack", type: "gear"}, // PDF: "4 sth. Torch" -> 4lb, also 4 Fackeln
+        { name: "Rations (10 days)", weight: 20, quantity: 1, location: "backpack", type: "gear"}, // PDF: "65th Rations" -> 6lb, also 3 Tage. HTML hatte 10 Tage. Ich nehme 10.
+        { name: "Waterskin", weight: 5, quantity: 1, location: "backpack", type: "gear", notes: "Full" },
+        { name: "Whetstone", weight: 1, quantity: 1, location: "backpack", type: "tool"},
+        { name: "Potion of Healing", weight: 0.5, quantity: 1, location: "pouch", type: "potion"}, // PDF Wert 100GP, 1 Pfund. Standard Potion 0.5lb, 50GP.
+        { name: "Pouch", weight: 1, quantity: 1, location: "equipped", type: "container"},
+        { name: "Soap", weight: 0.1, quantity: 1, location: "backpack", type: "gear"}, // PDF Gewicht leer
+        { name: "Oil (flask)", weight: 1, quantity: 1, location: "backpack", type: "gear"},
+        { name: "Gold Pieces", weight: 0.02, quantity: 211, location: "pouch", type: "currency", abbreviation: "GP" }, // PDF 211.63, gerundet
+        { name: "Silver Pieces", weight: 0.02, quantity: 6, location: "pouch", type: "currency", abbreviation: "SP" }, // für .6 GP
+        { name: "Copper Pieces", weight: 0.02, quantity: 3, location: "pouch", type: "currency", abbreviation: "CP"}  // für .03 GP
+    ],
+    speed: 40, // Vom PDF (Fast Movement +10)
+    tempHPEffects: [],
+    resources: {
+        rage: { current: 3, max: 3, resetOn: 'long', // Standard Barbar, PDF ist hier unklar mit "000/1 short, all long"
+                description: "Standard Rage + Divine Fury (Feuer) + STR für Skills",
+                divineFuryDice: "1d6",
+                divineFuryBonus: 2, // Level / 2
+                rageDamageBonus: 2 // Standard Rage Bonus
+              },
+        stonesEndurance: { current: 1, max: 1, resetOn: 'short' },
+        bootsOfTheVigilant: { current: 1, max: 1, resetOn: 'dawn' },
+        warriorOfTheGodsHeal: { current: 1, max: 1, resetOn: 'long', dice: "1d12" } // Annahme 1 Nutzung basierend auf PDF-Text "expend D12"
+    },
+    activeToggles: {
+       rage: false,
+       gwm: false, // Für Great Weapon Master -5/+10
+       reckless: false
+    }
+};
 
         // --- Global Variables ---
         let currentHP = characterData.hp.current;
