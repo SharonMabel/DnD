@@ -683,57 +683,65 @@
   </div><script>
       // --- Character Data ---
       const characterData = {
-          name: "Ilio Xaenor",
+          name: "Ilio Xaenor", // Name vom ursprünglichen Code, Sheet sagt nur "Ilio"
           race: "Wood Elf",
-          levels: { "Gloom Stalker Ranger": 4, "Rogue": 1 },
-          alignment: "Chaotic Good", // Assumed
+          levels: { "Gloom Stalker Ranger": 4, "Rogue": 1 }, // Annahme basierend auf Gloom Stalker & Rogue auf Sheet
+          alignment: "Chaotic Good", // Annahme aus ursprünglichem Code, nicht auf Sheet
           attributes: { str: 10, dex: 18, con: 14, int: 10, wis: 14, cha: 10 },
-          hp: { baseMax: 21, current: 16, temp: 0, bonus: 0 }, // HP: 10(Ranger)+6 + 3*(5+2) + (5+2) = 16 + 21 + 7 = 44? Rogue d8? Ranger d10? Let's use values from sheet (21 max).
-          hitDice: { "d10": 4, "d8": 1 }, // Ranger d10, Rogue d8
-          ac: 16, // Assumed Studded Leather (12) + DEX (4) = 16
-          speed: 35,
-          profBonus: 3,
+          hp: { baseMax: 21, current: 21, temp: 0, bonus: 0 }, // HP 21 laut Sheet
+          hitDice: { "d10": 5 }, // 5x W10 laut Sheet
+          ac: 16, // Laut Sheet
+          speed: 35, // Laut Sheet
+          profBonus: 3, // Standard für Level 5
           proficiencies: {
-              saves: ["str", "dex"], // Ranger
-              skills: ["Acrobatics", "Stealth", "Perception", "Survival", "Athletics", "Insight"], // Example - needs verification based on background & choices (Ranger 3, Rogue 1, Background 2?)
-              armor: ["Light", "Medium", "Shields"],
-              weapons: ["Simple", "Martial"],
-              tools: ["Thieves' Tools"] // Rogue
+              saves: ["dex"], // Nur DEX-Rettungswurf ist geübt (+7 bei DEX +4, PB +3)
+              skills: ["Acrobatics", "Animal Handling", "Athletics", "Perception", "Stealth", "Survival"], // Basierend auf den Werten des Sheets
+              armor: ["Light", "Medium", "Shields"], // Standard Ranger
+              weapons: ["Simple", "Martial"], // Standard Ranger
+              tools: ["Thieves' Tools"] // Standard Rogue
           },
-          expertise: ["Stealth", "Acrobatics"], // Example - Canny + Rogue Expertise
-          languages: ["Common", "Elvish", "Dwarvish", "Orcish", "Sign Language", "Thieves' Cant"],
+          expertise: ["Stealth", "Perception"], // Um Stealth +10 und Passive Perception 18 zu erreichen
+          languages: ["Common", "Elvish", "Dwarvish", "Sign Language", "Halfling"], // Laut Sheet
           features: {
-              // Add features with details for descriptions later if needed
-              "Darkvision": 60, "Fey Ancestry": true, "Trance": true, "Elf Weapon Training": true,
-              "Fleet of Foot": true, "Mask of the Wild": true,
-              "Favored Foe": true, "Deft Explorer (Canny)": true, "Fighting Style (Archery)": true,
-              "Spellcasting (Ranger)": true, "Ranger Conclave (Gloom Stalker)": true,
-              "Dread Ambusher": true, "Umbral Sight": true, "Feat (Sharpshooter)": true,
-              "Expertise (Rogue)": true, "Sneak Attack": { dice: "1d6" }, "Thieves' Cant": true
+              "Darkvision": 120, // Laut Sheet "Darkvision 120 ft."
+              "Fey Ancestry": true, // Standard Waldelf
+              "Mask of the Wild": true, // Standard Waldelf
+              "Fighting Style (Archery)": true, // Erklärt +9 Angriff mit Langbogen
+              "Spellcasting (Ranger)": true,
+              "Ranger Conclave (Gloom Stalker Variant)": true, // Gloom Stalker ist auf Sheet erwähnt
+              "Umbral Sight": "Invisible to creatures relying on darkvision to see you in darkness.", // Gloom Stalker Fähigkeit, Teil von "Invisible in Darkness" auf Sheet
+              "Amateur of the Drunkard": "Regain 1d4+1 HP when drinking beer, ale, mead, or wine. Once per dawn.", // Vom Sheet
+              "Campfolgrein (Ambuscade)": "Reaction on initiative (if not surprised): Hide, Attack, or mark Quarry.", // Vom Sheet
+              "Sneak Attack": { dice: "1d6" }, // Standard Rogue
+              "Strider I": "Ignore difficult terrain (natural), can't get lost by night sky, party not slowed by natural difficult terrain." // Vom Sheet
+              // Kein Sharpshooter, da nicht auf dem Battlesheet erwähnt
           },
           spellcasting: {
               ability: "wis",
-              slots: { level1: 3 },
-              spellsKnown: ["Hunter's Mark", "Ensnaring Strike", "Cure Wounds", "Goodberry", "Fog Cloud", "Disguise Self"], // Example + Gloom Stalker spell
+              slots: { level1: 3 }, // Laut Sheet
+              spellsKnown: ["Expeditious Retreat", "Snare", "Disguise Self"], // "Disguise Self" als typischer Gloom Stalker Zauber
+              dc: 13, // Laut Sheet
+              attackBonus: 5 // Laut Sheet
           },
           inventory: [
-              { name: "Longbow", weight: 2, quantity: 1, location: "equipped", type: "weapon" },
+              { name: "Longbow", weight: 2, quantity: 1, location: "equipped", type: "weapon", notes: "Sheet: Atk +9, Dmg 1d8+6" },
               { name: "Arrows", weight: 1, quantity: 20, location: "equipped", type: "ammo" },
-              { name: "Shortsword", weight: 2, quantity: 2, location: "carried", type: "weapon" },
-              { name: "Studded Leather", weight: 13, quantity: 1, location: "equipped", type: "armor" },
-              { name: "Explorer's Pack", weight: 59, quantity: 1, location: "backpack", type: "pack" },
-              { name: "Thieves' Tools", weight: 1, quantity: 1, location: "carried", type: "tool" },
-              { name: "Gold Pieces", weight: 0.02, quantity: 50, location: "carried", type: "currency", abbreviation: "GP" }
+              { name: "Rapier", weight: 2, quantity: 1, location: "carried", type: "weapon", notes: "Sheet: Atk +7, Dmg 1d8+4" },
+              { name: "Sylvan Talon Dagger", weight: 1, quantity: 1, location: "carried", type: "weapon", notes: "Sheet: Atk +9, Dmg 1d4+4" },
+              { name: "Studded Leather", weight: 13, quantity: 1, location: "equipped", type: "armor" }
+              // Weitere Items aus dem ursprünglichen Code entfernt, da nicht auf Battlesheet
           ],
           tempHPEffects: [],
           resources: {
-              "Favored Foe": { current: 3, max: 3, resetOn: "long" }, // PB times per long rest
-              "Dreadful Strike": { current: 2, max: 2, resetOn: "long" } // WIS mod times per long rest
+              "Ranger's Quarry": { current: 2, max: 2, resetOn: "long", dice: "1d4", description: "Bonus action. +1d4 dmg to Quarry. Uses = WIS mod. Regain on Long Rest or spell slot." }, // WIS Mod = +2
+              "Amateur of the Drunkard": { current: 1, max: 1, resetOn: "dawn", description: "Regain 1d4+1 HP when drinking alcohol." }
           },
-          activeToggles: {
-              huntersmark: false, sneakattack: false, sharpshooter: false, dreadfulstrike: false
+          activeToggles: { // Toggles anpassen an die Features
+              rangersquarry: false, // Umbenannt von dreadfulstrike
+              sneakattack: false
+              // sharpshooter entfernt
           },
-           actions: [ // Define available actions
+           actions: [ // Ggf. anpassen, falls spezielle Aktionen vom Sheet fehlen oder anders sind
                 { id: "action-attack", name: "Angriff", type: "action", desc: "Nutze deine Waffe" },
                 { id: "action-cast", name: "Zauber wirken", type: "action", desc: "Siehe Zauberliste" },
                 { id: "action-dash", name: "Spurt", type: "action", desc: "+Bewegung" },
@@ -743,13 +751,12 @@
                 { id: "action-hide", name: "Verstecken", type: "action", desc: "Heimlichkeitswurf" },
                 { id: "action-ready", name: "Vorbereiten", type: "action", desc: "Aktion/Reaktion später" },
                 { id: "action-use-object", name: "Gegenstand nutzen", type: "action", desc: "Trank, Hebel, etc." },
-                { id: "bonus-huntersmark", name: "Hunter's Mark", type: "bonus", desc: "Zauber (Konzentration)" },
-                { id: "bonus-ensnaringstrike", name: "Ensnaring Strike", type: "bonus", desc: "Zauber (Konzentration)" },
+                { id: "bonus-rangers-quarry", name: "Ranger's Quarry", type: "bonus", desc: "Ziel markieren (+1d4 Schaden)" },
                 { id: "bonus-cunning-hide", name: "Verstecken (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
                 { id: "bonus-cunning-dash", name: "Spurt (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
                 { id: "bonus-cunning-disengage", name: "Lösen (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
                 { id: "reaction-opportunity", name: "Gelegenheitsangriff", type: "reaction", desc: "Feind verlässt Reichweite" },
-                { id: "reaction-shield", name: "Schild (Zauber)", type: "reaction", desc: "+5 RK (falls bekannt)" } // Example
+                { id: "reaction-ambuscade", name: "Campfolgrein (Ambushcade)", type: "reaction", desc: "Bei Initiative: Verstecken, Angriff oder Quarry markieren" }
             ]
       };
 
