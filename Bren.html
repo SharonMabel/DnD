@@ -1029,7 +1029,7 @@
       <div class="header">
         <div>
           <h1 class="char-name">Bren Varakhaal</h1>
-          <div class="char-desc">Goliath Barbar 5 | Chaotic Neutral | Far Traveler</div>
+          <div class="char-desc">Goliath Barbar 6 | Chaotic Neutral | Far Traveler</div>
         </div>
       </div>
 
@@ -1040,14 +1040,14 @@
                     <div class="hp-field">
                       <label for="current-hp-input" class="hp-field-label">Aktuelle TP</label>
                       <div class="hp-input-group">
-                        <input type="number" id="current-hp-input" class="hp-input" value="46" min="0" max="46" onchange="updateHPDisplay()">
+                        <input type="number" id="current-hp-input" class="hp-input" value="68" min="0" max="68" onchange="updateHPDisplay()">
                       </div>
                     </div>
 
                     <div class="hp-field">
                       <label for="base-max-hp-input" class="hp-field-label">Basis Max-TP</label>
                       <div class="hp-input-group">
-                        <input type="number" id="base-max-hp-input" class="hp-input" value="46" min="1" onchange="updateMaxHP()">
+                        <input type="number" id="base-max-hp-input" class="hp-input" value="68" min="1" onchange="updateMaxHP()">
                       </div>
                     </div>
 
@@ -1072,7 +1072,7 @@
                       <div class="hp-fill-base" id="hp-fill-base"></div>
                       <div class="hp-fill-temp" id="hp-fill-temp"></div>
                       <div class="hp-text">
-                        <span id="display-current-hp">46</span>/<span id="display-max-hp">46</span> TP
+                        <span id="display-current-hp">68</span>/<span id="display-max-hp">68</span> TP
                         <span id="display-temp-hp"></span> </div>
                     </div>
 
@@ -1394,6 +1394,10 @@
                     <div class="ability-name">Danger Sense (Stufe 2) <span class="info-icon">i</span></div>
                     <div class="ability-desc">Vorteil auf DEX-Rettungswürfe gegen Effekte, die du sehen kannst.</div>
                  </div>
+                 <div class="ability" onclick="showModal('primal-path')" title="Details zu Primal Path anzeigen">
+                    <div class="ability-name">Primal Path (Stufe 3) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Gewählter Pfad: Path of the Zealot.</div>
+                 </div>
                 <div class="ability" onclick="showModal('divine-fury')" title="Details zu Divine Fury anzeigen">
                     <div class="ability-name">Divine Fury (Zealot, Stufe 3) <span class="info-icon">i</span></div>
                     <div class="ability-desc">Während Rage: Erster Treffer pro Zug +1W6 + halbe Barbaren-Stufe (Nekrotisch/Strahlend).</div>
@@ -1402,10 +1406,6 @@
                     <div class="ability-name">Warrior of the Gods (Zealot, Stufe 3) <span class="info-icon">i</span></div>
                     <div class="ability-desc">Wiederbelebungszauber benötigen keine materiellen Komponenten (Wert < 500 GP).</div>
                 </div>
-                 <div class="ability" onclick="showModal('primal-path')" title="Details zu Primal Path anzeigen">
-                    <div class="ability-name">Primal Path (Stufe 3) <span class="info-icon">i</span></div>
-                    <div class="ability-desc">Gewählter Pfad: Path of the Zealot.</div>
-                 </div>
                  <div class="ability" onclick="showModal('extra-attack')" title="Details zu Extra Attack anzeigen">
                     <div class="ability-name">Extra Attack (Stufe 5) <span class="info-icon">i</span></div>
                     <div class="ability-desc">Kann zweimal angreifen statt einmal bei Angriffsaktion.</div>
@@ -1414,6 +1414,11 @@
                     <div class="ability-name">Fast Movement (Stufe 5) <span class="info-icon">i</span></div>
                     <div class="ability-desc">+10 Fuß Bewegungsrate ohne schwere Rüstung.</div>
                  </div>
+                 <div class="ability" onclick="showModal('fanatical-focus')" title="Details zu Fanatical Focus anzeigen">
+                    <div class="ability-name">Fanatical Focus (Stufe 6) <span class="info-icon">i</span></div>
+                    <div class="ability-desc">Einmal pro Wut: Fehlgeschlagenen Rettungswurf mit Bonus (Wutschaden) wiederholen.</div>
+                 </div>
+
 
               <h3>Talente (Feats)</h3>
                  <div class="ability" onclick="showModal('great-weapon-master')" title="Details zu Great Weapon Master anzeigen">
@@ -1548,30 +1553,30 @@
         // --- Character Data ---
      
 const characterData = {
-    name: "Bren", // Vom PDF
+    name: "Bren",
     race: "Goliath",
     class: "Barbarian",
-    level: 5,
-    alignment: "Chaotic Neutral", // Aus HTML, nicht im PDF
-    background: "Far Traveler", // Aus HTML, nicht im PDF
+    level: 6, // UPDATED
+    alignment: "Chaotic Neutral",
+    background: "Far Traveler",
     attributes: {
-        str: 18, dex: 14, con: 14, int: 8, wis: 10, cha: 12 // Vom PDF
+        str: 18, dex: 14, con: 14, int: 8, wis: 10, cha: 12
     },
     hp: {
-        baseMax: 56, // Vom PDF
-        current: 56, // Annahme: startet voll
+        baseMax: 68, // UPDATED
+        current: 68, // UPDATED
         temp: 0,
         bonus: 0,
-        hitDiceMax: 5, // Vom PDF (00000)
-        hitDiceCurrent: 5, // Annahme: startet voll
-        hitDiceType: 12, // Vom PDF (D12)
+        hitDiceMax: 6, // UPDATED
+        hitDiceCurrent: 6, // UPDATED
+        hitDiceType: 12,
     },
     proficiencies: {
-        saves: ["str", "con"], // STR +7 (4+3), CON +5 (2+3) vom PDF
-        skills: ["Athletics", "Intimidation", "Perception", "Survival", "Animal Handling", "Nature"], // Vom PDF abgeleitet
-        weapons: ["Simple", "Martial"], // Standard Barbar
-        armor: ["Light", "Medium", "Shields"], // Standard Barbar
-        tools: ["Lute", "Gaming set (Dragonchess)"] // Lute vom PDF Inventar, Dragonchess vom HTML (Far Traveler gibt ein Musikinstrument oder Gaming Set)
+        saves: ["str", "con"],
+        skills: ["Athletics", "Intimidation", "Perception", "Survival", "Animal Handling", "Nature"],
+        weapons: ["Simple", "Martial"],
+        armor: ["Light", "Medium", "Shields"],
+        tools: ["Lute", "Gaming set (Dragonchess)"]
     },
     features: [
         // Goliath Traits
@@ -1579,69 +1584,75 @@ const characterData = {
         { id: "mountain-born", name: "Mountain Born", source: "Goliath", description: "Resistenz gegen Kälteschaden, akklimatisiert an große Höhen." },
         { id: "stones-endurance", name: "Stone's Endurance", source: "Goliath", usesMax: 1, usesCurrent: 1, resetOn: "short", description: "Reaktion: Schaden reduzieren um 1W12 + KON-Mod." },
         // Barbarian Class Features
-        { id: "rage-ability", name: "Rage", source: "Barbarian 1", description: "Siehe Rage Details unter Bonusaktionen." }, // Nutzungen etc. unter resources
-        { id: "unarmored-defense", name: "Unarmored Defense", source: "Barbarian 1", description: "Ohne Rüstung: RK = 10 + GES-Mod + KON-Mod." }, // Bren trägt Scale Mail laut AC und Inventar
+        { id: "rage-ability", name: "Rage", source: "Barbarian 1", description: "Siehe Rage Details unter Bonusaktionen." },
+        { id: "unarmored-defense", name: "Unarmored Defense", source: "Barbarian 1", description: "Ohne Rüstung: RK = 10 + GES-Mod + KON-Mod." },
         { id: "reckless-attack", name: "Reckless Attack", source: "Barbarian 2", description: "Vorteil auf STR-Nahkampfangriffe; Angriffe gegen dich haben Vorteil." },
         { id: "danger-sense", name: "Danger Sense", source: "Barbarian 2", description: "Vorteil auf GES-Rettungswürfe gegen Effekte, die du sehen kannst." },
         { id: "primal-path", name: "Primal Path (Zealot Variant)", source: "Barbarian 3", description: "Pfad des Zeloten (Variante gemäß DM-Sheet)." },
         // Zealot Variant Features (gemäß PDF)
-        { id: "divine-fury-pdf", name: "Divine Fury (Rage Trait)", source: "Zealot Variant 3", description: "Während Rage: Erster Treffer pro Zug +1W6 + halbe Barbaren-Stufe (aktuell +2) Feuerschaden. Entzündet Objekte." },
+        { id: "divine-fury-pdf", name: "Divine Fury (Rage Trait)", source: "Zealot Variant 3", description: "Während Rage: Erster Treffer pro Zug +1W6 + halbe Barbaren-Stufe (aktuell +3) Feuerschaden. Entzündet Objekte." }, // Level / 2 is now 3
         { id: "rage-str-skills-pdf", name: "Rage - Strength for Skills", source: "Zealot Variant 3", description: "Während Rage: Kann STR für Akrobatik, Einschüchterung, Wahrnehmung, Heimlichkeit, Überlebenskunst verwenden." },
-        { id: "warrior-of-the-gods-pdf", name: "Warrior of the Gods (Heal)", source: "Zealot Variant 3", usesMax: 1, usesCurrent: 1, resetOn: "long", description: "Kann W12 aus einem Pool (Annahme: Trefferwürfelpool?) ausgeben, würfeln und HP i.H.d. Wurfs regenerieren." }, // "0000/long" deutet auf mehrfache Nutzung hin, aber "expend D12 from the pool" klingt eher wie 1x pro Tag einen Würfel. Ich setze mal 1 Nutzung, kann angepasst werden.
+        { id: "warrior-of-the-gods-pdf", name: "Warrior of the Gods (Heal)", source: "Zealot Variant 3", usesMax: 1, usesCurrent: 1, resetOn: "long", description: "Kann W12 aus einem Pool (Annahme: Trefferwürfelpool?) ausgeben, würfeln und HP i.H.d. Wurfs regenerieren." },
         // Level Features
         { id: "asi", name: "Ability Score Improvement/Feat", source: "Barbarian 4", description: "Feat: Great Weapon Master angenommen (aus HTML und Hew-Fähigkeit)" },
-        { id: "great-weapon-master", name: "Great Weapon Master", source: "Feat", description: "Bonusaktion Angriff nach Krit/Kill (Hew); optional -5 Angriff für +10 Schaden." }, // "Hew" ist Teil davon
+        { id: "great-weapon-master", name: "Great Weapon Master", source: "Feat", description: "Bonusaktion Angriff nach Krit/Kill (Hew); optional -5 Angriff für +10 Schaden." },
         { id: "extra-attack", name: "Extra Attack", source: "Barbarian 5", description: "Kann zweimal angreifen statt einmal bei Angriffsaktion." },
         { id: "fast-movement", name: "Fast Movement", source: "Barbarian 5", description: "+10 Fuß Bewegungsrate ohne schwere Rüstung." },
+        { // NEW FEATURE
+            id: "fanatical-focus",
+            name: "Fanatical Focus",
+            source: "Barbarian 6",
+            description: "Once per active Rage, if you fail a saving throw, you can reroll it with a bonus equal to your Rage Damage bonus, and you must use the new roll. (PHB'24 p57)"
+        },
         // Items mit speziellen Eigenschaften
         { id: "cloak-of-displacement", name: "Cloak of Displacement (Attuned)", source: "Magic Item", description: "Angriffe haben Nachteil, bis Schaden genommen wird / Speed 0." },
         { id: "boots-of-the-vigilant", name: "Boots of the Vigilant", source: "Magic Item", description: "Nach Initiativewurf 1W8 zur Initiative addieren (1x pro Dämmerung)." },
         { id: "goggles-of-the-night", name: "Goggles of the Night", source: "Magic Item", description: "Gewährt Dunkelsicht 60ft." }
     ],
-    inventory: [ // Basierend auf PDF Seite 2 und Standardausrüstung
+    inventory: [ 
         { name: "Greataxe", weight: 7, quantity: 1, location: "equipped", type: "weapon", notes: "PDF: Atk +7, Dmg 1W12+7 (inkl. Rage?)" },
         { name: "Handaxe", weight: 2, quantity: 2, location: "carried", type: "weapon", notes: "PDF: Atk +7, Dmg 1W6+4" },
         { name: "Cast-off Scale Mail", weight: 45, quantity: 1, location: "equipped", type: "armor" },
         { name: "Lute", weight: 2, quantity: 1, location: "backpack", type: "tool" },
-        { name: "Boots of the Vigilant", weight: 1, quantity: 1, location: "equipped", type: "magic-item" }, // Gewicht geschätzt
-        { name: "Goggles of the Night", weight: 0.5, quantity: 1, location: "equipped", type: "magic-item" }, // Gewicht geschätzt
-        { name: "Cloak of Displacement", weight: 1, quantity: 1, location: "equipped", type: "magic-item", attunement: true }, // Gewicht geschätzt
+        { name: "Boots of the Vigilant", weight: 1, quantity: 1, location: "equipped", type: "magic-item" },
+        { name: "Goggles of the Night", weight: 0.5, quantity: 1, location: "equipped", type: "magic-item" },
+        { name: "Cloak of Displacement", weight: 1, quantity: 1, location: "equipped", type: "magic-item", attunement: true },
         { name: "Common Clothes", weight: 3, quantity: 1, location: "backpack", type: "gear"},
         { name: "Bedroll", weight: 7, quantity: 1, location: "backpack", type: "gear"},
-        { name: "Tent", weight: 20, quantity: 1, location: "backpack", type: "gear"}, // PDF sagt 70, das ist sehr viel für ein Zelt, Standard ist 20lb. Ich nehme 20.
-        { name: "Rope, Hempen (50 feet)", weight: 10, quantity: 1, location: "backpack", type: "gear"}, // PDF "Soft. Rone lam Rucksack" 5lb, Standard 50ft Seil ist 10lb.
+        { name: "Tent", weight: 20, quantity: 1, location: "backpack", type: "gear"},
+        { name: "Rope, Hempen (50 feet)", weight: 10, quantity: 1, location: "backpack", type: "gear"},
         { name: "Iron Pot", weight: 10, quantity: 1, location: "backpack", type: "gear"},
-        { name: "Backpack", weight: 5, quantity: 1, location: "equipped", type: "container"}, // Rucksack selbst
-        { name: "Mess kit", weight: 1, quantity: 1, location: "backpack", type: "gear"}, // Standard Explorer's Pack Inhalt, nicht explizit aber wahrscheinlich
+        { name: "Backpack", weight: 5, quantity: 1, location: "equipped", type: "container"},
+        { name: "Mess kit", weight: 1, quantity: 1, location: "backpack", type: "gear"},
         { name: "Tinderbox", weight: 1, quantity: 1, location: "backpack", type: "gear"},
-        { name: "Torches", weight: 1, quantity: 10, location: "backpack", type: "gear"}, // PDF: "4 sth. Torch" -> 4lb, also 4 Fackeln
-        { name: "Rations (10 days)", weight: 20, quantity: 1, location: "backpack", type: "gear"}, // PDF: "65th Rations" -> 6lb, also 3 Tage. HTML hatte 10 Tage. Ich nehme 10.
+        { name: "Torches", weight: 1, quantity: 10, location: "backpack", type: "gear"},
+        { name: "Rations (10 days)", weight: 20, quantity: 1, location: "backpack", type: "gear"},
         { name: "Waterskin", weight: 5, quantity: 1, location: "backpack", type: "gear", notes: "Full" },
         { name: "Whetstone", weight: 1, quantity: 1, location: "backpack", type: "tool"},
-        { name: "Potion of Healing", weight: 0.5, quantity: 1, location: "pouch", type: "potion"}, // PDF Wert 100GP, 1 Pfund. Standard Potion 0.5lb, 50GP.
+        { name: "Potion of Healing", weight: 0.5, quantity: 1, location: "pouch", type: "potion"},
         { name: "Pouch", weight: 1, quantity: 1, location: "equipped", type: "container"},
-        { name: "Soap", weight: 0.1, quantity: 1, location: "backpack", type: "gear"}, // PDF Gewicht leer
+        { name: "Soap", weight: 0.1, quantity: 1, location: "backpack", type: "gear"},
         { name: "Oil (flask)", weight: 1, quantity: 1, location: "backpack", type: "gear"},
-        { name: "Gold Pieces", weight: 0.02, quantity: 211, location: "pouch", type: "currency", abbreviation: "GP" }, // PDF 211.63, gerundet
-        { name: "Silver Pieces", weight: 0.02, quantity: 6, location: "pouch", type: "currency", abbreviation: "SP" }, // für .6 GP
-        { name: "Copper Pieces", weight: 0.02, quantity: 3, location: "pouch", type: "currency", abbreviation: "CP"}  // für .03 GP
+        { name: "Gold Pieces", weight: 0.02, quantity: 211, location: "pouch", type: "currency", abbreviation: "GP" },
+        { name: "Silver Pieces", weight: 0.02, quantity: 6, location: "pouch", type: "currency", abbreviation: "SP" },
+        { name: "Copper Pieces", weight: 0.02, quantity: 3, location: "pouch", type: "currency", abbreviation: "CP"}
     ],
-    speed: 40, // Vom PDF (Fast Movement +10)
+    speed: 40,
     tempHPEffects: [],
     resources: {
-        rage: { current: 3, max: 3, resetOn: 'long', // Standard Barbar, PDF ist hier unklar mit "000/1 short, all long"
+        rage: { current: 3, max: 3, resetOn: 'long',
                 description: "Standard Rage + Divine Fury (Feuer) + STR für Skills",
                 divineFuryDice: "1d6",
-                divineFuryBonus: 2, // Level / 2
-                rageDamageBonus: 2 // Standard Rage Bonus
+                divineFuryBonus: 3, // UPDATED: Level / 2 (6/2 = 3)
+                rageDamageBonus: 2 // Standard Rage Bonus for levels 1-8
               },
         stonesEndurance: { current: 1, max: 1, resetOn: 'short' },
         bootsOfTheVigilant: { current: 1, max: 1, resetOn: 'dawn' },
-        warriorOfTheGodsHeal: { current: 1, max: 1, resetOn: 'long', dice: "1d12" } // Annahme 1 Nutzung basierend auf PDF-Text "expend D12"
+        warriorOfTheGodsHeal: { current: 1, max: 1, resetOn: 'long', dice: "1d12" }
     },
     activeToggles: {
        rage: false,
-       gwm: false, // Für Great Weapon Master -5/+10
+       gwm: false,
        reckless: false
     }
 };
@@ -1652,8 +1663,8 @@ const characterData = {
         let hpBonus = characterData.hp.bonus;
         let tempHP = characterData.hp.temp;
         let maxHP = baseMaxHP + hpBonus;
-        let strScore = characterData.attributes.str; // Keep track for capacity
-        const powerfulBuild = characterData.features.some(f => f.id === 'powerful-build'); // Check if feature exists
+        let strScore = characterData.attributes.str; 
+        const powerfulBuild = characterData.features.some(f => f.id === 'powerful-build');
 
         // --- Utility Functions ---
         function getModifier(attribute) {
@@ -1662,18 +1673,26 @@ const characterData = {
         }
 
         function getProficiencyBonus() {
-            return Math.ceil(characterData.level / 4) + 1;
+            // UPDATED based on user request for +4 at level 6
+            const level = characterData.level;
+            if (level >= 17) return 6;
+            if (level >= 13) return 5;
+            if (level >= 9) return 4; 
+            if (level >= 6) return 4; // User requested +4 for level 6
+            if (level === 5) return 3; // Standard for L5
+            if (level >= 1) return 2;
+            return 3; // Default fallback
         }
 
          function getSkillBonus(skillName) {
-            const skillsData = { // Mapping skills to attributes
+            const skillsData = { 
                 "Athletics": "str", "Acrobatics": "dex", "Sleight of Hand": "dex", "Stealth": "dex",
                 "Arcana": "int", "History": "int", "Investigation": "int", "Nature": "int", "Religion": "int",
                 "Animal Handling": "wis", "Insight": "wis", "Medicine": "wis", "Perception": "wis", "Survival": "wis",
                 "Deception": "cha", "Intimidation": "cha", "Performance": "cha", "Persuasion": "cha"
             };
             const attribute = skillsData[skillName];
-            if (!attribute) return 0; // Skill not found
+            if (!attribute) return 0;
 
             let bonus = getModifier(attribute);
             if (characterData.proficiencies.skills.includes(skillName)) {
@@ -1701,10 +1720,9 @@ const characterData = {
           populateSkillsAndSaves();
           updateHPDisplay();
           updateCombatStats();
-          initializeInventory(); // Renders inventory and calculates weight
-          updateRageCounter(); // Display initial rage uses
+          initializeInventory(); 
+          updateRageCounter(); 
 
-           // Set initial tab state
             document.getElementById('combat').classList.add('active');
             document.querySelectorAll('.tab')[0].classList.add('active');
         };
@@ -1722,10 +1740,10 @@ const characterData = {
          function populateSkillsAndSaves() {
             const skillsContainer = document.getElementById('skills-list');
             const savesContainer = document.getElementById('saves-list');
-            skillsContainer.innerHTML = ''; // Clear existing
-            savesContainer.innerHTML = ''; // Clear existing
+            skillsContainer.innerHTML = ''; 
+            savesContainer.innerHTML = ''; 
 
-            const allSkills = [ // List all standard skills
+            const allSkills = [ 
                 "Athletics", "Acrobatics", "Sleight of Hand", "Stealth", "Arcana", "History",
                 "Investigation", "Nature", "Religion", "Animal Handling", "Insight", "Medicine",
                 "Perception", "Survival", "Deception", "Intimidation", "Performance", "Persuasion"
@@ -1733,7 +1751,7 @@ const characterData = {
 
             allSkills.sort().forEach(skill => {
                 const bonus = getSkillBonus(skill);
-                const attribute = ["Athletics"].includes(skill) ? "STR" : // Add more mappings as needed
+                const attribute = ["Athletics"].includes(skill) ? "STR" : 
                                 ["Acrobatics", "Sleight of Hand", "Stealth"].includes(skill) ? "DEX" :
                                 ["Arcana", "History", "Investigation", "Nature", "Religion"].includes(skill) ? "INT" :
                                 ["Animal Handling", "Insight", "Medicine", "Perception", "Survival"].includes(skill) ? "WIS" : "CHA";
@@ -1752,7 +1770,7 @@ const characterData = {
                 const bonus = getSaveBonus(save);
                 const isProficient = characterData.proficiencies.saves.includes(save);
                 const saveElement = document.createElement('div');
-                saveElement.className = 'skill'; // Reuse skill styling
+                saveElement.className = 'skill'; 
                 saveElement.innerHTML = `
                     <span class="skill-name" title="${isProficient ? '(Proficient)' : ''}">${save.toUpperCase()}</span>
                     <span>${formatBonus(bonus)}</span>
@@ -1760,7 +1778,6 @@ const characterData = {
                 savesContainer.appendChild(saveElement);
             });
 
-            // Update Passive Perception
              document.getElementById('passive-perception').innerText = 10 + getSkillBonus('Perception');
              document.getElementById('proficiency-bonus').innerText = formatBonus(getProficiencyBonus());
          }
@@ -1771,37 +1788,33 @@ const characterData = {
             const strMod = getModifier('str');
             const profBonus = getProficiencyBonus();
 
-            // AC calculation (assuming Scale Mail: 14 + Dex mod (max 2))
-            // If Unarmored: 10 + Dex + Con
             const ac = characterData.inventory.some(i => i.name === "Scale Mail" && i.location === 'equipped')
                 ? 14 + Math.min(dexMod, 2)
-                : 10 + dexMod + conMod; // Fallback to unarmored if no specific armor equipped
+                : 10 + dexMod + conMod; 
             document.getElementById('ac-value').innerText = ac;
 
             document.getElementById('initiative-value').innerText = formatBonus(dexMod);
             document.getElementById('speed-value').innerText = `${characterData.speed} ft.`;
 
-            // Attack and Damage (assuming Greatsword 2H, STR based)
             let attackBonus = strMod + profBonus;
             let damageParts = ["2d6", formatBonus(strMod)];
 
             if (characterData.activeToggles.rage) {
-                damageParts.push(formatBonus(2)); // Rage damage bonus at level 5
+                damageParts.push(formatBonus(characterData.resources.rage.rageDamageBonus)); // Use defined rage damage
              }
              if (characterData.activeToggles.gwm) {
                 attackBonus -= 5;
                 damageParts.push(formatBonus(10));
              }
-             // Divine Fury (Zealot) - Assuming first hit, active rage
              if (characterData.activeToggles.rage) {
-                 const divineFuryDice = `1d6`; // Assuming Radiant/Necrotic chosen
-                 const divineFuryBonus = Math.floor(characterData.level / 2);
+                 const divineFuryDice = characterData.resources.rage.divineFuryDice;
+                 const divineFuryBonus = characterData.resources.rage.divineFuryBonus;
                  damageParts.push(`${divineFuryDice}${formatBonus(divineFuryBonus)} Divine`);
              }
 
 
             document.getElementById('attack-bonus').innerText = formatBonus(attackBonus);
-            document.getElementById('damage-formula').innerText = damageParts.join(" + ").replace("+ -", "- "); // Basic formatting
+            document.getElementById('damage-formula').innerText = damageParts.join(" + ").replace("+ -", "- ");
          }
 
 
@@ -1810,7 +1823,7 @@ const characterData = {
           document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
           document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
           document.getElementById(tabName).classList.add('active');
-          event.currentTarget.classList.add('active'); // Add active to the clicked tab
+          event.currentTarget.classList.add('active'); 
         }
 
         // --- Combat Toggles & Actions ---
@@ -1818,13 +1831,12 @@ const characterData = {
             characterData.activeToggles.rage = !characterData.activeToggles.rage;
             document.getElementById('rage-toggle').classList.toggle('active', characterData.activeToggles.rage);
             document.getElementById('rage-overlay').style.opacity = characterData.activeToggles.rage ? '1' : '0';
-            document.body.classList.toggle('rage-active', characterData.activeToggles.rage); // For potential body-wide styling
+            document.body.classList.toggle('rage-active', characterData.activeToggles.rage); 
             if (!characterData.activeToggles.rage) {
-                 // Ensure rage action checkbox is unchecked if rage ends
                  const rageCheckbox = document.querySelector('#action-rage .action-checkbox');
                  if(rageCheckbox && rageCheckbox.checked) {
                      rageCheckbox.checked = false;
-                     toggleActionUsed(rageCheckbox, 'bonus'); // Update action state
+                     toggleActionUsed(rageCheckbox, 'bonus'); 
                  }
              }
             updateCombatStats();
@@ -1839,26 +1851,24 @@ const characterData = {
         function toggleReckless() {
              characterData.activeToggles.reckless = !characterData.activeToggles.reckless;
              document.getElementById('reckless-toggle').classList.toggle('active', characterData.activeToggles.reckless);
-             // updateCombatStats(); // Reckless doesn't directly change displayed bonus/dmg
         }
 
         function activateRage(calledFromAction = false) {
              if (characterData.resources.rage.current <= 0) {
                 alert("Keine Wut mehr übrig!");
-                return false; // Indicate failure
+                return false; 
              }
              if (characterData.activeToggles.rage) {
-                 if (!calledFromAction) alert("Bereits in Rage!"); // Don't alert if triggered by action checkbox
-                return false; // Indicate failure or already active
+                 if (!calledFromAction) alert("Bereits in Rage!");
+                return false; 
              }
 
              characterData.resources.rage.current--;
              updateRageCounter();
-             toggleRage(); // Activate rage state and UI
-             document.body.classList.add('rage-animation'); // Visual feedback
+             toggleRage(); 
+             document.body.classList.add('rage-animation'); 
              setTimeout(() => document.body.classList.remove('rage-animation'), 500);
 
-             // Ensure the action checkbox reflects this if not called from it
              if (!calledFromAction) {
                  const rageCheckbox = document.querySelector('#action-rage .action-checkbox');
                  if (rageCheckbox && !rageCheckbox.checked) {
@@ -1866,7 +1876,7 @@ const characterData = {
                      toggleActionUsed(rageCheckbox, 'bonus');
                  }
              }
-             return true; // Indicate success
+             return true; 
         }
 
          function updateRageCounter() {
@@ -1880,7 +1890,7 @@ const characterData = {
              const profBonus = getProficiencyBonus();
              let baseAttackBonus = strMod + profBonus;
              let advantage = characterData.activeToggles.reckless;
-             let disadvantage = false; // Add conditions for disadvantage if needed
+             let disadvantage = false; 
 
              if (characterData.activeToggles.gwm) {
                 baseAttackBonus -= 5;
@@ -1911,7 +1921,6 @@ const characterData = {
                  resultText += " - Patzer!";
              }
 
-             // Display result in the main dice result area
              document.getElementById('dice-result').innerHTML = `Angriff: ${resultText}`;
         }
 
@@ -1926,7 +1935,6 @@ const characterData = {
          function rollQuickDice(diceString) {
             let resultText = "-";
             try {
-                // Basic parser: handles "XdY+Z" or "XdY" or just "XdY"
                 const match = diceString.match(/(\d+)[dD](\d+)(?:[+](\d+))?/);
                 if (match) {
                     const numDice = parseInt(match[1]);
@@ -1941,7 +1949,7 @@ const characterData = {
                     }
                     total += modifier;
                     resultText = `${diceString}: ${rolls.join(' + ')}${modifier > 0 ? ' + ' + modifier : ''} = ${total}`;
-                } else if (!isNaN(parseInt(diceString))) { // Handle simple D20, D12 etc.
+                } else if (!isNaN(parseInt(diceString))) { 
                     const sides = parseInt(diceString);
                     const roll = Math.floor(Math.random() * sides) + 1;
                     resultText = `d${sides}: ${roll}`;
@@ -1957,7 +1965,7 @@ const characterData = {
 
         // --- HP Management ---
         function modifyHP(amount) {
-             if (amount < 0) { // Damage
+             if (amount < 0) { 
                  let damageTaken = Math.abs(amount);
                  if (tempHP > 0) {
                      const tempDamage = Math.min(damageTaken, tempHP);
@@ -1967,10 +1975,9 @@ const characterData = {
                  if (damageTaken > 0) {
                      currentHP = Math.max(0, currentHP - damageTaken);
                  }
-             } else { // Healing
+             } else { 
                  currentHP = Math.min(maxHP, currentHP + amount);
              }
-             // Update inputs to reflect changes
              document.getElementById('current-hp-input').value = currentHP;
              document.getElementById('temp-hp-input').value = tempHP;
              updateHPDisplay();
@@ -1981,19 +1988,18 @@ const characterData = {
             tempHP = parseInt(document.getElementById('temp-hp-input').value) || 0;
             hpBonus = parseInt(document.getElementById('hp-bonus-input').value) || 0;
             baseMaxHP = parseInt(document.getElementById('base-max-hp-input').value) || 0;
-             maxHP = baseMaxHP + hpBonus; // Recalculate maxHP based on bonus
+             maxHP = baseMaxHP + hpBonus; 
 
-             // Ensure current HP doesn't exceed current max HP
              currentHP = Math.min(currentHP, maxHP);
-             document.getElementById('current-hp-input').value = currentHP; // Correct input if needed
+             document.getElementById('current-hp-input').value = currentHP; 
+             document.getElementById('current-hp-input').max = maxHP;
 
-             // Update displayed numbers
+
              document.getElementById('display-current-hp').innerText = currentHP;
              document.getElementById('display-max-hp').innerText = maxHP;
              document.getElementById('display-temp-hp').innerText = tempHP > 0 ? ` (+${tempHP} Temp)` : '';
 
-             // Update HP bars
-             const totalBarWidth = maxHP + tempHP; // Bar represents full potential health + temp
+             const totalBarWidth = maxHP + tempHP; 
              const basePercentage = totalBarWidth > 0 ? (currentHP / totalBarWidth) * 100 : 0;
              const tempPercentage = totalBarWidth > 0 ? (tempHP / totalBarWidth) * 100 : 0;
 
@@ -2002,21 +2008,19 @@ const characterData = {
 
              hpFillBase.style.width = `${basePercentage}%`;
              hpFillTemp.style.width = `${tempPercentage}%`;
-             hpFillTemp.style.left = `${basePercentage}%`; // Temp HP stacks visually 'on top' or 'after' base HP
+             hpFillTemp.style.left = `${basePercentage}%`; 
 
-             // Change base HP bar color based on percentage of MAX HP (not including temp)
              const currentToBaseMaxPercent = maxHP > 0 ? (currentHP / maxHP) * 100 : 0;
-             let hpColor = 'linear-gradient(90deg, var(--primary), #CC0000)'; // Default red gradient
+             let hpColor = 'linear-gradient(90deg, var(--primary), #CC0000)'; 
              if (currentToBaseMaxPercent < 25) {
-                 hpColor = '#FF0000'; // Critical red
+                 hpColor = '#FF0000'; 
              } else if (currentToBaseMaxPercent < 50) {
-                 hpColor = '#FFA500'; // Wounded orange
+                 hpColor = '#FFA500'; 
              } else {
-                 hpColor = 'linear-gradient(90deg, #008000, #006400)'; // Healthy green gradient
+                 hpColor = 'linear-gradient(90deg, #008000, #006400)'; 
              }
              hpFillBase.style.background = hpColor;
 
-             // Update Temp HP Effects list display
              renderTempHPEffects();
         }
 
@@ -2024,28 +2028,23 @@ const characterData = {
              baseMaxHP = parseInt(document.getElementById('base-max-hp-input').value) || 0;
              hpBonus = parseInt(document.getElementById('hp-bonus-input').value) || 0;
              maxHP = baseMaxHP + hpBonus;
-             // Ensure inputs reflect calculated maxHP
              document.getElementById('display-max-hp').innerText = maxHP;
-             // Don't auto-heal, just cap current HP if needed
+             document.getElementById('current-hp-input').max = maxHP; // Update max for current HP input
               if (currentHP > maxHP) {
                  currentHP = maxHP;
                  document.getElementById('current-hp-input').value = currentHP;
              }
-             updateHPDisplay(); // Update bars and text
+             updateHPDisplay(); 
         }
 
         function resetHP() {
              currentHP = maxHP;
              document.getElementById('current-hp-input').value = currentHP;
-             // Temp HP is usually lost on long rest, but keep manual control here
-             // tempHP = 0;
-             // document.getElementById('temp-hp-input').value = tempHP;
              updateHPDisplay();
         }
 
         // --- Temp HP Modal & Effects ---
         function openTempHPModal() {
-             // Reset modal fields
              document.getElementById('temp-hp-source-input').value = '';
              document.getElementById('temp-hp-amount-input').value = '1';
              document.getElementById('temp-hp-type-select').value = 'temp';
@@ -2056,7 +2055,7 @@ const characterData = {
         function addTempHPEffect() {
              const source = document.getElementById('temp-hp-source-input').value.trim() || "Unbekannte Quelle";
              const amount = parseInt(document.getElementById('temp-hp-amount-input').value) || 0;
-             const type = document.getElementById('temp-hp-type-select').value; // 'temp' or 'max'
+             const type = document.getElementById('temp-hp-type-select').value; 
              const durationValue = document.getElementById('temp-hp-duration-select').value;
              const durationTextMap = {
                  long: "Bis zur langen Rast", short: "Bis zur kurzen Rast", combat: "Bis Ende des Kampfes",
@@ -2069,16 +2068,16 @@ const characterData = {
                  return;
              }
 
-             const newEffect = { id: Date.now(), source, amount, type, duration }; // Use timestamp as unique ID
+             const newEffect = { id: Date.now(), source, amount, type, duration }; 
              characterData.tempHPEffects.push(newEffect);
 
-             applyTempHPEffects(); // Recalculate total temp/bonus HP
+             applyTempHPEffects(); 
              closeModal('temp-hp-modal');
         }
 
          function removeTempHPEffect(id) {
             characterData.tempHPEffects = characterData.tempHPEffects.filter(effect => effect.id !== id);
-            applyTempHPEffects(); // Recalculate after removal
+            applyTempHPEffects(); 
         }
 
         function applyTempHPEffects() {
@@ -2087,27 +2086,24 @@ const characterData = {
 
             characterData.tempHPEffects.forEach(effect => {
                 if (effect.type === 'temp') {
-                    // Temp HP doesn't stack, take the highest
                     currentMaxTempHP = Math.max(currentMaxTempHP, effect.amount);
                 } else if (effect.type === 'max') {
-                    // Max HP bonuses stack
                     currentTotalBonusHP += effect.amount;
                 }
             });
 
-            // Update global vars and inputs
             tempHP = currentMaxTempHP;
             hpBonus = currentTotalBonusHP;
             document.getElementById('temp-hp-input').value = tempHP;
             document.getElementById('hp-bonus-input').value = hpBonus;
 
-            updateMaxHP(); // This calls updateHPDisplay internally
+            updateMaxHP(); 
         }
 
 
         function renderTempHPEffects() {
             const effectsContainer = document.getElementById('temp-hp-effects');
-            effectsContainer.innerHTML = ''; // Clear current list
+            effectsContainer.innerHTML = ''; 
 
             if (characterData.tempHPEffects.length === 0) {
                 effectsContainer.style.display = 'none';
@@ -2117,7 +2113,7 @@ const characterData = {
             effectsContainer.style.display = 'block';
             characterData.tempHPEffects.forEach(effect => {
                  const effectElement = document.createElement('div');
-                 effectElement.className = 'temp-hp-timer'; // Reuse existing class
+                 effectElement.className = 'temp-hp-timer'; 
                  effectElement.innerHTML = `
                     <div class="temp-hp-source">${effect.source} (${effect.amount} ${effect.type === 'temp' ? 'Temp-TP' : 'Max-TP'})</div>
                     <div class="temp-hp-duration">${effect.duration}</div>
@@ -2132,50 +2128,41 @@ const characterData = {
           const valueElement = document.getElementById(`${attr}-value`);
           let currentValue = parseInt(valueElement.innerText);
           let newValue = currentValue + amount;
-          newValue = Math.max(1, Math.min(30, newValue)); // Clamp between 1 and 30
+          newValue = Math.max(1, Math.min(30, newValue)); 
 
-          characterData.attributes[attr] = newValue; // Update data model
+          characterData.attributes[attr] = newValue; 
           valueElement.innerText = newValue;
 
           const mod = getModifier(attr);
           document.getElementById(`${attr}-mod`).innerText = formatBonus(mod);
 
-           // Recalculate dependent stats
             if (attr === 'str') {
-                strScore = newValue; // Update global for capacity
+                strScore = newValue; 
                 updateWeightCapacity();
                 updateCombatStats();
-                populateSkillsAndSaves(); // Update skills/saves display
+                populateSkillsAndSaves(); 
             } else if (attr === 'con') {
-                // Update base Max HP if CON changes (typical D&D rule)
-                // This requires knowing the HP calculation method (e.g., average or rolled)
-                // Simple approach: Adjust baseMaxHP by level * change in CON modifier
-                // More complex logic needed for accurate retroactive HP adjustment.
-                // For now, just update derived stats:
-                 updateMaxHP(); // Updates total max HP based on potential bonus changes
-                 updateCombatStats(); // Updates AC if unarmored
-                 populateSkillsAndSaves(); // Update saves/passive perception if WIS changes
+                 updateMaxHP(); 
+                 updateCombatStats(); 
+                 populateSkillsAndSaves(); 
             } else if (attr === 'dex') {
-                 updateCombatStats(); // Updates AC, Initiative
+                 updateCombatStats(); 
                  populateSkillsAndSaves();
             } else {
-                 // Update skills/saves if INT, WIS, CHA change
                  populateSkillsAndSaves();
             }
         }
 
         function showInfo(infoId, event) {
              const infoBox = document.getElementById(infoId);
-             document.querySelectorAll('.infobox').forEach(box => box.style.display = 'none'); // Hide others
+             document.querySelectorAll('.infobox').forEach(box => box.style.display = 'none'); 
 
              infoBox.style.display = 'block';
-             // Simple positioning below the attribute for now
              const rect = event.currentTarget.getBoundingClientRect();
-             infoBox.style.position = 'fixed'; // Use fixed for simplicity
+             infoBox.style.position = 'fixed'; 
              infoBox.style.left = `${rect.left}px`;
              infoBox.style.top = `${rect.bottom + 5}px`;
 
-             // Ensure it fits on screen (basic check)
               if (infoBox.offsetLeft + infoBox.offsetWidth > window.innerWidth) {
                  infoBox.style.left = `${window.innerWidth - infoBox.offsetWidth - 10}px`;
              }
@@ -2183,11 +2170,10 @@ const characterData = {
                   infoBox.style.top = `${rect.top - infoBox.offsetHeight - 5}px`;
               }
 
-             // Close on next click anywhere
-             setTimeout(() => { // Timeout prevents immediate closure
+             setTimeout(() => { 
                  document.addEventListener('click', closeInfoBox, { once: true });
              }, 0);
-             event.stopPropagation(); // Prevent click from immediately closing
+             event.stopPropagation(); 
         }
 
         function closeInfoBox() {
@@ -2200,26 +2186,25 @@ const characterData = {
           const title = document.getElementById('modal-title');
           const description = document.getElementById('modal-description');
 
-           // Fetch descriptions (replace with actual D&D text)
            const descriptions = {
              'powerful-build': "<p>Du zählst als eine Größenkategorie größer, wenn es darum geht, deine Tragfähigkeit und das Gewicht zu bestimmen, das du schieben, ziehen oder heben kannst.</p>",
              'mountain-born': "<p>Du bist an große Höhen gewöhnt, einschließlich Höhen über 10.000 Fuß. Du bist außerdem auf natürliche Weise an kalte Klimazonen angepasst, wie in Kapitel 5 des Dungeon Master's Guide beschrieben.</p><p>Du hast Resistenz gegen Kälteschaden.</p>",
              'stones-endurance': "<p>Du kannst dich darauf konzentrieren, Verletzungen abzuwehren. Wenn du Schaden nimmst, kannst du deine Reaktion verwenden, um einen W12 zu würfeln. Addiere deinen Konstitutionsmodifikator zum gewürfelten Ergebnis und reduziere den Schaden um diese Summe.</p><p>Nachdem du diese Eigenschaft verwendet hast, kannst du sie erst wieder nutzen, nachdem du eine kurze oder lange Rast beendet hast.</p>",
-             'rage-ability': "<p>Als Bonusaktion kannst du in einen Wutrausch verfallen. Dauer: 1 Minute. Endet früher bei Bewusstlosigkeit, keiner Aktion/Schaden seit letztem Zug, oder freiwillig (Bonusaktion).</p><ul><li>Vorteil auf STR-Würfe und STR-Rettungswürfe.</li><li>Bonus auf Schadenswürfe mit STR-Nahkampfwaffen (+${getProficiencyBonus()}).</li><li>Resistenz gegen Hieb-, Stich- und Wuchtschaden.</li></ul><p>Nutzungen: ${characterData.resources.rage.max} pro langer Rast.</p>",
+             'rage-ability': `<p>Als Bonusaktion kannst du in einen Wutrausch verfallen. Dauer: 1 Minute. Endet früher bei Bewusstlosigkeit, keiner Aktion/Schaden seit letztem Zug, oder freiwillig (Bonusaktion).</p><ul><li>Vorteil auf STR-Würfe und STR-Rettungswürfe.</li><li>Bonus auf Schadenswürfe mit STR-Nahkampfwaffen (+${characterData.resources.rage.rageDamageBonus}).</li><li>Resistenz gegen Hieb-, Stich- und Wuchtschaden.</li></ul><p>Nutzungen: ${characterData.resources.rage.max} pro langer Rast.</p>`, // CORRECTED Rage Damage Bonus
              'unarmored-defense': "<p>Ohne Rüstung entspricht deine Rüstungsklasse 10 + deinem Geschicklichkeitsmodifikator + deinem Konstitutionsmodifikator. Du kannst einen Schild verwenden und trotzdem von diesem Vorteil profitieren.</p>",
              'reckless-attack': "<p>Wenn du deinen ersten Angriff in deinem Zug ausführst, kannst du entscheiden, rücksichtslos anzugreifen. Dies gibt dir Vorteil bei Nahkampfangriffen mit Stärke während dieses Zuges, aber Angriffswürfe gegen dich haben bis zu deinem nächsten Zug Vorteil.</p>",
              'danger-sense': "<p>Du hast Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst (z.B. Fallen, Zauber). Funktioniert nicht, wenn du geblendet, taub oder handlungsunfähig bist.</p>",
              'primal-path': "<p>Auf Stufe 3 wählst du einen Pfad, der deine Wut formt. Dein gewählter Pfad ist der Pfad des Zeloten, der dir auf Stufe 3, 6, 10 und 14 Merkmale verleiht.</p>",
-             'divine-fury': `<p>Während du in Rage bist, erleidet die erste Kreatur, die du in jedem deiner Züge mit einem Waffenangriff triffst, zusätzlichen Schaden in Höhe von 1W6 + ${Math.floor(characterData.level / 2)}. Der Schadenstyp ist Nekrotisch oder Strahlend (wähle bei Erhalt).</p>`,
+             'divine-fury': `<p>Während du in Rage bist, erleidet die erste Kreatur, die du in jedem deiner Züge mit einem Waffenangriff triffst, zusätzlichen Schaden in Höhe von 1W6 + ${characterData.resources.rage.divineFuryBonus}. Der Schadenstyp ist Nekrotisch oder Strahlend (wähle bei Erhalt).</p>`, // divineFuryBonus now correctly calculated
              'warrior-of-the-gods': "<p>Wenn ein Zauber wie *Totenerweckung* den alleinigen Effekt hat, dich ins Leben zurückzubringen (nicht als Untoter), benötigt der Zauberwirker keine materiellen Komponenten, um den Zauber auf dich zu wirken.</p>",
              'asi': "<p>Auf Stufe 4 (und weiteren Stufen) kannst du einen Attributswert um 2 oder zwei Attributswerte um je 1 erhöhen, oder ein Talent wählen. Du hast das Talent 'Great Weapon Master' gewählt.</p>",
              'great-weapon-master': "<p><ul><li>Wenn du einen kritischen Treffer mit einer Nahkampfwaffe erzielst oder eine Kreatur mit einer solchen auf 0 Trefferpunkte reduzierst, kannst du einen Nahkampfwaffenangriff als Bonusaktion ausführen.</li><li>Bevor du einen Nahkampfangriff mit einer schweren Waffe ausführst, mit der du geübt bist, kannst du einen Malus von -5 auf den Angriffswurf nehmen. Wenn der Angriff trifft, addierst du +10 zum Schaden des Angriffs.</li></ul></p>",
              'extra-attack': "<p>Du kannst zweimal anstatt einmal angreifen, wenn du die Angriffsaktion in deinem Zug ausführst.</p>",
              'fast-movement': "<p>Deine Bewegungsrate erhöht sich um 10 Fuß, solange du keine schwere Rüstung trägst.</p>",
-             // Add more descriptions as needed
+             'fanatical-focus': `<p>Einmal pro aktiver Wut, wenn du einen Rettungswurf nicht bestehst, kannst du ihn mit einem Bonus in Höhe deines Wutschaden-Bonus wiederholen. Du musst den neuen Wurf verwenden. (PHB'24 S.57)</p><p>Dein aktueller Wutschaden-Bonus ist: +${characterData.resources.rage.rageDamageBonus}.</p>`, // NEW
             };
 
-          title.innerText = abilityId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); // Format title
+          title.innerText = abilityId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); 
           description.innerHTML = descriptions[abilityId] || "<p>Beschreibung nicht gefunden.</p>";
           modal.style.display = 'flex';
         }
@@ -2228,7 +2213,6 @@ const characterData = {
           document.getElementById(modalId).style.display = 'none';
         }
 
-        // Close modal on clicking outside backdrop
         window.addEventListener('click', function(event) {
              const modals = document.querySelectorAll('.modal');
              modals.forEach(modal => {
@@ -2246,28 +2230,24 @@ const characterData = {
 
             actionItem.classList.toggle('action-used', isUsed);
 
-            // Disable other actions of the same type if this one is used
             document.querySelectorAll(`.action-item:has(.action-${actionType})`).forEach(item => {
                 const itemCheckbox = item.querySelector('.action-checkbox');
                 if (item !== actionItem) {
                     item.classList.toggle('action-disabled', isUsed);
-                     if (isUsed) itemCheckbox.disabled = true; // Disable checkbox too
+                     if (isUsed) itemCheckbox.disabled = true; 
                      else itemCheckbox.disabled = false;
                 }
             });
 
-            // Special handling for Rage action toggle linking
              if (actionItem.id === 'action-rage') {
-                 // If checkbox is checked and rage isn't active, try activating
                  if (isUsed && !characterData.activeToggles.rage) {
-                     if (!activateRage(true)) { // Try activating, mark as from action
-                          checkbox.checked = false; // Revert if activation failed (e.g., no uses left)
-                          toggleActionUsed(checkbox, actionType); // Re-run toggle to undo state
+                     if (!activateRage(true)) { 
+                          checkbox.checked = false; 
+                          toggleActionUsed(checkbox, actionType); 
                      }
                  }
-                 // If checkbox is unchecked and rage is active, deactivate rage
                  else if (!isUsed && characterData.activeToggles.rage) {
-                     toggleRage(); // Deactivate rage state
+                     toggleRage(); 
                  }
              }
         }
@@ -2281,17 +2261,11 @@ const characterData = {
                  checkbox.disabled = false;
              }
           });
-           // Also reset Rage toggle if it was activated via action
-           /* // Decided against auto-resetting rage toggle, user might want it persistent
-            if (characterData.activeToggles.rage && document.querySelector('#action-rage .action-checkbox')?.checked) {
-                 toggleRage();
-            }
-           */
         }
 
         // --- Inventory Management ---
         function initializeInventory() {
-             renderInventory(); // Initial render based on characterData
+             renderInventory(); 
         }
 
         function addInventoryItem() {
@@ -2304,7 +2278,7 @@ const characterData = {
              const weight = parseFloat(weightInput.value) || 0;
              const quantity = parseInt(quantityInput.value) || 1;
              const location = locationSelect.value;
-             const type = name.toLowerCase().includes("gold") || name.toLowerCase().includes("gp") ? "currency" : // Basic type detection
+             const type = name.toLowerCase().includes("gold") || name.toLowerCase().includes("gp") ? "currency" : 
                            ["großschwert", "handaxt", "streitaxt"].includes(name.toLowerCase()) ? "weapon" :
                            ["kettenhemd", "scale mail"].includes(name.toLowerCase()) ? "armor" : "gear";
 
@@ -2313,11 +2287,10 @@ const characterData = {
                  return;
              }
 
-             // Check if stackable item exists at the same location
              const existingItemIndex = characterData.inventory.findIndex(item =>
                  item.name.toLowerCase() === name.toLowerCase() &&
                  item.location === location &&
-                 item.type !== 'currency' // Don't auto-stack currency this way
+                 item.type !== 'currency' 
              );
 
              if (existingItemIndex > -1) {
@@ -2326,11 +2299,10 @@ const characterData = {
                  characterData.inventory.push({ name, weight, quantity, location, type, equipped: location === 'equipped' });
              }
 
-             // Reset form
              nameInput.value = '';
              weightInput.value = '';
              quantityInput.value = '1';
-             locationSelect.value = 'carried'; // Default to carried
+             locationSelect.value = 'carried'; 
 
              renderInventory();
         }
@@ -2347,13 +2319,12 @@ const characterData = {
          function toggleEquipped(index) {
              if (index >= 0 && index < characterData.inventory.length) {
                  const item = characterData.inventory[index];
-                 // Simple toggle logic: If equipped, move to carried. If carried/backpack/etc, move to equipped.
                  if (item.location === 'equipped') {
                      item.location = 'carried';
                  } else {
                      item.location = 'equipped';
                  }
-                  item.equipped = item.location === 'equipped'; // Update equipped flag
+                  item.equipped = item.location === 'equipped'; 
                  renderInventory();
              }
          }
@@ -2361,14 +2332,12 @@ const characterData = {
 
         function renderInventory() {
              const tbody = document.getElementById('inventory-items');
-             tbody.innerHTML = ''; // Clear table
+             tbody.innerHTML = ''; 
              let totalWeight = 0;
              let totalGold = 0;
 
              characterData.inventory.forEach((item, index) => {
-                 // Don't include weight of containers themselves if items are inside (simplification)
                  const itemTotalWeight = (item.type !== 'container' && item.type !== 'pack') ? (item.weight * item.quantity) : 0;
-                 // Only count weight if not inside a container like a backpack (unless the container itself is being listed)
                  if(item.location !== 'backpack' && item.location !== 'pouch' || item.type === 'pack' || item.type === 'container') {
                     totalWeight += itemTotalWeight;
                  }
@@ -2379,9 +2348,8 @@ const characterData = {
                  }
 
                  const row = document.createElement('tr');
-                 row.className = `inventory-location-${item.location}`; // Class for potential styling
+                 row.className = `inventory-location-${item.location}`; 
 
-                 // Determine if item can be equipped (basic check for weapon/armor)
                  const canBeEquipped = item.type === 'weapon' || item.type === 'armor' || item.name === "Shield";
 
                  row.innerHTML = `
@@ -2396,43 +2364,40 @@ const characterData = {
              });
 
              document.getElementById('current-weight').textContent = totalWeight.toFixed(1);
-             document.getElementById('gold-total').textContent = totalGold; // Update gold display
-             updateWeightCapacity(totalWeight); // Pass current weight for meter update
+             document.getElementById('gold-total').textContent = totalGold; 
+             updateWeightCapacity(totalWeight); 
         }
 
         function calculateCapacity() {
              let capacity = strScore * 15;
              if (powerfulBuild) {
-                 capacity *= 2; // Goliath trait doubles capacity calculation base
+                 capacity *= 2; 
              }
              return capacity;
         }
 
         function updateWeightCapacity(currentWeight = 0) {
              const capacity = calculateCapacity();
-             const encumberedThreshold = capacity / 3; // Example: STR*5 for Encumbered
-             const heavilyEncumberedThreshold = capacity * 2 / 3; // Example: STR*10 for Heavily Encumbered
+             const encumberedThreshold = capacity / 3; 
+             const heavilyEncumberedThreshold = capacity * 2 / 3; 
 
              document.getElementById('weight-capacity').textContent = capacity;
 
-             // Update weight meter fill and color
              const fillPercentage = capacity > 0 ? Math.min(100, (currentWeight / capacity) * 100) : 0;
              const weightFill = document.getElementById('weight-fill');
              weightFill.style.width = `${fillPercentage}%`;
 
-             let fillColor = '#4CAF50'; // Green (Light)
+             let fillColor = '#4CAF50'; 
              if (currentWeight > heavilyEncumberedThreshold) {
-                 fillColor = '#FF5722'; // Red (Heavily Encumbered)
+                 fillColor = '#FF5722'; 
              } else if (currentWeight > encumberedThreshold) {
-                 fillColor = '#FFC107'; // Yellow (Encumbered)
+                 fillColor = '#FFC107'; 
              }
              weightFill.style.backgroundColor = fillColor;
 
-             // Update threshold markers
              document.getElementById('weight-marker-encumbered').style.left = `${(encumberedThreshold / capacity) * 100}%`;
              document.getElementById('weight-marker-heavily').style.left = `${(heavilyEncumberedThreshold / capacity) * 100}%`;
 
-             // Update text labels for thresholds
              document.getElementById('weight-text-details').innerHTML = `
                 <span>Leicht (0-${Math.floor(encumberedThreshold)})</span>
                 <span>Belastet (${Math.floor(encumberedThreshold) + 1}-${Math.floor(heavilyEncumberedThreshold)})</span>
