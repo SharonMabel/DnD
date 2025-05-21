@@ -119,10 +119,10 @@
         border: none;
         padding: 8px 12px;
         cursor: pointer;
-        z-index: 20; /* Über den Bildern, aber unter dem Rage-Overlay, falls nötig */
+        z-index: 20; 
         border-radius: 50%;
         font-size: 1.2rem;
-        line-height: 1; /* Für bessere Zentrierung des Textes/Symbols */
+        line-height: 1; 
         width: 40px;
         height: 40px;
         display: flex;
@@ -153,7 +153,7 @@
       opacity: 0;
       transition: opacity 0.5s ease;
       pointer-events: none;
-      z-index: 10; /* Unter den Slider-Buttons, falls diese über dem Overlay sein sollen, oder höher */
+      z-index: 10; 
     }
 
     .rage-active .rage-overlay {
@@ -215,7 +215,7 @@
 
     .hp-container {
       display: flex;
-      flex-direction: column; /* Changed from row */
+      flex-direction: column; 
       margin: 15px 0;
     }
 
@@ -223,7 +223,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 8px; /* Added margin */
+      margin-bottom: 8px; 
     }
 
     .hp-bar {
@@ -235,19 +235,18 @@
       position: relative;
     }
 
-    .hp-fill-base { /* Renamed from hp-fill */
+    .hp-fill-base { 
         height: 100%;
-        background: linear-gradient(90deg, var(--primary), #CC0000); /* Base HP color */
+        background: linear-gradient(90deg, var(--primary), #CC0000); 
         position: absolute;
         left: 0;
         transition: width 0.3s ease;
     }
 
-    .hp-fill-temp { /* New element for Temp HP */
+    .hp-fill-temp { 
         height: 100%;
-        background: linear-gradient(90deg, #FFD700, #FFA500); /* Temp HP color */
+        background: linear-gradient(90deg, #FFD700, #FFA500); 
         position: absolute;
-        /* left will be set by JS */
         transition: width 0.3s ease;
     }
 
@@ -268,7 +267,6 @@
     .hp-controls {
       display: flex;
       gap: 5px;
-      /* Removed align-items center as container is column */
     }
 
     .hp-btn {
@@ -281,9 +279,9 @@
       font-weight: bold;
       cursor: pointer;
       font-size: 16px;
-      display: flex;          /* Added */
-      align-items: center;    /* Added */
-      justify-content: center;/* Added */
+      display: flex;          
+      align-items: center;    
+      justify-content: center;
     }
 
     .hp-btn:hover {
@@ -291,32 +289,32 @@
       transform: scale(1.1);
     }
 
-    .hp-values { /* Added for input organization */
+    .hp-values { 
         display: flex;
-        gap: 10px; /* Reduced gap */
+        gap: 10px; 
         margin-bottom: 8px;
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        flex-wrap: wrap; 
     }
 
-    .hp-field { /* Added for input organization */
-        flex: 1 1 100px; /* Allow flexible sizing */
+    .hp-field { 
+        flex: 1 1 100px; 
         display: flex;
         flex-direction: column;
     }
 
-    .hp-field-label { /* Added for input organization */
+    .hp-field-label { 
         font-size: 0.8rem;
         margin-bottom: 3px;
         color: #AAA;
     }
 
-    .hp-input-group { /* Added for input organization */
+    .hp-input-group { 
         display: flex;
         align-items: center;
         gap: 5px;
     }
 
-    .hp-input { /* Added for input styling */
+    .hp-input { 
         flex: 1;
         background: rgba(30, 30, 30, 0.8);
         border: 1px solid var(--border);
@@ -325,10 +323,10 @@
         color: white;
         font-size: 1rem;
         text-align: center;
-        min-width: 50px; /* Ensure minimum width */
+        min-width: 50px; 
     }
 
-     .hp-reset-btn { /* Added for styling */
+     .hp-reset-btn { 
         padding: 5px 10px;
         background: rgba(80, 80, 80, 0.5);
         border: 1px solid var(--border);
@@ -337,14 +335,14 @@
         cursor: pointer;
         font-size: 0.8rem;
         margin-top: 5px;
-        align-self: flex-start; /* Align button */
+        align-self: flex-start; 
     }
 
     .hp-reset-btn:hover {
         background: rgba(100, 100, 100, 0.5);
     }
 
-    .temp-hp-timer { /* Added for styling */
+    .temp-hp-timer { 
         display: flex;
         align-items: center;
         gap: 10px;
@@ -352,12 +350,12 @@
         font-size: 0.8rem;
     }
 
-    .temp-hp-source { /* Added for styling */
+    .temp-hp-source { 
         flex: 1;
-        color: #FFA500; /* Temp HP color */
+        color: #FFA500; 
     }
 
-    .temp-hp-duration { /* Added for styling */
+    .temp-hp-duration { 
         color: #AAA;
     }
 
@@ -690,7 +688,6 @@
       transform: scale(1.1);
     }
 
-    /* Animation for rage activation */
     @keyframes rageActivation {
       0% { transform: scale(1); }
       50% { transform: scale(1.05); }
@@ -701,7 +698,6 @@
       animation: rageActivation 0.5s ease;
     }
 
-    /* Animation for leveling effect */
     @keyframes levelUp {
       0% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.5); opacity: 0.5; }
@@ -712,7 +708,6 @@
       animation: levelUp 1s ease;
     }
 
-    /* Action Economy Styles */
     .action-economy {
       margin-top: 15px;
       padding: 10px;
@@ -730,7 +725,7 @@
       display: flex;
       gap: 8px;
       margin-bottom: 5px;
-      align-items: center; /* Center icons vertically */
+      align-items: center; 
     }
 
     .action-icon {
@@ -742,7 +737,7 @@
     }
 
     .action-regular {
-      background-color: #4CAF50; /* Green */
+      background-color: #4CAF50; 
       border-radius: 50%;
     }
 
@@ -752,12 +747,12 @@
       background-color: transparent;
       border-left: 9px solid transparent;
       border-right: 9px solid transparent;
-      border-bottom: 18px solid #FF9800; /* Orange */
+      border-bottom: 18px solid #FF9800; 
     }
 
     .action-reaction {
-      background-color: #2196F3; /* Blue */
-      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamond shape */
+      background-color: #2196F3; 
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); 
     }
 
     .action-list {
@@ -773,16 +768,15 @@
       background: rgba(60, 60, 60, 0.6);
       border-radius: 5px;
       font-size: 0.9rem;
-      transition: opacity 0.3s ease; /* Added transition */
+      transition: opacity 0.3s ease; 
     }
 
-    .action-details { /* Added wrapper */
+    .action-details { 
       flex: 1;
-      margin-left: 8px; /* Space between icon and text */
+      margin-left: 8px; 
     }
 
     .action-name {
-      /* flex: 1; */ /* Removed */
       font-weight: bold;
     }
 
@@ -793,10 +787,9 @@
     }
 
     .action-used {
-      /* text-decoration: line-through; */ /* Removed */
       opacity: 0.5;
     }
-     .action-disabled { /* Added for visual feedback */
+     .action-disabled { 
         opacity: 0.5;
         pointer-events: none;
     }
@@ -823,9 +816,9 @@
       position: absolute;
       color: var(--accent);
       font-size: 14px;
-      font-weight: bold; /* Make checkmark bolder */
-      top: 0px;  /* Adjust position */
-      left: 2px; /* Adjust position */
+      font-weight: bold; 
+      top: 0px;  
+      left: 2px; 
     }
 
     .action-checkbox:hover {
@@ -847,7 +840,6 @@
       background: rgba(100, 100, 100, 0.5);
     }
 
-    /* Inventory Styles */
     .inventory-container {
       margin-top: 15px;
     }
@@ -871,7 +863,7 @@
     .inventory-table td {
       padding: 8px;
       border-bottom: 1px solid rgba(100, 100, 100, 0.3);
-      vertical-align: middle; /* Align content vertically */
+      vertical-align: middle; 
     }
 
     .inventory-table tr:hover {
@@ -880,20 +872,20 @@
 
     .inventory-add {
       display: flex;
-      flex-wrap: wrap; /* Allow wrapping */
+      flex-wrap: wrap; 
       gap: 10px;
       margin-top: 15px;
       align-items: flex-end;
     }
 
     .inventory-field {
-      flex: 2 1 150px; /* Flexible sizing, min 150px */
+      flex: 2 1 150px; 
     }
 
     .inventory-field:nth-child(2),
     .inventory-field:nth-child(3),
-    .inventory-field:nth-child(4) { /* Apply flex basis to weight, qty, location */
-      flex: 1 1 80px; /* Smaller flex basis */
+    .inventory-field:nth-child(4) { 
+      flex: 1 1 80px; 
     }
 
     .inventory-field label {
@@ -921,7 +913,7 @@
       padding: 8px;
       color: white;
       font-size: 0.9rem;
-      height: 36px; /* Match input height */
+      height: 36px; 
     }
 
     .inventory-add-btn {
@@ -932,8 +924,8 @@
       padding: 8px 15px;
       cursor: pointer;
       font-weight: bold;
-      height: 36px; /* Match input height */
-      flex-shrink: 0; /* Prevent button shrinking */
+      height: 36px; 
+      flex-shrink: 0; 
     }
 
     .inventory-add-btn:hover {
@@ -943,7 +935,7 @@
 
     .inventory-summary {
       display: flex;
-      flex-wrap: wrap; /* Allow wrapping */
+      flex-wrap: wrap; 
       justify-content: space-between;
       margin-top: 15px;
       padding: 10px;
@@ -952,9 +944,9 @@
       font-size: 0.9rem;
     }
 
-    .weight-meter-container { /* Added wrapper */
-       flex: 1 1 200px; /* Allow shrinking/growing */
-       min-width: 150px; /* Ensure minimum width */
+    .weight-meter-container { 
+       flex: 1 1 200px; 
+       min-width: 150px; 
     }
 
     .weight-meter {
@@ -969,9 +961,8 @@
 
     .weight-fill {
       height: 100%;
-      /* background gradient removed, color set by JS */
       border-radius: 4px;
-      transition: width 0.3s ease, background 0.3s ease; /* Added background transition */
+      transition: width 0.3s ease, background 0.3s ease; 
     }
 
     .weight-marker {
@@ -980,7 +971,7 @@
       height: 100%;
       width: 2px;
       background: rgba(255, 255, 255, 0.8);
-      transform: translateX(-1px); /* Center marker */
+      transform: translateX(-1px); 
     }
 
     .weight-text {
@@ -989,9 +980,9 @@
       color: #AAA;
       display: flex;
       justify-content: space-between;
-      flex-wrap: wrap; /* Allow wrapping */
+      flex-wrap: wrap; 
     }
-     .weight-text span { /* Add margin for wrapped elements */
+     .weight-text span { 
         margin-right: 5px;
     }
 
@@ -999,10 +990,10 @@
       color: #FF5555;
       cursor: pointer;
       padding: 0 5px;
-      font-weight: bold; /* Make delete 'x' more prominent */
-      font-size: 1.1em;  /* Make delete 'x' more prominent */
-      display: inline-block; /* Ensure transform works */
-      transition: color 0.2s ease, transform 0.2s ease; /* Smooth transition */
+      font-weight: bold; 
+      font-size: 1.1em;  
+      display: inline-block; 
+      transition: color 0.2s ease, transform 0.2s ease; 
     }
 
     .delete-item:hover {
@@ -1010,9 +1001,7 @@
       transform: scale(1.2);
     }
 
-
-    /* Responsive */
-    @media (max-width: 992px) { /* Adjusted breakpoint */
+    @media (max-width: 992px) { 
         .attributes {
             grid-template-columns: repeat(2, 1fr);
         }
@@ -1022,43 +1011,40 @@
       .main-content {
         grid-template-columns: 1fr;
       }
-
       .skills {
         grid-template-columns: 1fr;
       }
-
       .char-name {
         font-size: 1.8rem;
       }
       .header {
-          flex-direction: column; /* Stack elements */
-          align-items: flex-start; /* Align left */
+          flex-direction: column; 
+          align-items: flex-start; 
       }
-       .attributes { /* Ensure 2 columns on medium */
+       .attributes { 
             grid-template-columns: repeat(2, 1fr);
       }
-      .hp-values { /* Adjust HP inputs layout */
+      .hp-values { 
           gap: 8px;
       }
       .hp-field {
-          flex-basis: calc(50% - 4px); /* Two columns for HP inputs */
-          min-width: 0; /* Override min-width */
+          flex-basis: calc(50% - 4px); 
+          min-width: 0; 
       }
-       .inventory-add { /* Stack inventory inputs */
+       .inventory-add { 
             flex-direction: column;
             align-items: stretch;
       }
        .inventory-add-btn {
-            width: 100%; /* Full width button */
+            width: 100%; 
       }
-
     }
-     @media (max-width: 480px) { /* Small screens */
+     @media (max-width: 480px) { 
         .attributes {
-            grid-template-columns: 1fr; /* Single column */
+            grid-template-columns: 1fr; 
         }
          .hp-field {
-             flex-basis: 100%; /* Single column for HP inputs */
+             flex-basis: 100%; 
         }
          .char-name {
              font-size: 1.6rem;
@@ -1066,12 +1052,11 @@
          .char-desc {
              font-size: 1rem;
         }
-         .dice-container .dice-btn { /* Smaller dice buttons */
+         .dice-container .dice-btn { 
              padding: 6px 10px;
              font-size: 0.9rem;
         }
     }
-
   </style>
 </head>
 <body>
@@ -1250,11 +1235,11 @@
                 <div class="section-divider"></div>
                  <div class="stat">
                   <div class="stat-label">Angriffsbonus</div>
-                  <div class="stat-value" id="attack-bonus">+8</div>
+                  <div class="stat-value" id="attack-bonus">+10</div>
                 </div>
                  <div class="stat">
-                  <div class="stat-label">Schaden (Greataxe)</div>
-                  <div class="stat-value" id="damage-formula">2W6 + 4</div>
+                  <div class="stat-label">Schaden (Großaxt)</div>
+                  <div class="stat-value" id="damage-formula">1W12 + 6</div>
                 </div>
               </div>
 
@@ -1265,7 +1250,7 @@
                 <div class="rage-counter" id="rage-counter">3/3 übrig</div>
               </button>
 
-              <button class="action-btn" onclick="rollAttack()" title="Angriff mit Großschwert würfeln">ANGRIFF WÜRFELN</button>
+              <button class="action-btn" onclick="rollAttack()" title="Angriff mit Großaxt würfeln">ANGRIFF WÜRFELN</button>
             </div>
 
             <div class="card dice-container">
@@ -1553,8 +1538,8 @@
                 <h3>Wichtige Würfe</h3>
                 <div class="dice-result" id="quick-dice-result">-</div>
                 <div>
-                <button class="dice-btn" onclick="rollQuickDice('1d20+' + getModifier('str'))" title="Stärke Rettungswurf">STR Save</button>
-                <button class="dice-btn" onclick="rollQuickDice('1d20+' + getModifier('con'))" title="Konstitution Rettungswurf">CON Save</button>
+                <button class="dice-btn" onclick="rollQuickDice('1d20+' + getSaveBonus('str'))" title="Stärke Rettungswurf">STR Save</button>
+                <button class="dice-btn" onclick="rollQuickDice('1d20+' + getSaveBonus('con'))" title="Konstitution Rettungswurf">CON Save</button>
                 <button class="dice-btn" onclick="rollQuickDice('1d20+' + getSkillBonus('Athletics'))" title="Athletik Wurf">Athletik</button>
                 <button class="dice-btn" onclick="rollQuickDice('1d12')" title="Trefferwürfel">D12 HD</button>
                 </div>
@@ -1609,7 +1594,6 @@
 </div>
     <script>
         // --- Character Data ---
-     
 const characterData = {
     name: "Bren",
     race: "Goliath",
@@ -1631,10 +1615,31 @@ const characterData = {
     },
     proficiencies: {
         saves: ["str", "con"],
-        skills: ["Athletics", "Intimidation", "Perception", "Survival", "Animal Handling", "Nature"],
+        // This list might be less relevant for display if explicitSkillBonuses is used, but kept for potential fallback/other uses
+        skills: ["Athletics", "Intimidation", "Perception", "Survival"], 
         weapons: ["Simple", "Martial"],
         armor: ["Light", "Medium", "Shields"],
         tools: ["Lute", "Gaming set (Dragonchess)"]
+    },
+    // Explicit skill bonuses as per user request
+    explicitSkillBonuses: {
+        "Akrobatik": 0,
+        "Arkane Kunde": 0,
+        "Athletik": 7,
+        "Einschüchtern": 4,
+        "Fingerfertigkeit": 0,
+        "Geschichte": 0,
+        "Heilkunde": 0,
+        "Heimlichkeit": 0,
+        "Mit Tieren umgehen": 0,
+        "Motiv erkennen": 3,
+        "Nachforschungen": 0,
+        "Naturkunde": 0,
+        "Religion": 0,
+        "Täuschen": 0,
+        "Überlebenskunst": 3,
+        "Überzeugen": 0,
+        "Wahrnehmung": 3
     },
     features: [
         { id: "powerful-build", name: "Powerful Build", source: "Goliath", description: "Zählt als eine Größenkategorie größer für Tragfähigkeit." },
@@ -1663,8 +1668,8 @@ const characterData = {
         { id: "goggles-of-the-night", name: "Goggles of the Night", source: "Magic Item", description: "Gewährt Dunkelsicht 60ft." }
     ],
     inventory: [ 
-        { name: "Greataxe", weight: 7, quantity: 1, location: "equipped", type: "weapon", notes: "PDF: Atk +7, Dmg 1W12+7 (inkl. Rage?)" },
-        { name: "Handaxe", weight: 2, quantity: 2, location: "carried", type: "weapon", notes: "PDF: Atk +7, Dmg 1W6+4" },
+        { name: "Greataxe", weight: 7, quantity: 1, location: "equipped", type: "weapon", magicBonus: 2, notes: "1d12 base damage" },
+        { name: "Handaxe", weight: 2, quantity: 2, location: "carried", type: "weapon", notes: "1d6 base damage" },
         { name: "Cast-off Scale Mail", weight: 45, quantity: 1, location: "equipped", type: "armor" },
         { name: "Lute", weight: 2, quantity: 1, location: "backpack", type: "tool" },
         { name: "Boots of the Vigilant", weight: 1, quantity: 1, location: "equipped", type: "magic-item" },
@@ -1721,11 +1726,10 @@ const characterData = {
 
         // --- Image Slider Variables ---
         let currentImageIndex = 0;
-      
         let characterImages = [
-            "https://sharonmabel.github.io/DnD/Bren.jpg", // Originalbild
-            "https://sharonmabel.github.io/DnD/FeuerzeichenBren.jpg", // Beispiel Bild 2
-            "https://sharonmabel.github.io/DnD/Bren2.jpg"  // Beispiel Bild 3
+            "https://sharonmabel.github.io/DnD/Bren.jpg", 
+            "https://sharonmabel.github.io/DnD/FeuerzeichenBren.jpg", 
+            "https://sharonmabel.github.io/DnD/Bren2.jpg"  
         ];
         let sliderImageElements;
 
@@ -1747,18 +1751,26 @@ const characterData = {
             return 3; 
         }
 
-         function getSkillBonus(skillName) {
+        function getSkillBonus(skillName) {
+            // Prioritize explicit bonuses if they exist for the skill
+            if (characterData.explicitSkillBonuses && characterData.explicitSkillBonuses[skillName] !== undefined) {
+                return characterData.explicitSkillBonuses[skillName];
+            }
+
+            // Fallback to calculation (though all skills are covered by explicit list in this request)
             const skillsData = { 
-                "Athletics": "str", "Acrobatics": "dex", "Sleight of Hand": "dex", "Stealth": "dex",
-                "Arcana": "int", "History": "int", "Investigation": "int", "Nature": "int", "Religion": "int",
-                "Animal Handling": "wis", "Insight": "wis", "Medicine": "wis", "Perception": "wis", "Survival": "wis",
-                "Deception": "cha", "Intimidation": "cha", "Performance": "cha", "Persuasion": "cha"
+                "Athletik": "str", "Akrobatik": "dex", "Fingerfertigkeit": "dex", "Heimlichkeit": "dex",
+                "Arkane Kunde": "int", "Geschichte": "int", "Nachforschungen": "int", "Naturkunde": "int", "Religion": "int",
+                "Mit Tieren umgehen": "wis", "Motiv erkennen": "wis", "Heilkunde": "wis", "Wahrnehmung": "wis", "Überlebenskunst": "wis",
+                "Täuschen": "cha", "Einschüchtern": "cha", "Auftreten": "cha", "Überzeugen": "cha"
             };
+            // Ensure skill names match keys in skillsData (e.g. "Athletics" vs "Athletik")
+            // For this specific structure, skillName from allSkills array will be German.
             const attribute = skillsData[skillName];
-            if (!attribute) return 0;
+            if (!attribute) return 0; 
 
             let bonus = getModifier(attribute);
-            if (characterData.proficiencies.skills.includes(skillName)) {
+            if (characterData.proficiencies.skills.includes(skillName)) { // Check proficiency against the English name if skillsData uses English
                 bonus += getProficiencyBonus();
             }
             return bonus;
@@ -1773,7 +1785,7 @@ const characterData = {
         }
 
         function formatBonus(bonus) {
-            return bonus >= 0 ? `+${bonus}` : bonus;
+            return bonus >= 0 ? `+${bonus}` : bonus.toString();
         }
 
 
@@ -1785,7 +1797,7 @@ const characterData = {
           updateCombatStats();
           initializeInventory(); 
           updateRageCounter(); 
-          initializeImageSlider(); // Slider initialisieren
+          initializeImageSlider();
 
             document.getElementById('combat').classList.add('active');
             document.querySelectorAll('.tab')[0].classList.add('active');
@@ -1807,23 +1819,34 @@ const characterData = {
             skillsContainer.innerHTML = ''; 
             savesContainer.innerHTML = ''; 
 
-            const allSkills = [ 
-                "Athletics", "Acrobatics", "Sleight of Hand", "Stealth", "Arcana", "History",
-                "Investigation", "Nature", "Religion", "Animal Handling", "Insight", "Medicine",
-                "Perception", "Survival", "Deception", "Intimidation", "Performance", "Persuasion"
+            const allSkillsGerman = [ 
+                "Akrobatik", "Arkane Kunde", "Athletik", "Auftreten", "Einschüchtern", "Fingerfertigkeit", 
+                "Geschichte", "Heilkunde", "Heimlichkeit", "Mit Tieren umgehen", "Motiv erkennen", 
+                "Nachforschungen", "Naturkunde", "Religion", "Täuschen", "Überlebenskunst", "Überzeugen", "Wahrnehmung"
             ];
+             allSkillsGerman.sort();
 
-            allSkills.sort().forEach(skill => {
-                const bonus = getSkillBonus(skill);
-                const attribute = ["Athletics"].includes(skill) ? "STR" : 
-                                ["Acrobatics", "Sleight of Hand", "Stealth"].includes(skill) ? "DEX" :
-                                ["Arcana", "History", "Investigation", "Nature", "Religion"].includes(skill) ? "INT" :
-                                ["Animal Handling", "Insight", "Medicine", "Perception", "Survival"].includes(skill) ? "WIS" : "CHA";
-                 const isProficient = characterData.proficiencies.skills.includes(skill);
+
+            const skillToAttributeMap = { 
+                "Akrobatik": "dex", "Arkane Kunde": "int", "Athletik": "str", "Auftreten": "cha",
+                "Einschüchtern": "cha", "Fingerfertigkeit": "dex", "Geschichte": "int", "Heilkunde": "wis",
+                "Heimlichkeit": "dex", "Mit Tieren umgehen": "wis", "Motiv erkennen": "wis",
+                "Nachforschungen": "int", "Naturkunde": "int", // Standard D&D, can be WIS by rule variant
+                "Religion": "int", "Täuschen": "cha", "Überlebenskunst": "wis",
+                "Überzeugen": "cha", "Wahrnehmung": "wis"
+            };
+
+
+            allSkillsGerman.forEach(skillName => {
+                const bonus = getSkillBonus(skillName); // This will now use explicitSkillBonuses
+                const attributeKey = skillToAttributeMap[skillName] || "n/a";
+                const attributeMod = attributeKey !== "n/a" ? getModifier(attributeKey) : 0;
+                // Determine if proficient for title - this might be complex if bonus is explicit and doesn't match calculation
+                // For now, let's just show the attribute.
                 const skillElement = document.createElement('div');
                 skillElement.className = 'skill';
                 skillElement.innerHTML = `
-                    <span class="skill-name" title="${attribute} based ${isProficient ? '(Proficient)' : ''}">${skill}</span>
+                    <span class="skill-name" title="${attributeKey.toUpperCase()}-basiert">${skillName}</span>
                     <span>${formatBonus(bonus)}</span>
                 `;
                 skillsContainer.appendChild(skillElement);
@@ -1836,13 +1859,13 @@ const characterData = {
                 const saveElement = document.createElement('div');
                 saveElement.className = 'skill'; 
                 saveElement.innerHTML = `
-                    <span class="skill-name" title="${isProficient ? '(Proficient)' : ''}">${save.toUpperCase()}</span>
+                    <span class="skill-name" title="${isProficient ? '(Geübt)' : ''}">${save.toUpperCase()}</span>
                     <span>${formatBonus(bonus)}</span>
                 `;
                 savesContainer.appendChild(saveElement);
             });
 
-             document.getElementById('passive-perception').innerText = 10 + getSkillBonus('Perception');
+             document.getElementById('passive-perception').innerText = 10 + getSkillBonus('Wahrnehmung');
              document.getElementById('proficiency-bonus').innerText = formatBonus(getProficiencyBonus());
          }
 
@@ -1852,33 +1875,42 @@ const characterData = {
             const strMod = getModifier('str');
             const profBonus = getProficiencyBonus();
 
-            const ac = characterData.inventory.some(i => i.name === "Scale Mail" && i.location === 'equipped')
-                ? 14 + Math.min(dexMod, 2)
-                : 10 + dexMod + conMod; 
+            const isWearingScaleMail = characterData.inventory.some(i => i.location === 'equipped' && i.name.toLowerCase().includes("scale mail"));
+            const ac = isWearingScaleMail ? 14 + Math.min(dexMod, 2) : 10 + dexMod + conMod;
             document.getElementById('ac-value').innerText = ac;
 
             document.getElementById('initiative-value').innerText = formatBonus(dexMod);
             document.getElementById('speed-value').innerText = `${characterData.speed} ft.`;
 
-            let attackBonus = strMod + profBonus;
-            let damageParts = ["2d6", formatBonus(strMod)];
+            const mainWeapon = characterData.inventory.find(item => item.name.toLowerCase().includes("greataxe") && item.location === "equipped");
+            let weaponMagicBonus = 0;
+            let weaponBaseDie = "1d12"; // Default for Greataxe
+
+            if (mainWeapon && mainWeapon.magicBonus) {
+                weaponMagicBonus = mainWeapon.magicBonus;
+            }
+            
+            let attackBonusCalc = strMod + profBonus + weaponMagicBonus;
+            document.getElementById('attack-bonus').innerText = formatBonus(attackBonusCalc);
+
+            let baseDamageBonus = strMod + weaponMagicBonus;
+            let damageParts = [weaponBaseDie, formatBonus(baseDamageBonus)];
 
             if (characterData.activeToggles.rage) {
                 damageParts.push(formatBonus(characterData.resources.rage.rageDamageBonus));
              }
              if (characterData.activeToggles.gwm) {
-                attackBonus -= 5;
+                // Attack bonus for GWM is handled by a different display or understanding, GWM toggle implies the -5 to hit for +10 damage
+                // The main attack bonus display shows the potential without the -5.
                 damageParts.push(formatBonus(10));
              }
-             if (characterData.activeToggles.rage) {
-                 const divineFuryDice = characterData.resources.rage.divineFuryDice;
-                 const divineFuryBonus = characterData.resources.rage.divineFuryBonus;
-                 damageParts.push(`${divineFuryDice}${formatBonus(divineFuryBonus)} Divine`);
-             }
+             // Divine Fury is separate additional damage, not usually part of the main weapon's listed mod.
+             // If it should be part of the string, it can be added here conditionally.
+             // Example: if (characterData.activeToggles.rage && characterData.features.some(f => f.id === "divine-fury-pdf")) {
+             //     damageParts.push(`+ ${characterData.resources.rage.divineFuryDice}${formatBonus(characterData.resources.rage.divineFuryBonus)} Göttlich`);
+             // }
 
-
-            document.getElementById('attack-bonus').innerText = formatBonus(attackBonus);
-            document.getElementById('damage-formula').innerText = damageParts.join(" + ").replace("+ -", "- ");
+            document.getElementById('damage-formula').innerText = damageParts.join(" + ").replace(/\+ -/g, "- ");
          }
 
 
@@ -1895,7 +1927,7 @@ const characterData = {
             characterData.activeToggles.rage = !characterData.activeToggles.rage;
             document.getElementById('rage-toggle').classList.toggle('active', characterData.activeToggles.rage);
             const rageOverlay = document.getElementById('rage-overlay');
-            if (rageOverlay) { // Nur wenn das Overlay existiert
+            if (rageOverlay) { 
                 rageOverlay.style.opacity = characterData.activeToggles.rage ? '1' : '0';
             }
             document.body.classList.toggle('rage-active', characterData.activeToggles.rage); 
@@ -1955,12 +1987,19 @@ const characterData = {
         function rollAttack() {
              const strMod = getModifier('str');
              const profBonus = getProficiencyBonus();
-             let baseAttackBonus = strMod + profBonus;
+             
+             const mainWeapon = characterData.inventory.find(item => item.name.toLowerCase().includes("greataxe") && item.location === "equipped");
+             let weaponMagicBonus = 0;
+             if (mainWeapon && mainWeapon.magicBonus) {
+                 weaponMagicBonus = mainWeapon.magicBonus;
+             }
+
+             let currentAttackBonus = strMod + profBonus + weaponMagicBonus;
              let advantage = characterData.activeToggles.reckless;
              let disadvantage = false; 
 
              if (characterData.activeToggles.gwm) {
-                baseAttackBonus -= 5;
+                currentAttackBonus -= 5; // Apply GWM penalty for the roll itself
              }
 
              let roll1 = Math.floor(Math.random() * 20) + 1;
@@ -1979,8 +2018,8 @@ const characterData = {
                  resultText = `Würfel: ${rollResult}`;
              }
 
-             let totalAttack = rollResult + baseAttackBonus;
-             resultText += ` + ${baseAttackBonus} = ${totalAttack}`;
+             let totalAttack = rollResult + currentAttackBonus;
+             resultText += ` + ${currentAttackBonus} = ${totalAttack}`;
 
              if (rollResult === 20) {
                 resultText += " - KRITISCH!";
@@ -2002,11 +2041,13 @@ const characterData = {
          function rollQuickDice(diceString) {
             let resultText = "-";
             try {
-                const match = diceString.match(/(\d+)[dD](\d+)(?:[+](\d+))?/);
+                const match = diceString.match(/(\d*)[dD](\d+)(?:([+-])(\d+))?/); // Improved regex
                 if (match) {
-                    const numDice = parseInt(match[1]);
+                    const numDice = match[1] ? parseInt(match[1]) : 1; // Default to 1 die
                     const sides = parseInt(match[2]);
-                    const modifier = parseInt(match[3] || '0');
+                    const operator = match[3];
+                    const modifier = match[4] ? parseInt(match[4]) : 0;
+                    
                     let total = 0;
                     let rolls = [];
                     for (let i = 0; i < numDice; i++) {
@@ -2014,8 +2055,16 @@ const characterData = {
                         rolls.push(roll);
                         total += roll;
                     }
-                    total += modifier;
-                    resultText = `${diceString}: ${rolls.join(' + ')}${modifier > 0 ? ' + ' + modifier : ''} = ${total}`;
+
+                    let modString = "";
+                    if (operator && modifier !== 0) {
+                        if (operator === '+') total += modifier;
+                        if (operator === '-') total -= modifier;
+                        modString = ` ${operator} ${modifier}`;
+                    }
+                    
+                    resultText = `${numDice}d${sides}${modString}: ${rolls.join(' + ')}${modString} = ${total}`;
+
                 } else if (!isNaN(parseInt(diceString))) { 
                     const sides = parseInt(diceString);
                     const roll = Math.floor(Math.random() * sides) + 1;
@@ -2024,6 +2073,7 @@ const characterData = {
                      resultText = "Ungültiger Wurf";
                 }
             } catch (e) {
+                console.error("Fehler beim Würfeln: ", e);
                 resultText = "Fehler beim Würfeln";
             }
              document.getElementById('quick-dice-result').innerText = resultText;
@@ -2206,17 +2256,12 @@ const characterData = {
             if (attr === 'str') {
                 strScore = newValue; 
                 updateWeightCapacity();
-                updateCombatStats();
-                populateSkillsAndSaves(); 
-            } else if (attr === 'con') {
+            }
+            // After any attribute change, update combat stats and skills/saves that might depend on it.
+            updateCombatStats();
+            populateSkillsAndSaves(); // This will also update passive perception
+            if (attr === 'con') { // CON specifically affects Max HP
                  updateMaxHP(); 
-                 updateCombatStats(); 
-                 populateSkillsAndSaves(); 
-            } else if (attr === 'dex') {
-                 updateCombatStats(); 
-                 populateSkillsAndSaves();
-            } else {
-                 populateSkillsAndSaves();
             }
         }
 
@@ -2346,7 +2391,7 @@ const characterData = {
              const quantity = parseInt(quantityInput.value) || 1;
              const location = locationSelect.value;
              const type = name.toLowerCase().includes("gold") || name.toLowerCase().includes("gp") ? "currency" : 
-                           ["großschwert", "handaxt", "streitaxt"].includes(name.toLowerCase()) ? "weapon" :
+                           ["großschwert", "großaxt", "handaxt", "streitaxt"].includes(name.toLowerCase()) ? "weapon" :
                            ["kettenhemd", "scale mail"].includes(name.toLowerCase()) ? "armor" : "gear";
 
              if (!name || quantity < 1 || weight < 0) {
@@ -2433,6 +2478,7 @@ const characterData = {
              document.getElementById('current-weight').textContent = totalWeight.toFixed(1);
              document.getElementById('gold-total').textContent = totalGold; 
              updateWeightCapacity(totalWeight); 
+             updateCombatStats(); // Ensure combat stats are updated after inventory changes (e.g. equipping armor/weapon)
         }
 
         function calculateCapacity() {
@@ -2477,7 +2523,7 @@ const characterData = {
             const sliderContainer = document.querySelector('.image-slider-container');
             if (!sliderContainer) return;
 
-            sliderContainer.innerHTML = ''; // Alte Bilder löschen, falls welche hardcoded waren
+            sliderContainer.innerHTML = ''; 
 
             characterImages.forEach((src, index) => {
                 const img = document.createElement('img');
@@ -2487,7 +2533,7 @@ const characterData = {
                 sliderContainer.appendChild(img);
             });
             sliderImageElements = sliderContainer.querySelectorAll('.slider-image');
-            showImage(0); // Erstes Bild anzeigen
+            showImage(0); 
         }
 
         function showImage(index) {
