@@ -77,22 +77,71 @@
     .char-portrait {
       position: relative;
       border-radius: 10px;
-      overflow: hidden;
+      overflow: hidden; /* Wichtig, um andere Bilder auszublenden */
       height: 100%;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
       max-height: 600px;
     }
 
-    .char-portrait img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
+    .image-slider-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: relative; /* Für die enthaltenen Bilder */
     }
 
-    .char-portrait:hover img {
-      transform: scale(1.03);
+    .slider-image {
+        min-width: 100%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none; /* Alle Bilder standardmäßig ausblenden */
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease; /* Für Einblend- und Hover-Effekt */
+        opacity: 0;
     }
+
+    .slider-image.active {
+        display: block; /* Nur das aktive Bild anzeigen */
+        opacity: 1;
+    }
+    
+    .char-portrait:hover .slider-image.active {
+        transform: scale(1.03); /* Skalierung beim Hovern über das Portrait-DIV */
+    }
+
+
+    .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.4);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        z-index: 20; /* Über den Bildern, aber unter dem Rage-Overlay, falls nötig */
+        border-radius: 50%;
+        font-size: 1.2rem;
+        line-height: 1; /* Für bessere Zentrierung des Textes/Symbols */
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slider-btn.prev {
+        left: 10px;
+    }
+
+    .slider-btn.next {
+        right: 10px;
+    }
+
+    .slider-btn:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
 
     .rage-overlay {
       position: absolute;
@@ -104,6 +153,7 @@
       opacity: 0;
       transition: opacity 0.5s ease;
       pointer-events: none;
+      z-index: 10; /* Unter den Slider-Buttons, falls diese über dem Overlay sein sollen, oder höher */
     }
 
     .rage-active .rage-overlay {
@@ -1489,66 +1539,74 @@
                 </div>
               </div>
             </div>
-          </div> </div> <div class="right-column"> <div class="char-portrait">
-            <img src="https://sharonmabel.github.io/DnD/Bren.jpg" alt="Portrait von Bren Varakhaal, einem Goliath Barbaren">
-            <div class="rage-overlay" id="rage-overlay"></div>
-          </div>
-
-          <div class="card dice-container">
-             <h3>Wichtige Würfe</h3>
-            <div class="dice-result" id="quick-dice-result">-</div>
-            <div>
-              <button class="dice-btn" onclick="rollQuickDice('1d20+' + getModifier('str'))" title="Stärke Rettungswurf">STR Save</button>
-              <button class="dice-btn" onclick="rollQuickDice('1d20+' + getModifier('con'))" title="Konstitution Rettungswurf">CON Save</button>
-              <button class="dice-btn" onclick="rollQuickDice('1d20+' + getSkillBonus('Athletics'))" title="Athletik Wurf">Athletik</button>
-              <button class="dice-btn" onclick="rollQuickDice('1d12')" title="Trefferwürfel">D12 HD</button>
+          </div> </div> 
+          <div class="right-column"> 
+            <div class="char-portrait">
+                <div class="image-slider-container">
+                    </div>
+                <button class="slider-btn prev" onclick="prevImage()" title="Vorheriges Bild">&#10094;</button>
+                <button class="slider-btn next" onclick="nextImage()" title="Nächstes Bild">&#10095;</button>
+                <div class="rage-overlay" id="rage-overlay"></div>
             </div>
-          </div>
-        </div> </div> </div> <div class="modal" id="ability-modal">
-      <div class="modal-content">
+
+            <div class="card dice-container">
+                <h3>Wichtige Würfe</h3>
+                <div class="dice-result" id="quick-dice-result">-</div>
+                <div>
+                <button class="dice-btn" onclick="rollQuickDice('1d20+' + getModifier('str'))" title="Stärke Rettungswurf">STR Save</button>
+                <button class="dice-btn" onclick="rollQuickDice('1d20+' + getModifier('con'))" title="Konstitution Rettungswurf">CON Save</button>
+                <button class="dice-btn" onclick="rollQuickDice('1d20+' + getSkillBonus('Athletics'))" title="Athletik Wurf">Athletik</button>
+                <button class="dice-btn" onclick="rollQuickDice('1d12')" title="Trefferwürfel">D12 HD</button>
+                </div>
+            </div>
+        </div> 
+    </div> 
+</div> 
+<div class="modal" id="ability-modal">
+    <div class="modal-content">
         <button class="close-btn" onclick="closeModal('ability-modal')" title="Schließen">&times;</button>
         <h3 id="modal-title">Fähigkeit</h3>
         <div id="modal-description"></div>
-      </div>
     </div>
+</div>
 
-    <div class="modal" id="temp-hp-modal">
-      <div class="modal-content" style="max-width: 400px;">
+<div class="modal" id="temp-hp-modal">
+    <div class="modal-content" style="max-width: 400px;">
         <button class="close-btn" onclick="closeModal('temp-hp-modal')" title="Schließen">&times;</button>
         <h3>Temporäre Trefferpunkte / Max HP Bonus</h3>
 
         <div style="margin-bottom: 15px;">
-          <label for="temp-hp-source-input" class="hp-field-label">Quelle / Beschreibung</label>
-          <input type="text" id="temp-hp-source-input" class="hp-input" placeholder="z.B. Aid Zauber, Inspiration..." style="width: 100%; text-align: left;">
+            <label for="temp-hp-source-input" class="hp-field-label">Quelle / Beschreibung</label>
+            <input type="text" id="temp-hp-source-input" class="hp-input" placeholder="z.B. Aid Zauber, Inspiration..." style="width: 100%; text-align: left;">
         </div>
 
         <div style="margin-bottom: 15px;">
-          <label for="temp-hp-amount-input" class="hp-field-label">Menge</label>
-          <input type="number" id="temp-hp-amount-input" class="hp-input" value="1" min="1" style="width: 100%;">
+            <label for="temp-hp-amount-input" class="hp-field-label">Menge</label>
+            <input type="number" id="temp-hp-amount-input" class="hp-input" value="1" min="1" style="width: 100%;">
         </div>
 
         <div style="margin-bottom: 15px;">
-          <label for="temp-hp-type-select" class="hp-field-label">Typ</label>
-          <select id="temp-hp-type-select" class="hp-input" style="width: 100%; text-align: left;">
-            <option value="temp">Temporäre TP</option>
-            <option value="max">Erhöhung Max-TP</option>
-          </select>
+            <label for="temp-hp-type-select" class="hp-field-label">Typ</label>
+            <select id="temp-hp-type-select" class="hp-input" style="width: 100%; text-align: left;">
+                <option value="temp">Temporäre TP</option>
+                <option value="max">Erhöhung Max-TP</option>
+            </select>
         </div>
 
         <div style="margin-bottom: 15px;">
-           <label for="temp-hp-duration-select" class="hp-field-label">Dauer</label>
-           <select id="temp-hp-duration-select" class="hp-input" style="width: 100%; text-align: left;">
-             <option value="long">Bis zur langen Rast</option>
-             <option value="short">Bis zur kurzen Rast</option>
-             <option value="combat">Bis Ende des Kampfes</option>
-             <option value="permanent">Permanent</option>
-             <option value="other">Andere</option>
-          </select>
+            <label for="temp-hp-duration-select" class="hp-field-label">Dauer</label>
+            <select id="temp-hp-duration-select" class="hp-input" style="width: 100%; text-align: left;">
+                <option value="long">Bis zur langen Rast</option>
+                <option value="short">Bis zur kurzen Rast</option>
+                <option value="combat">Bis Ende des Kampfes</option>
+                <option value="permanent">Permanent</option>
+                <option value="other">Andere</option>
+            </select>
         </div>
 
         <button class="action-btn" style="margin-top: 15px;" onclick="addTempHPEffect()" title="Effekt hinzufügen">Hinzufügen</button>
-      </div>
     </div>
+</div>
     <script>
         // --- Character Data ---
      
@@ -1556,19 +1614,19 @@ const characterData = {
     name: "Bren",
     race: "Goliath",
     class: "Barbarian",
-    level: 6, // UPDATED
+    level: 6, 
     alignment: "Chaotic Neutral",
     background: "Far Traveler",
     attributes: {
         str: 18, dex: 14, con: 14, int: 8, wis: 10, cha: 12
     },
     hp: {
-        baseMax: 68, // UPDATED
-        current: 68, // UPDATED
+        baseMax: 68, 
+        current: 68, 
         temp: 0,
         bonus: 0,
-        hitDiceMax: 6, // UPDATED
-        hitDiceCurrent: 6, // UPDATED
+        hitDiceMax: 6, 
+        hitDiceCurrent: 6, 
         hitDiceType: 12,
     },
     proficiencies: {
@@ -1579,32 +1637,27 @@ const characterData = {
         tools: ["Lute", "Gaming set (Dragonchess)"]
     },
     features: [
-        // Goliath Traits
         { id: "powerful-build", name: "Powerful Build", source: "Goliath", description: "Zählt als eine Größenkategorie größer für Tragfähigkeit." },
         { id: "mountain-born", name: "Mountain Born", source: "Goliath", description: "Resistenz gegen Kälteschaden, akklimatisiert an große Höhen." },
         { id: "stones-endurance", name: "Stone's Endurance", source: "Goliath", usesMax: 1, usesCurrent: 1, resetOn: "short", description: "Reaktion: Schaden reduzieren um 1W12 + KON-Mod." },
-        // Barbarian Class Features
         { id: "rage-ability", name: "Rage", source: "Barbarian 1", description: "Siehe Rage Details unter Bonusaktionen." },
         { id: "unarmored-defense", name: "Unarmored Defense", source: "Barbarian 1", description: "Ohne Rüstung: RK = 10 + GES-Mod + KON-Mod." },
         { id: "reckless-attack", name: "Reckless Attack", source: "Barbarian 2", description: "Vorteil auf STR-Nahkampfangriffe; Angriffe gegen dich haben Vorteil." },
         { id: "danger-sense", name: "Danger Sense", source: "Barbarian 2", description: "Vorteil auf GES-Rettungswürfe gegen Effekte, die du sehen kannst." },
         { id: "primal-path", name: "Primal Path (Zealot Variant)", source: "Barbarian 3", description: "Pfad des Zeloten (Variante gemäß DM-Sheet)." },
-        // Zealot Variant Features (gemäß PDF)
-        { id: "divine-fury-pdf", name: "Divine Fury (Rage Trait)", source: "Zealot Variant 3", description: "Während Rage: Erster Treffer pro Zug +1W6 + halbe Barbaren-Stufe (aktuell +3) Feuerschaden. Entzündet Objekte." }, // Level / 2 is now 3
+        { id: "divine-fury-pdf", name: "Divine Fury (Rage Trait)", source: "Zealot Variant 3", description: "Während Rage: Erster Treffer pro Zug +1W6 + halbe Barbaren-Stufe (aktuell +3) Feuerschaden. Entzündet Objekte." },
         { id: "rage-str-skills-pdf", name: "Rage - Strength for Skills", source: "Zealot Variant 3", description: "Während Rage: Kann STR für Akrobatik, Einschüchterung, Wahrnehmung, Heimlichkeit, Überlebenskunst verwenden." },
         { id: "warrior-of-the-gods-pdf", name: "Warrior of the Gods (Heal)", source: "Zealot Variant 3", usesMax: 1, usesCurrent: 1, resetOn: "long", description: "Kann W12 aus einem Pool (Annahme: Trefferwürfelpool?) ausgeben, würfeln und HP i.H.d. Wurfs regenerieren." },
-        // Level Features
         { id: "asi", name: "Ability Score Improvement/Feat", source: "Barbarian 4", description: "Feat: Great Weapon Master angenommen (aus HTML und Hew-Fähigkeit)" },
         { id: "great-weapon-master", name: "Great Weapon Master", source: "Feat", description: "Bonusaktion Angriff nach Krit/Kill (Hew); optional -5 Angriff für +10 Schaden." },
         { id: "extra-attack", name: "Extra Attack", source: "Barbarian 5", description: "Kann zweimal angreifen statt einmal bei Angriffsaktion." },
         { id: "fast-movement", name: "Fast Movement", source: "Barbarian 5", description: "+10 Fuß Bewegungsrate ohne schwere Rüstung." },
-        { // NEW FEATURE
+        { 
             id: "fanatical-focus",
             name: "Fanatical Focus",
-            source: "Barbarian 6",
+            source: "Barbarian 6", 
             description: "Once per active Rage, if you fail a saving throw, you can reroll it with a bonus equal to your Rage Damage bonus, and you must use the new roll. (PHB'24 p57)"
         },
-        // Items mit speziellen Eigenschaften
         { id: "cloak-of-displacement", name: "Cloak of Displacement (Attuned)", source: "Magic Item", description: "Angriffe haben Nachteil, bis Schaden genommen wird / Speed 0." },
         { id: "boots-of-the-vigilant", name: "Boots of the Vigilant", source: "Magic Item", description: "Nach Initiativewurf 1W8 zur Initiative addieren (1x pro Dämmerung)." },
         { id: "goggles-of-the-night", name: "Goggles of the Night", source: "Magic Item", description: "Gewährt Dunkelsicht 60ft." }
@@ -1643,8 +1696,8 @@ const characterData = {
         rage: { current: 3, max: 3, resetOn: 'long',
                 description: "Standard Rage + Divine Fury (Feuer) + STR für Skills",
                 divineFuryDice: "1d6",
-                divineFuryBonus: 3, // UPDATED: Level / 2 (6/2 = 3)
-                rageDamageBonus: 2 // Standard Rage Bonus for levels 1-8
+                divineFuryBonus: 3, 
+                rageDamageBonus: 2 
               },
         stonesEndurance: { current: 1, max: 1, resetOn: 'short' },
         bootsOfTheVigilant: { current: 1, max: 1, resetOn: 'dawn' },
@@ -1666,6 +1719,17 @@ const characterData = {
         let strScore = characterData.attributes.str; 
         const powerfulBuild = characterData.features.some(f => f.id === 'powerful-build');
 
+        // --- Image Slider Variables ---
+        let currentImageIndex = 0;
+      
+        let characterImages = [
+            "https://sharonmabel.github.io/DnD/Bren.jpg", // Originalbild
+            "https://sharonmabel.github.io/DnD/FeuerzeichenBren.jpg", // Beispiel Bild 2
+            "https://sharonmabel.github.io/DnD/Bren2.jpg"  // Beispiel Bild 3
+        ];
+        let sliderImageElements;
+
+
         // --- Utility Functions ---
         function getModifier(attribute) {
             const score = characterData.attributes[attribute];
@@ -1673,15 +1737,14 @@ const characterData = {
         }
 
         function getProficiencyBonus() {
-            // UPDATED based on user request for +4 at level 6
             const level = characterData.level;
             if (level >= 17) return 6;
             if (level >= 13) return 5;
             if (level >= 9) return 4; 
-            if (level >= 6) return 4; // User requested +4 for level 6
-            if (level === 5) return 3; // Standard for L5
+            if (level >= 6) return 4; 
+            if (level === 5) return 3; 
             if (level >= 1) return 2;
-            return 3; // Default fallback
+            return 3; 
         }
 
          function getSkillBonus(skillName) {
@@ -1722,6 +1785,7 @@ const characterData = {
           updateCombatStats();
           initializeInventory(); 
           updateRageCounter(); 
+          initializeImageSlider(); // Slider initialisieren
 
             document.getElementById('combat').classList.add('active');
             document.querySelectorAll('.tab')[0].classList.add('active');
@@ -1800,7 +1864,7 @@ const characterData = {
             let damageParts = ["2d6", formatBonus(strMod)];
 
             if (characterData.activeToggles.rage) {
-                damageParts.push(formatBonus(characterData.resources.rage.rageDamageBonus)); // Use defined rage damage
+                damageParts.push(formatBonus(characterData.resources.rage.rageDamageBonus));
              }
              if (characterData.activeToggles.gwm) {
                 attackBonus -= 5;
@@ -1830,7 +1894,10 @@ const characterData = {
         function toggleRage() {
             characterData.activeToggles.rage = !characterData.activeToggles.rage;
             document.getElementById('rage-toggle').classList.toggle('active', characterData.activeToggles.rage);
-            document.getElementById('rage-overlay').style.opacity = characterData.activeToggles.rage ? '1' : '0';
+            const rageOverlay = document.getElementById('rage-overlay');
+            if (rageOverlay) { // Nur wenn das Overlay existiert
+                rageOverlay.style.opacity = characterData.activeToggles.rage ? '1' : '0';
+            }
             document.body.classList.toggle('rage-active', characterData.activeToggles.rage); 
             if (!characterData.activeToggles.rage) {
                  const rageCheckbox = document.querySelector('#action-rage .action-checkbox');
@@ -2029,7 +2096,7 @@ const characterData = {
              hpBonus = parseInt(document.getElementById('hp-bonus-input').value) || 0;
              maxHP = baseMaxHP + hpBonus;
              document.getElementById('display-max-hp').innerText = maxHP;
-             document.getElementById('current-hp-input').max = maxHP; // Update max for current HP input
+             document.getElementById('current-hp-input').max = maxHP; 
               if (currentHP > maxHP) {
                  currentHP = maxHP;
                  document.getElementById('current-hp-input').value = currentHP;
@@ -2190,18 +2257,18 @@ const characterData = {
              'powerful-build': "<p>Du zählst als eine Größenkategorie größer, wenn es darum geht, deine Tragfähigkeit und das Gewicht zu bestimmen, das du schieben, ziehen oder heben kannst.</p>",
              'mountain-born': "<p>Du bist an große Höhen gewöhnt, einschließlich Höhen über 10.000 Fuß. Du bist außerdem auf natürliche Weise an kalte Klimazonen angepasst, wie in Kapitel 5 des Dungeon Master's Guide beschrieben.</p><p>Du hast Resistenz gegen Kälteschaden.</p>",
              'stones-endurance': "<p>Du kannst dich darauf konzentrieren, Verletzungen abzuwehren. Wenn du Schaden nimmst, kannst du deine Reaktion verwenden, um einen W12 zu würfeln. Addiere deinen Konstitutionsmodifikator zum gewürfelten Ergebnis und reduziere den Schaden um diese Summe.</p><p>Nachdem du diese Eigenschaft verwendet hast, kannst du sie erst wieder nutzen, nachdem du eine kurze oder lange Rast beendet hast.</p>",
-             'rage-ability': `<p>Als Bonusaktion kannst du in einen Wutrausch verfallen. Dauer: 1 Minute. Endet früher bei Bewusstlosigkeit, keiner Aktion/Schaden seit letztem Zug, oder freiwillig (Bonusaktion).</p><ul><li>Vorteil auf STR-Würfe und STR-Rettungswürfe.</li><li>Bonus auf Schadenswürfe mit STR-Nahkampfwaffen (+${characterData.resources.rage.rageDamageBonus}).</li><li>Resistenz gegen Hieb-, Stich- und Wuchtschaden.</li></ul><p>Nutzungen: ${characterData.resources.rage.max} pro langer Rast.</p>`, // CORRECTED Rage Damage Bonus
+             'rage-ability': `<p>Als Bonusaktion kannst du in einen Wutrausch verfallen. Dauer: 1 Minute. Endet früher bei Bewusstlosigkeit, keiner Aktion/Schaden seit letztem Zug, oder freiwillig (Bonusaktion).</p><ul><li>Vorteil auf STR-Würfe und STR-Rettungswürfe.</li><li>Bonus auf Schadenswürfe mit STR-Nahkampfwaffen (+${characterData.resources.rage.rageDamageBonus}).</li><li>Resistenz gegen Hieb-, Stich- und Wuchtschaden.</li></ul><p>Nutzungen: ${characterData.resources.rage.max} pro langer Rast.</p>`, 
              'unarmored-defense': "<p>Ohne Rüstung entspricht deine Rüstungsklasse 10 + deinem Geschicklichkeitsmodifikator + deinem Konstitutionsmodifikator. Du kannst einen Schild verwenden und trotzdem von diesem Vorteil profitieren.</p>",
              'reckless-attack': "<p>Wenn du deinen ersten Angriff in deinem Zug ausführst, kannst du entscheiden, rücksichtslos anzugreifen. Dies gibt dir Vorteil bei Nahkampfangriffen mit Stärke während dieses Zuges, aber Angriffswürfe gegen dich haben bis zu deinem nächsten Zug Vorteil.</p>",
              'danger-sense': "<p>Du hast Vorteil auf Geschicklichkeits-Rettungswürfe gegen Effekte, die du sehen kannst (z.B. Fallen, Zauber). Funktioniert nicht, wenn du geblendet, taub oder handlungsunfähig bist.</p>",
              'primal-path': "<p>Auf Stufe 3 wählst du einen Pfad, der deine Wut formt. Dein gewählter Pfad ist der Pfad des Zeloten, der dir auf Stufe 3, 6, 10 und 14 Merkmale verleiht.</p>",
-             'divine-fury': `<p>Während du in Rage bist, erleidet die erste Kreatur, die du in jedem deiner Züge mit einem Waffenangriff triffst, zusätzlichen Schaden in Höhe von 1W6 + ${characterData.resources.rage.divineFuryBonus}. Der Schadenstyp ist Nekrotisch oder Strahlend (wähle bei Erhalt).</p>`, // divineFuryBonus now correctly calculated
+             'divine-fury': `<p>Während du in Rage bist, erleidet die erste Kreatur, die du in jedem deiner Züge mit einem Waffenangriff triffst, zusätzlichen Schaden in Höhe von 1W6 + ${characterData.resources.rage.divineFuryBonus}. Der Schadenstyp ist Nekrotisch oder Strahlend (wähle bei Erhalt).</p>`, 
              'warrior-of-the-gods': "<p>Wenn ein Zauber wie *Totenerweckung* den alleinigen Effekt hat, dich ins Leben zurückzubringen (nicht als Untoter), benötigt der Zauberwirker keine materiellen Komponenten, um den Zauber auf dich zu wirken.</p>",
              'asi': "<p>Auf Stufe 4 (und weiteren Stufen) kannst du einen Attributswert um 2 oder zwei Attributswerte um je 1 erhöhen, oder ein Talent wählen. Du hast das Talent 'Great Weapon Master' gewählt.</p>",
              'great-weapon-master': "<p><ul><li>Wenn du einen kritischen Treffer mit einer Nahkampfwaffe erzielst oder eine Kreatur mit einer solchen auf 0 Trefferpunkte reduzierst, kannst du einen Nahkampfwaffenangriff als Bonusaktion ausführen.</li><li>Bevor du einen Nahkampfangriff mit einer schweren Waffe ausführst, mit der du geübt bist, kannst du einen Malus von -5 auf den Angriffswurf nehmen. Wenn der Angriff trifft, addierst du +10 zum Schaden des Angriffs.</li></ul></p>",
              'extra-attack': "<p>Du kannst zweimal anstatt einmal angreifen, wenn du die Angriffsaktion in deinem Zug ausführst.</p>",
              'fast-movement': "<p>Deine Bewegungsrate erhöht sich um 10 Fuß, solange du keine schwere Rüstung trägst.</p>",
-             'fanatical-focus': `<p>Einmal pro aktiver Wut, wenn du einen Rettungswurf nicht bestehst, kannst du ihn mit einem Bonus in Höhe deines Wutschaden-Bonus wiederholen. Du musst den neuen Wurf verwenden. (PHB'24 S.57)</p><p>Dein aktueller Wutschaden-Bonus ist: +${characterData.resources.rage.rageDamageBonus}.</p>`, // NEW
+             'fanatical-focus': `<p>Einmal pro aktiver Wut, wenn du einen Rettungswurf nicht bestehst, kannst du ihn mit einem Bonus in Höhe deines Wutschaden-Bonus wiederholen. Du musst den neuen Wurf verwenden. (PHB'24 S.57)</p><p>Dein aktueller Wutschaden-Bonus ist: +${characterData.resources.rage.rageDamageBonus}.</p>`, 
             };
 
           title.innerText = abilityId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); 
@@ -2405,6 +2472,49 @@ const characterData = {
              `;
         }
 
+        // --- Image Slider Functions ---
+        function initializeImageSlider() {
+            const sliderContainer = document.querySelector('.image-slider-container');
+            if (!sliderContainer) return;
+
+            sliderContainer.innerHTML = ''; // Alte Bilder löschen, falls welche hardcoded waren
+
+            characterImages.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `Portrait von Bren Varakhaal ${index + 1}`;
+                img.classList.add('slider-image');
+                sliderContainer.appendChild(img);
+            });
+            sliderImageElements = sliderContainer.querySelectorAll('.slider-image');
+            showImage(0); // Erstes Bild anzeigen
+        }
+
+        function showImage(index) {
+            if (!sliderImageElements || sliderImageElements.length === 0) return;
+            sliderImageElements.forEach((img, i) => {
+                img.classList.toggle('active', i === index);
+            });
+            currentImageIndex = index;
+        }
+
+        function nextImage() {
+            if (!sliderImageElements || sliderImageElements.length === 0) return;
+            let newIndex = currentImageIndex + 1;
+            if (newIndex >= sliderImageElements.length) {
+                newIndex = 0; 
+            }
+            showImage(newIndex);
+        }
+
+        function prevImage() {
+            if (!sliderImageElements || sliderImageElements.length === 0) return;
+            let newIndex = currentImageIndex - 1;
+            if (newIndex < 0) {
+                newIndex = sliderImageElements.length - 1; 
+            }
+            showImage(newIndex);
+        }
 
     </script>
 </body>
