@@ -3,496 +3,348 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ilio Xaenor - E-Ink Optimiert</title>
+  <title>Ilio Xaenor - Charakterbogen</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=MedievalSharp&display=swap');
+
+    :root {
+      --bg-color: #4747cd; 
+      --card-bg-color: #204d78; 
+      --text-color: #f0f0f0; 
+      --primary-color: #1771cb; 
+      --secondary-color: #428fe1; 
+      --accent-color: #c8d9e6; 
+      --border-color: #44475a; 
+      --font-sans-serif: 'Roboto', sans-serif;
+      --font-serif: 'MedievalSharp', cursive;
+    }
+
     body {
-      font-family: sans-serif;
-      background-color: white;
-      color: black;
-      font-size: 14px; /* Standard E-Ink Font Size */
-      line-height: 1.3;
+      font-family: var(--font-sans-serif);
+      background-color: var(--bg-color);
+      color: var(--text-color);
       margin: 0;
-      padding: 5px;
-      -webkit-text-size-adjust: 100%; /* Prevent font scaling */
-    }
-    h1, h2, h3 {
-      margin: 0 0 5px 0;
-      padding: 0;
-      font-size: 1.2em; /* Relative sizes */
-    }
-    h1 { font-size: 1.4em; }
-    h3 { font-size: 1.1em; font-weight: bold; }
-    p { margin: 3px 0; }
-    ul { margin: 3px 0; padding-left: 15px; }
-    button, input, select {
-      font-family: sans-serif;
-      font-size: 1em;
-      background: white;
-      border: 1px solid black;
-      padding: 2px 4px;
-      margin: 1px;
-      cursor: pointer;
-      vertical-align: middle;
-    }
-    input[type="number"] {
-      width: 40px; /* Smaller number inputs */
-      text-align: center;
-    }
-    input[type="checkbox"] {
-        vertical-align: middle;
-    }
-    select {
-        min-width: 60px;
+      padding: 15px;
+      line-height: 1.6;
+      font-size: 16px;
     }
 
     .container {
-      /* Using simple block layout instead of table for better flexibility */
-    }
-    .header-info {
-        border: 1px solid black;
-        padding: 5px;
-        margin-bottom: 5px;
-    }
-     .character-basics {
-        font-weight: bold;
-        margin-bottom: 5px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 20px;
     }
 
-    .section {
-      border: 1px solid black;
-      padding: 5px;
-      margin-bottom: 5px;
-      background: white; /* Ensure background */
-    }
-    .section h2 {
-      font-size: 1.1em;
-      margin: 0 0 5px;
-      border-bottom: 1px solid black;
-      padding-bottom: 2px;
-    }
-
-    /* Attributes using simple divs */
-     .attributes-grid {
-         display: grid;
-         grid-template-columns: repeat(3, 1fr); /* 3 columns */
-         gap: 3px;
-         margin-bottom: 5px;
-     }
-    .attribute {
-        text-align: center;
-        padding: 2px;
-        border: 1px solid black;
-    }
-    .attribute-name {
-        font-weight: bold;
-        font-size: 0.9em;
-        display: block;
-    }
-    .attribute-controls {
+    .main-column {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 2px 0;
-    }
-    .attribute-value {
-      font-size: 1.1em;
-      margin: 0 3px;
-      min-width: 20px; /* Ensure space */
-      display: inline-block;
-    }
-    .attribute-mod {
-        font-weight: bold;
-        font-size: 1em;
-        display: block;
-    }
-    .attr-button {
-      width: 16px;
-      height: 16px;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 0;
-      margin: 0;
-      border: 1px solid black;
-      cursor: pointer;
-      line-height: 14px; /* Center text vertically */
+      flex-direction: column;
+      gap: 20px;
     }
 
-    /* HP Management */
-    .hp-section {
-        margin-bottom: 5px;
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
-    .hp-bar-container {
-        display: flex;
-        align-items: center;
-        margin-bottom: 3px;
-        gap: 5px;
-    }
-     .hp-display {
-        font-weight: bold;
-        white-space: nowrap; /* Prevent wrapping */
-    }
-    .hp-bar {
-        flex-grow: 1;
-        height: 10px; /* Slimmer bar */
-        border: 1px solid black;
-        background: white;
-        position: relative; /* For fill */
-        min-width: 50px; /* Ensure bar visible */
-    }
-    .hp-fill {
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        background: black; /* Simple black fill */
-        /* width set by JS */
-    }
-     .hp-buttons {
-         display: flex;
-         align-items: center;
-         gap: 2px;
-    }
-     .hp-button {
-         width: 20px;
-         height: 20px;
-         border: 1px solid black;
-         cursor: pointer;
-         font-weight: bold;
-         font-size: 14px;
-         text-align: center;
-         line-height: 18px; /* Adjust line height */
-         padding: 0;
-     }
-     .hp-extra-toggle {
-         font-size: 0.8em;
-         margin-left: 5px;
-         text-decoration: underline;
-         cursor: pointer;
-     }
-     .hp-extra-content {
-         display: none; /* Hidden by default */
-         padding: 5px;
-         margin-top: 3px;
-         border: 1px dashed black; /* Dashed border */
-         font-size: 0.9em;
-     }
-      .hp-extra-content label {
-         display: block;
-         margin-top: 3px;
-         font-weight: bold;
-     }
-     .hp-extra-content input, .hp-extra-content select {
-         margin-bottom: 3px;
-     }
-      .temp-hp-effect {
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-         font-size: 0.9em;
-         padding: 1px 0;
-     }
-      .temp-hp-effect button {
-         font-size: 0.8em;
-         padding: 0 2px;
-         line-height: 1;
-         height: 16px;
-     }
-
-
-    /* Tabs */
-    .tab-bar {
-      display: flex; /* Use flexbox for tabs */
-      width: 100%;
-      margin-bottom: 5px;
-      border: 1px solid black;
-    }
-    .tab {
-      flex: 1; /* Equal width tabs */
-      text-align: center;
-      padding: 3px 2px; /* Slightly more padding */
-      border-left: 1px solid black;
-      cursor: pointer;
-      font-size: 0.9em;
-      background: white;
-    }
-    .tab:first-child {
-        border-left: none;
-    }
-    .tab.active {
-      background: #ddd; /* Gray background for active */
-      font-weight: bold;
-    }
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
+    
+    .char-portrait-container {
+        background-color: var(--card-bg-color);
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
-    /* Toggles */
-    .toggle-container {
-        margin-bottom: 5px;
+    #char-portrait-img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 6px;
+        border: 2px solid var(--accent-color);
     }
-    .toggle {
-      display: inline-block;
-      padding: 2px 5px; /* Smaller padding */
-      margin: 1px;
-      border: 1px solid black;
-      cursor: pointer;
-      font-size: 0.9em;
-      background: white;
-    }
-    .toggle.active {
-      background: #ddd; /* Gray background */
-      font-weight: bold;
-    }
-    .toggle.resource-limited.disabled { /* For limited use abilities like Dreadful Strike */
-        opacity: 0.5;
-        cursor: default;
-        background: #eee;
+    
+    .card {
+      background-color: var(--card-bg-color);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
-
-    /* Collapsible sections */
-    .collapsible {
-      border: 1px solid black;
-      margin-bottom: 3px;
-      background: white;
+    h1, h2, h3 {
+      font-family: var(--font-serif);
+      color: var(--primary-color);
+      margin-top: 0;
+      margin-bottom: 15px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
-    .collapsible-header {
-      background: #eee; /* Light gray header */
-      padding: 3px 5px;
-      cursor: pointer;
-      font-weight: bold;
+    h1 { font-size: 2.5em; text-align: center; }
+    h2 { font-size: 1.8em; border-bottom: 1px solid var(--accent-color); padding-bottom: 10px;}
+    h3 { font-size: 1.4em; color: var(--accent-color); }
+
+    p { margin-bottom: 10px; }
+    ul { padding-left: 20px; margin-bottom: 10px; }
+
+    button, input[type="button"], input[type="submit"] {
+      font-family: var(--font-sans-serif);
       font-size: 1em;
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    .collapsible-content {
-      padding: 5px;
-      display: none; /* Hidden by default */
-      border-top: 1px solid black;
+    button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
     }
-    .collapsible-content p, .collapsible-content ul {
-      font-size: 0.95em; /* Slightly smaller text inside */
-    }
-
-    /* Skills & Info Lists */
-    .info-list {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-    }
-    .info-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 2px 0;
-      border-bottom: 1px solid #eee; /* Lighter separator */
-    }
-     .info-item:last-child {
-        border-bottom: none;
-    }
-    .info-label {
-        /* flex: 1; */ /* Removed */
-    }
-    .info-value {
-        font-weight: bold;
-        text-align: right;
-        min-width: 30px; /* Ensure space */
-        padding-left: 10px; /* Space between label and value */
-    }
-     .proficient::after { /* Simple proficiency indicator */
-        content: "*";
-        font-weight: bold;
-        margin-left: 2px;
-        color: black;
+    button:active {
+        transform: translateY(0px);
     }
 
-    /* Dice Result */
-    .dice-result-display {
-        border: 1px solid black;
-        padding: 5px;
-        margin-top: 5px;
+    input[type="number"], input[type="text"], select {
+      font-family: var(--font-sans-serif);
+      font-size: 1em;
+      background-color: rgba(255,255,255,0.1);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 5px;
+      width: auto;
+    }
+    input[type="number"] { text-align: center; width: 60px; }
+
+    .header-info { text-align: center; }
+    .character-basics { font-size: 1.1em; margin-bottom: 15px; }
+    .character-basics span { margin: 0 8px; }
+
+    .attributes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .attribute {
+      text-align: center;
+      padding: 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background-color: rgba(0,0,0,0.2);
+    }
+    .attribute-name { font-family:var(--font-serif); font-size: 1.3em; color: var(--primary-color); margin-bottom: 5px; }
+    .attribute-value-container { display: flex; align-items: center; justify-content: center; margin: 5px 0; }
+    .attribute-value { font-size: 1.8em; font-weight: bold; margin: 0 10px;}
+    .attr-button {
+        background-color: var(--secondary-color);
+        color: var(--text-color);
+        border: none;
+        width: 25px;
+        height: 25px;
+        font-size: 1em;
+        border-radius: 50%;
+        cursor: pointer;
+        line-height: 25px; /* Vertikal zentrieren */
         text-align: center;
     }
-    .dice-result-value {
-        font-size: 1.5em;
-        font-weight: bold;
-        margin: 3px 0;
-    }
-    .dice-buttons button {
-        margin: 0 2px;
-    }
+    .attr-button:hover { background-color: var(--primary-color); }
+    .attribute-mod { font-size: 1.5em; color: var(--accent-color); }
+    
+    .hp-section { margin-bottom: 20px; }
+    .hp-bar-container { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .hp-display { font-weight: bold; white-space: nowrap; font-size: 1.2em; }
+    .hp-bar { flex-grow: 1; height: 25px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.3); border-radius: 12px; position: relative; overflow: hidden;}
+    .hp-fill { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, var(--accent-color), var(--primary-color)); transition: width 0.3s ease; }
+    .hp-buttons button { width: 40px; height: 40px; font-size: 1.2em; }
+    .hp-extra-content { border: 1px dashed var(--border-color); padding: 10px; margin-top:10px; border-radius: 6px;}
 
-    /* Inventory & Action Economy */
-     .inventory-table, .action-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.9em;
-        margin-bottom: 5px;
-    }
-     .inventory-table th, .action-table th,
-     .inventory-table td, .action-table td {
-        border: 1px solid black;
-        padding: 2px 4px;
-        text-align: left;
-        vertical-align: top;
-    }
-     .inventory-table th, .action-table th {
-        background: #eee;
-        font-weight: bold;
-    }
-     .inventory-add-form label, .action-table label {
-        font-size: 0.9em;
-        margin-right: 3px;
-    }
-     .inventory-add-form input, .inventory-add-form select {
-        margin-right: 5px;
-        margin-bottom: 3px;
-     }
-      .inventory-summary {
-         font-size: 0.9em;
-         margin-top: 5px;
-         padding: 3px;
-         border: 1px solid #ccc;
-     }
-      .delete-button {
-         color: black;
-         text-decoration: none;
-         font-weight: bold;
-         padding: 0 3px;
-         cursor: pointer;
-         border: 1px solid black;
-         display: inline-block;
-         line-height: 1;
-     }
-     .action-item td:last-child {
-        text-align: center;
-     }
-     .action-checkbox {
-        width: 16px;
-        height: 16px;
-     }
+    .tab-bar { display: flex; margin-bottom: 20px; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+    .tab { flex: 1; text-align: center; padding: 12px 10px; background: var(--secondary-color); cursor: pointer; font-size: 1em; font-weight: bold; transition: background-color 0.3s ease;}
+    .tab.active { background: var(--primary-color); }
+    .tab:not(.active):hover { background: #5a1aa0; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.5s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .toggle-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+    .toggle { padding: 8px 15px; border: 1px solid var(--border-color); border-radius: 20px; cursor: pointer; font-size: 0.9em; background: rgba(255,255,255,0.1); transition: background-color 0.3s, color 0.3s;}
+    .toggle.active { background: var(--accent-color); color: var(--bg-color); font-weight: bold;}
+    .toggle.resource-limited.disabled { opacity: 0.5; cursor: default; background: #555; }
+    
+    .info-list { list-style: none; padding: 0; }
+    .info-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+    .info-item:last-child { border-bottom: none; }
+    .info-label { opacity: 0.8; }
+    .info-value { font-weight: bold; color: var(--accent-color); }
+    .proficient::after { content: "✶"; margin-left: 5px; color: var(--accent-color); }
+
+    .dice-result-display { padding: 15px; text-align: center; margin-top:15px; background-color: rgba(0,0,0,0.2); border-radius: 6px; }
+    .dice-result-value { font-size: 2em; font-weight: bold; margin: 10px 0; min-height: 40px; color: var(--accent-color); }
+    .dice-buttons button { background-color: var(--secondary-color); }
+    .dice-buttons button:hover { background-color: var(--primary-color); }
+    #btn-roll-quarry.disabled { background-color: #555; color: #888; cursor:not-allowed; }
+    #btn-roll-quarry:not(.disabled):hover { background-color: var(--primary-color); }
+    
+    .damage-input-section { margin-top: 15px; }
+    .damage-input-section label { margin-right: 5px; }
+    .damage-input-section input[type="number"] { width: 70px; margin-right: 10px;}
 
 
-    /* Simple layout adjustments */
-     .two-column {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-        border-spacing: 5px 0;
-        margin-bottom: 5px;
+    .collapsible-header { background: var(--secondary-color); padding: 10px; cursor: pointer; font-weight: bold; border-radius: 4px; margin-bottom: 2px; transition: background-color 0.3s;}
+    .collapsible-header:hover { background: var(--primary-color); }
+    .collapsible-content { padding: 15px; display: none; background-color: rgba(0,0,0,0.1); border-radius: 0 0 4px 4px;}
+    
+    .inventory-table { width: 100%; border-collapse: collapse; font-size: 0.95em; margin-bottom: 15px; }
+    .inventory-table th, .inventory-table td { border: 1px solid var(--border-color); padding: 10px; text-align: left; }
+    .inventory-table th { background: var(--secondary-color); font-family: var(--font-serif); font-size:1.1em; }
+    .inventory-add-form { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end; }
+    .inventory-add-form label { display:block; margin-bottom:5px; font-size:0.9em; opacity:0.8;}
+    .inventory-add-form div { flex:1 1 auto; }
+    .inventory-summary { font-size: 0.9em; margin-top: 15px; padding: 10px; border: 1px solid var(--border-color); border-radius:6px; background-color:rgba(0,0,0,0.2);}
+    .delete-button { background: #c0392b; color:white; padding: 3px 8px; border-radius:4px; text-decoration:none; font-size:0.9em;}
+    .delete-button:hover { background: #e74c3c; }
+
+    .action-table { width: 100%; border-collapse: collapse; font-size: 0.95em; margin-bottom: 15px; }
+    .action-table th, .action-table td { border: 1px solid var(--border-color); padding: 10px; text-align: left; }
+    .action-table th { background: var(--secondary-color); font-family: var(--font-serif); font-size:1.1em; }
+    .action-checkbox { margin-left:10px; transform: scale(1.3); }
+
+
+    @media (max-width: 900px) {
+        .container {
+            grid-template-columns: 1fr; /* Stack main and sidebar */
+        }
+        .sidebar {
+            order: -1; /* Move sidebar to top on smaller screens */
+        }
     }
-     .column {
-        display: table-cell;
-        vertical-align: top;
+     @media (max-width: 600px) {
+        .attributes-grid {
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        }
+        h1 { font-size: 2em; }
+        .hp-bar-container { flex-direction: column; align-items: stretch; }
+        .hp-buttons { justify-content: center; margin-top:10px; }
+        .tab-bar { flex-direction:column; }
+        .tab { border-bottom: 1px solid var(--border-color); border-left:none !important; }
     }
 
   </style>
 </head>
 <body>
   <div class="container">
-      <div class="header-info">
+    <div class="main-column">
+      <div class="card header-info">
           <h1 id="char-name">Ilio Xaenor</h1>
           <div class="character-basics">
               <span id="char-details">Waldelf Gloom Stalker 4 / Rogue 1</span> |
               RK: <span id="ac-value">16</span> |
               Bewegung: <span id="speed-value">35</span>ft |
-              Init: <span id="initiative-value">+7</span> |
-              PB: <span id="pb-value">+3</span>
+              Init: <span id="initiative-value">+7</span> | 
+              PB: <span id="pb-value">+4</span>
           </div>
-           <div class="hp-section">
-              <div class="hp-bar-container">
-                 <span class="hp-display">
-                      TP: <span id="current-hp">21</span>/<span id="max-hp">21</span><span id="temp-hp-display"></span>
-                 </span>
-                 <div class="hp-bar">
-                      <div class="hp-fill" id="hp-fill"></div>
-                 </div>
-                 <div class="hp-buttons">
-                      <button class="hp-button" onclick="modifyHP(-1)" title="-1 TP">-</button>
-                      <button class="hp-button" onclick="modifyHP(1)" title="+1 TP">+</button>
-                      <button class="hp-button" onclick="modifyHP(-5)" title="-5 TP">-5</button>
-                      <button class="hp-button" onclick="modifyHP(5)" title="+5 TP">+5</button>
-                 </div>
-                  <span class="hp-extra-toggle" onclick="toggleCollapsibleContent(document.getElementById('hp-extra'))">[+/-]</span>
-              </div>
-              <div class="hp-extra-content" id="hp-extra">
-                 <h3>Temp TP / Bonus TP</h3>
-                 <label for="temp-hp-source-input">Quelle:</label>
-                 <input type="text" id="temp-hp-source-input" size="15" placeholder="z.B. Aid">
-                 <label for="temp-hp-amount-input">Menge:</label>
-                 <input type="number" id="temp-hp-amount-input" value="1" min="0">
-                 <label for="temp-hp-type-select">Typ:</label>
-                 <select id="temp-hp-type-select">
-                     <option value="temp">Temp TP</option>
-                     <option value="max">Max TP Bonus</option>
-                 </select>
-                 <button onclick="addTempHPEffect()">Hinzufügen</button>
-                 <div id="temp-hp-effects-list" style="margin-top: 5px;">
-                     </div>
-                  <hr style="border: none; border-top: 1px dashed black; margin: 5px 0;">
-                  <button onclick="resetHP()" style="font-size: 0.9em;">HP Voll</button>
-                  <button onclick="takeShortRest()" style="font-size: 0.9em;">Kurze Rast</button>
-                  <button onclick="takeLongRest()" style="font-size: 0.9em;">Lange Rast</button>
-                  <div>Trefferwürfel: <span id="hit-dice-current">5</span>/<span id="hit-dice-max">5</span> W<span id="hit-dice-type">8</span></div>
-              </div>
-           </div>
       </div>
 
-      <div class="attributes-grid">
+      <div class="card attributes-grid">
           <div class="attribute">
               <div class="attribute-name">STR</div>
-              <div class="attribute-controls">
-                  <button class="attr-button" onclick="changeAttribute('str', -1)">-</button>
-                  <span class="attribute-value" id="str-value">10</span>
-                  <button class="attr-button" onclick="changeAttribute('str', 1)">+</button>
+              <div class="attribute-value-container">
+                <button class="attr-button" onclick="changeAttribute('str', -1)">-</button>
+                <span class="attribute-value" id="str-value">10</span>
+                <button class="attr-button" onclick="changeAttribute('str', 1)">+</button>
               </div>
               <div class="attribute-mod" id="str-mod">+0</div>
           </div>
            <div class="attribute">
               <div class="attribute-name">DEX</div>
-              <div class="attribute-controls">
-                  <button class="attr-button" onclick="changeAttribute('dex', -1)">-</button>
-                  <span class="attribute-value" id="dex-value">18</span>
-                  <button class="attr-button" onclick="changeAttribute('dex', 1)">+</button>
+              <div class="attribute-value-container">
+                <button class="attr-button" onclick="changeAttribute('dex', -1)">-</button>
+                <span class="attribute-value" id="dex-value">18</span>
+                <button class="attr-button" onclick="changeAttribute('dex', 1)">+</button>
               </div>
               <div class="attribute-mod" id="dex-mod">+4</div>
           </div>
            <div class="attribute">
               <div class="attribute-name">CON</div>
-              <div class="attribute-controls">
-                  <button class="attr-button" onclick="changeAttribute('con', -1)">-</button>
-                  <span class="attribute-value" id="con-value">14</span>
-                  <button class="attr-button" onclick="changeAttribute('con', 1)">+</button>
+              <div class="attribute-value-container">
+                <button class="attr-button" onclick="changeAttribute('con', -1)">-</button>
+                <span class="attribute-value" id="con-value">14</span>
+                <button class="attr-button" onclick="changeAttribute('con', 1)">+</button>
               </div>
               <div class="attribute-mod" id="con-mod">+2</div>
           </div>
            <div class="attribute">
               <div class="attribute-name">INT</div>
-              <div class="attribute-controls">
-                  <button class="attr-button" onclick="changeAttribute('int', -1)">-</button>
-                  <span class="attribute-value" id="int-value">10</span>
-                  <button class="attr-button" onclick="changeAttribute('int', 1)">+</button>
+              <div class="attribute-value-container">
+                <button class="attr-button" onclick="changeAttribute('int', -1)">-</button>
+                <span class="attribute-value" id="int-value">10</span>
+                <button class="attr-button" onclick="changeAttribute('int', 1)">+</button>
               </div>
               <div class="attribute-mod" id="int-mod">+0</div>
           </div>
            <div class="attribute">
               <div class="attribute-name">WIS</div>
-              <div class="attribute-controls">
-                  <button class="attr-button" onclick="changeAttribute('wis', -1)">-</button>
-                  <span class="attribute-value" id="wis-value">14</span>
-                  <button class="attr-button" onclick="changeAttribute('wis', 1)">+</button>
+              <div class="attribute-value-container">
+                <button class="attr-button" onclick="changeAttribute('wis', -1)">-</button>
+                <span class="attribute-value" id="wis-value">14</span>
+                <button class="attr-button" onclick="changeAttribute('wis', 1)">+</button>
               </div>
               <div class="attribute-mod" id="wis-mod">+2</div>
           </div>
            <div class="attribute">
               <div class="attribute-name">CHA</div>
-              <div class="attribute-controls">
-                  <button class="attr-button" onclick="changeAttribute('cha', -1)">-</button>
-                  <span class="attribute-value" id="cha-value">10</span>
-                  <button class="attr-button" onclick="changeAttribute('cha', 1)">+</button>
+              <div class="attribute-value-container">
+                <button class="attr-button" onclick="changeAttribute('cha', -1)">-</button>
+                <span class="attribute-value" id="cha-value">10</span>
+                <button class="attr-button" onclick="changeAttribute('cha', 1)">+</button>
               </div>
               <div class="attribute-mod" id="cha-mod">+0</div>
           </div>
+      </div>
+
+      <div class="card hp-section">
+        <h2>Trefferpunkte &amp; Heilung</h2>
+        <div class="hp-bar-container">
+            <span class="hp-display">
+                TP: <span id="current-hp">21</span>/<span id="max-hp">21</span><span id="temp-hp-display"></span>
+            </span>
+            <div class="hp-bar">
+                <div class="hp-fill" id="hp-fill"></div>
+            </div>
+        </div>
+        <div class="hp-buttons">
+            <button onclick="modifyHP(-1)" title="-1 TP">-1</button>
+            <button onclick="modifyHP(-5)" title="-5 TP">-5</button>
+            <button onclick="modifyHP(1)" title="+1 TP">+1</button>
+            <button onclick="modifyHP(5)" title="+5 TP">+5</button>
+        </div>
+        <div class="hp-extra-content" id="hp-extra">
+            <h3>Temp TP / Bonus TP</h3>
+            <label for="temp-hp-source-input">Quelle:</label>
+            <input type="text" id="temp-hp-source-input" size="15" placeholder="z.B. Aid">
+            <label for="temp-hp-amount-input">Menge:</label>
+            <input type="number" id="temp-hp-amount-input" value="1" min="0">
+            <label for="temp-hp-type-select">Typ:</label>
+            <select id="temp-hp-type-select">
+                <option value="temp">Temp TP</option>
+                <option value="max">Max TP Bonus</option>
+            </select>
+            <button onclick="addTempHPEffect()">Hinzufügen</button>
+            <div id="temp-hp-effects-list" style="margin-top: 5px;"></div>
+            <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 10px 0;">
+            <button onclick="resetHP()">HP Voll</button>
+            <button onclick="takeShortRest()">Kurze Rast</button>
+            <button onclick="takeLongRest()">Lange Rast</button>
+            <div>Trefferwürfel: <span id="hit-dice-current">5</span>/<span id="hit-dice-max">5</span> <span id="hit-dice-type">W10</span> 
+                <span class="hp-extra-toggle" onclick="toggleCollapsibleContent(document.getElementById('hp-extra'))">[Details ein/aus]</span>
+            </div>
+        </div>
       </div>
 
       <div class="tab-bar">
@@ -503,861 +355,681 @@
           <div class="tab" onclick="changeTab('actions')">Aktionen</div>
       </div>
 
-      <div id="main" class="tab-content active">
-          <div class="section">
-              <h2>Kampf Status</h2>
-              <div class="toggle-container">
-                  <span class="toggle" id="huntersmark" onclick="toggle('huntersmark')">Hunter's Mark</span>
-                  <span class="toggle" id="sneakattack" onclick="toggle('sneakattack')">Sneak Attack</span>
-                  <span class="toggle" id="dreadfulstrike" onclick="toggle('dreadfulstrike', true)">Dreadful Strike (<span id="dreadfulstrike-uses">2</span>/<span id="dreadfulstrike-max">2</span>)</span>
-                   <span class="toggle" id="sharpshooter" onclick="toggle('sharpshooter')">Sharpshooter</span>
-              </div>
-              <div style="margin-top: 5px; font-size: 0.9em;">
-                  <div><b>Angriff (Langbogen):</b> <span id="attack-summary">+9</span></div>
-                  <div><b>Schaden (Langbogen):</b> <span id="damage-summary">1d8+4</span></div>
-                   <div id="extra-attack-info" style="display:none;">(+ 1 extra Angriff bei Angriffsaktion)</div>
-                   <div id="dread-ambusher-info" style="display:none;">(+1 Angriff in Runde 1, +1d8 extra Schaden)</div>
-              </div>
+      <div id="main" class="tab-content active card">
+          <h2>Kampf Status &amp; Schaden</h2>
+          <div class="toggle-container">
+              <span class="toggle" id="sneakattack" onclick="toggle('sneakattack')">Sneak Attack</span>
+              <span class="toggle resource-limited" id="rangers-quarry" onclick="toggle('rangersQuarry', true)">Ranger's Quarry (<span id="rangers-quarry-uses">2</span>/<span id="rangers-quarry-max">2</span>)</span>
           </div>
-
-           <div class="section">
-              <h2>Zauberplätze</h2>
-               <div id="spell-slots">Level 1: 3/3</div>
-               <div>Spell Save DC: <span id="spell-dc">13</span> | Spell Attack: <span id="spell-attack">+5</span></div>
-           </div>
-
+          <div style="margin-top: 15px; margin-bottom:15px; font-size: 1.1em;">
+              <div><b>Angriff (Langbogen):</b> <span id="attack-summary">+9</span></div>
+              <div><b>Schadensformel (Langbogen):</b> <span id="damage-summary">1d8+6</span></div>
+               <div id="extra-attack-info" style="display:none; font-size:0.9em; opacity:0.8;">(+1 Extra Angriff bei Angriffsaktion)</div>
+          </div>
+          
           <div class="dice-result-display">
-              <h3>Würfel</h3>
-              <div class="dice-buttons">
-                   <button onclick="rollDice('1d20+' + getAttackBonus())">Angriff</button>
-                   <button onclick="rollDice(4)">d4</button>
-                   <button onclick="rollDice(6)">d6</button>
-                   <button onclick="rollDice(8)">d8</button>
-                   <button onclick="rollDice(10)">d10</button>
-                   <button onclick="rollDice(12)">d12</button>
-                   <button onclick="rollDice(20)">d20</button>
-              </div>
-              <div class="dice-result-value" id="dice-result">-</div>
+            <h3>Angriff &amp; Schaden</h3>
+            <div class="dice-buttons">
+                 <button onclick="rollDice('1d20+' + getAttackBonus())">Angriffswurf</button>
+                 <button id="btn-roll-quarry" class="disabled" onclick="rollQuarryDice()" title="W4 für Ranger's Quarry würfeln">Quarry W4</button>
+            </div>
+            <div class="damage-input-section">
+                <label for="weapon-dice-roll">Waffenwurf (z.B. W8):</label>
+                <input type="number" id="weapon-dice-roll" placeholder="z.B. 5">
+                <br>
+                <label for="other-bonus-damage">Sonst. Bonus Schaden:</label>
+                <input type="number" id="other-bonus-damage" placeholder="z.B. 2">
+                <br>
+                <button onclick="calculateTotalDamageFromInputs()">Gesamtschaden berechnen</button>
+            </div>
+            <div class="dice-result-value" id="dice-result">-</div>
+            <p style="font-size:0.9em; opacity:0.8;">Hinweis: Für Quarry W4 oben klicken, das Ergebnis wird in die Schadensberechnung einbezogen, wenn Quarry aktiv ist.</p>
           </div>
       </div>
 
-      <div id="skills" class="tab-content">
-          <div class="two-column">
-              <div class="column">
-                  <div class="section">
-                      <h2>Fertigkeiten</h2>
-                      <ul class="info-list" id="skills-list">
-                          </ul>
-                  </div>
-              </div>
-              <div class="column">
-                  <div class="section">
-                      <h2>Rettungswürfe</h2>
-                      <ul class="info-list" id="saves-list">
-                           </ul>
-                  </div>
-                   <div class="section">
-                      <h2>Sinne</h2>
-                       <ul class="info-list">
-                          <li class="info-item"><span class="info-label">Passive Wahrnehmung</span><span class="info-value" id="passive-perception">15</span></li>
-                          <li class="info-item"><span class="info-label">Passive Investigation</span><span class="info-value" id="passive-investigation">10</span></li>
-                          <li class="info-item"><span class="info-label">Passive Insight</span><span class="info-value" id="passive-insight">12</span></li>
-                       </ul>
-                  </div>
-                   <div class="section">
-                      <h2>Sprachen</h2>
-                      <div id="languages" style="font-size:0.9em;">Common, Elvish, Dwarvish, Orkish, Sign Language, Thieves' Cant</div>
-                  </div>
-              </div>
-          </div>
+      <div id="skills" class="tab-content card">
+        <h2>Fertigkeiten &amp; Werte</h2>
+        <div class="two-column">
+            <div class="column">
+                <h3>Fertigkeiten</h3>
+                <ul class="info-list" id="skills-list"></ul>
+            </div>
+            <div class="column">
+                <h3>Rettungswürfe</h3>
+                <ul class="info-list" id="saves-list"></ul>
+                <h3>Sinne</h3>
+                 <ul class="info-list">
+                    <li class="info-item"><span class="info-label">Passive Wahrnehmung</span><span class="info-value" id="passive-perception">18</span></li>
+                    <li class="info-item"><span class="info-label">Passive Investigation</span><span class="info-value" id="passive-investigation">10</span></li>
+                    <li class="info-item"><span class="info-label">Passive Insight</span><span class="info-value" id="passive-insight">12</span></li>
+                 </ul>
+                <h3>Sprachen</h3>
+                <div id="languages" style="font-size:1em; padding:5px 0;">Common, Elvish, Dwarvish, Sign Language, Halfling</div>
+            </div>
+        </div>
       </div>
 
-      <div id="abilities" class="tab-content">
-          <div class="section">
-              <h2>Rasse: Waldelf</h2>
+      <div id="abilities" class="tab-content card">
+        <h2>Fähigkeiten &amp; Merkmale</h2>
+        <div class="section">
+            <h3>Rasse: Waldelf</h3>
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">Details</div>
+                <div class="collapsible-content">
+                     <p><b>Attributswerterhöhung:</b> GES +2, WEI +1.</p>
+                     <p><b>Dunkelsicht:</b> <span id="racial-darkvision">120</span> Fuß (DM-Sheet Wert)</p>
+                     <p><b>Feenblut (Fey Ancestry):</b> Vorteil bei Rettungswürfen gegen Bezauberung, Magie kann dich nicht einschläfern.</p>
+                     <p><b>Trance:</b> Meditiere 4 Stunden statt 8 Stunden Schlaf.</p>
+                     <p><b>Waffentraining der Elfen:</b> Geübt mit Langschwert, Kurzschwert, Kurzbogen, Langbogen.</p>
+                     <p><b>Flinke Füße (Fleet of Foot):</b> Bewegungsrate ist 35 Fuß.</p>
+                     <p><b>Maske der Wildnis (Mask of the Wild):</b> Kann versuchen, sich auch zu verstecken, wenn nur leicht durch Laub, Regen, Schnee, Nebel usw. verdeckt.</p>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h3>Klasse: Ranger (Gloom Stalker Variante)</h3>
+             <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">Allgemein</div>
+                <div class="collapsible-content">
+                     <p><b>Kampfstil:</b> Bogenschießen (+2 Bonus auf Angriffswürfe mit Fernkampfwaffen).</p>
+                     <p><b>Zauberwirken:</b> WEI-basiert. Zauberrettungswurf ZS 13, Zauberangriffsmodifikator +5. Zauberplätze L1: 3.</p>
+                     <p><b>Umbralblick (Umbral Sight):</b> Unsichtbar für Kreaturen, die auf Dunkelsicht angewiesen sind, um dich in Dunkelheit zu sehen.</p>
+                </div>
+             </div>
+        </div>
+         <div class="section">
+            <h3>Klasse: Rogue</h3>
+             <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1</div>
+                <div class="collapsible-content">
+                     <p><b>Expertise:</b> Heimlichkeit, Wahrnehmung.</p>
+                     <p><b>Hinterhältiger Angriff (Sneak Attack):</b> Einmal pro Zug +1W6 Schaden.</p>
+                     <p><b>Diebeszeichen (Thieves' Cant):</b> Geheime Sprache.</p>
+                </div>
+             </div>
+         </div>
+         <div class="section">
+              <h3>Weitere Fähigkeiten (DM Sheet & Feats)</h3>
               <div class="collapsible">
                   <div class="collapsible-header" onclick="toggleCollapsible(this)">Details</div>
-                  <div class="collapsible-content">
-                       <p><b>Ability Score Increase:</b> DEX +2, WIS +1.</p>
-                       <p><b>Darkvision:</b> 60 ft.</p>
-                       <p><b>Fey Ancestry:</b> Advantage on saves vs. charmed, magic can't put you to sleep.</p>
-                       <p><b>Trance:</b> Meditate 4 hours instead of 8 hours sleep.</p>
-                       <p><b>Elf Weapon Training:</b> Proficient with longsword, shortsword, shortbow, longbow.</p>
-                       <p><b>Fleet of Foot:</b> Base walking speed is 35 feet.</p>
-                       <p><b>Mask of the Wild:</b> Can attempt to hide even when lightly obscured by foliage, rain, snow, mist etc.</p>
-                  </div>
+                  <div class="collapsible-content" id="custom-features-list">
+                    <p><b>Alert:</b> You gain the following benefits: </p>
+                    <p><b>Initiative Profiency. </b> When you roll Initiative, you can add your Proficiency Bonus to the roll.</p>
+                                    <p><b>Initiative Swap.</b> Immediately after you roll Initiative, you can swap your Initative with the Initiative 
+                                    of one willing ally in the same combat. You can't make this swap if you or the ally has the <i>Incapacitated</i> condition.</p>
+                     <p><b>Incapacitated: </b> You can't take actions or reactions.</p>
+                     <p><b>Feral Senses:</b> You hunt with the skills of an apex predator. At 5th level, you can't have disadvantage on attack rolls against your Quarry. 
+                                            When you reach 18th level, you cannot have disadvantage on attack rolls agains any target withing 30 feet of you.
+                    <p><b>Extra Attack </b> Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.</p>
+                      </div>
               </div>
-          </div>
-          <div class="section">
-              <h2>Klasse: Ranger (Gloom Stalker)</h2>
-               <div class="collapsible">
-                  <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1</div>
-                  <div class="collapsible-content">
-                       <p><b>Favored Enemy (TCoE):</b> Hunter's Mark prepared, cast PB times/long rest without slot. Choose one creature type for Adv on Survival checks.</p>
-                       <p><b>Deft Explorer (TCoE - Canny):</b> Expertise in one skill (e.g., Stealth).</p>
-                  </div>
-               </div>
-               <div class="collapsible">
-                  <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 2</div>
-                  <div class="collapsible-content">
-                       <p><b>Fighting Style:</b> Archery (+2 bonus to attack rolls with ranged weapons).</p>
-                       <p><b>Spellcasting:</b> WIS based. Known Spells: 3 (L1: 2, L2: 1?). Slots: L1: 3.</p>
-                  </div>
-               </div>
-               <div class="collapsible">
-                  <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 3</div>
-                  <div class="collapsible-content">
-                       <p><b>Ranger Conclave:</b> Gloom Stalker.</p>
-                       <p><b>Gloom Stalker Magic:</b> *Disguise Self* always prepared, doesn't count against known spells.</p>
-                       <p><b>Dread Ambusher:</b> +WIS bonus to Initiative. On first turn of combat, speed increases by 10ft. If you take Attack action on that turn, make one additional weapon attack that deals an extra 1d8 damage on hit.</p>
-                       <p><b>Umbral Sight:</b> Darkvision 60ft (or adds 30ft if you have it). Invisible to creatures relying on darkvision to see you in darkness.</p>
-                  </div>
-               </div>
-               <div class="collapsible">
-                  <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 4</div>
-                  <div class="collapsible-content">
-                       <p><b>Feat:</b> Sharpshooter. Attacking at long range doesn't impose disadvantage. Ranged weapon attacks ignore half and three-quarters cover. Before making attack with ranged weapon you are proficient with, can take -5 penalty to attack roll for +10 damage.</p>
-                  </div>
-               </div>
-          </div>
-           <div class="section">
-              <h2>Klasse: Rogue</h2>
-               <div class="collapsible">
-                  <div class="collapsible-header" onclick="toggleCollapsible(this)">Level 1</div>
-                  <div class="collapsible-content">
-                       <p><b>Expertise:</b> Choose two skill proficiencies (or one skill and thieves' tools); double proficiency bonus for checks.</p>
-                       <p><b>Sneak Attack:</b> Once per turn, deal extra 1d6 damage to one creature hit with attack (finesse or ranged weapon) if you have advantage, OR another enemy of target is within 5ft, isn't incapacitated, and you don't have disadvantage.</p>
-                       <p><b>Thieves' Cant:</b> Secret mix of dialect, jargon, and code.</p>
-                  </div>
-               </div>
-           </div>
+         </div>
       </div>
 
-      <div id="inventory" class="tab-content">
-          <div class="section">
-              <h2>Gegenstände</h2>
-              <table class="inventory-table">
-                  <thead>
-                      <tr><th>Item</th><th>Qty</th><th>Wt.</th><th>Loc.</th><th></th></tr>
-                  </thead>
-                  <tbody id="inventory-items">
-                      </tbody>
-              </table>
-              <div class="inventory-summary">
-                  Gewicht: <span id="current-weight">0</span> / <span id="weight-capacity">150</span> lbs |
-                  Gold: <span id="gold-total">0</span> GP
-              </div>
-          </div>
-          <div class="section">
-              <h2>Gegenstand hinzufügen</h2>
-              <div class="inventory-add-form">
-                  <label>Name:</label><input type="text" id="item-name" size="15">
-                  <label>Menge:</label><input type="number" id="item-quantity" value="1" min="1">
-                  <label>Gewicht (lbs):</label><input type="number" id="item-weight" value="0" min="0" step="0.1">
-                  <label>Ort:</label>
-                  <select id="item-location">
-                      <option value="carried">Getragen</option>
-                      <option value="backpack">Rucksack</option>
-                      <option value="equipped">Ausrüst.</option>
-                      <option value="other">Andere</option>
-                  </select>
-                  <button onclick="addInventoryItem()">+</button>
-              </div>
-          </div>
+      <div id="inventory" class="tab-content card">
+        <h2>Inventar</h2>
+        <table class="inventory-table">
+            <thead>
+                <tr><th>Gegenstand</th><th>Menge</th><th>Gew. (lbs)</th><th>Ort</th><th>Notizen</th><th>Aktion</th></tr>
+            </thead>
+            <tbody id="inventory-items"></tbody>
+        </table>
+        <div class="inventory-summary">
+            Gewicht: <span id="current-weight">0</span> / <span id="weight-capacity">150</span> lbs |
+            Gold: <span id="gold-total">0</span> GP
+        </div>
+        <h3>Gegenstand hinzufügen</h3>
+        <div class="inventory-add-form">
+            <div><label for="item-name">Name:</label><input type="text" id="item-name"></div>
+            <div><label for="item-quantity">Menge:</label><input type="number" id="item-quantity" value="1" min="1"></div>
+            <div><label for="item-weight">Gewicht (lbs):</label><input type="number" id="item-weight" value="0" min="0" step="0.1"></div>
+            <div><label for="item-location">Ort:</label>
+            <select id="item-location">
+                <option value="carried">Getragen</option>
+                <option value="backpack">Rucksack</option>
+                <option value="equipped">Ausrüst.</option>
+                <option value="other">Andere</option>
+            </select></div>
+            <button onclick="addInventoryItem()">+</button>
+        </div>
       </div>
 
-       <div id="actions" class="tab-content">
-           <div class="section">
-               <h2>Aktionen im Kampf (pro Runde)</h2>
-               <table class="action-table">
-                  <thead>
-                      <tr><th>Typ</th><th>Aktion</th><th>Benutzt?</th></tr>
-                  </thead>
-                   <tbody id="action-list">
-                       </tbody>
-               </table>
-               <button onclick="resetActions()" style="margin-top: 5px;">Aktionen zurücksetzen</button>
-           </div>
+       <div id="actions" class="tab-content card">
+         <h2>Aktionen im Kampf (pro Runde)</h2>
+         <table class="action-table">
+            <thead>
+                <tr><th>Typ</th><th>Aktion</th><th>Benutzt?</th></tr>
+            </thead>
+             <tbody id="action-list"></tbody>
+         </table>
+         <button onclick="resetActions()" style="margin-top: 15px;">Aktionen zurücksetzen</button>
        </div>
+    </div> <div class="sidebar">
+        <div class="char-portrait-container">
+            <img id="char-portrait-img" src="https://sharonmabel.github.io/DnD/Ilio.png" alt="Charakterportrait Ilio Xaenor">
+        </div>
+        <div class="card">
+            <h3>Notizen</h3>
+            <textarea style="width: 95%; height: 150px; background:rgba(255,255,255,0.1); color:var(--text-color); border:1px solid var(--border-color); border-radius:4px; padding:10px;" placeholder="Deine Notizen hier..."></textarea>
+        </div>
+    </div> </div> <script>
+      // --- Character Data ---
+      const characterData = {
+          name: "Ilio Xaenor",
+          race: "Wood Elf",
+          levels: { "Gloom Stalker Ranger": 4, "Rogue": 1 },
+          alignment: "Chaotic Good",
+          attributes: { str: 10, dex: 18, con: 14, int: 10, wis: 14, cha: 10 },
+          hp: { baseMax: 21, current: 21, temp: 0, bonus: 0 },
+          hitDice: { "d10": 5 }, // Sheet: 5x d10
+          ac: 16,
+          speed: 35,
+          profBonus: 3,
+          initiativeTotal: 7, // Neuer Gesamtwert für Initiative
+          proficiencies: {
+              saves: ["dex"],
+              skills: ["Acrobatics", "Animal Handling", "Athletics", "Perception", "Stealth", "Survival"],
+              armor: ["Light", "Medium", "Shields"],
+              weapons: ["Simple", "Martial"],
+              tools: ["Thieves' Tools"]
+          },
+          expertise: ["Stealth", "Perception"],
+          languages: ["Common", "Elvish", "Dwarvish", "Sign Language", "Halfling"],
+          features: {
+              "Darkvision": { value: 120, description: "Du kannst bei dämmrigem Licht innerhalb von 120 Fuß sehen, als wäre es helles Licht, und bei Dunkelheit, als wäre es dämmriges Licht. Du kannst in der Dunkelheit keine Farben erkennen, nur Graustufen." },
+              "Fey Ancestry": { value: true, description: "Du hast Vorteil auf Rettungswürfe gegen Bezauberung, und Magie kann dich nicht einschläfern." },
+              "Mask of the Wild": { value: true, description: "Du kannst versuchen, dich auch dann zu verstecken, wenn du nur leicht von Laub, starkem Regen, fallendem Schnee, Nebel und anderen natürlichen Phänomenen verdeckt bist." },
+              "Fighting Style (Archery)": { value: true, description: "Du erhältst einen Bonus von +2 auf Angriffswürfe, die du mit Fernkampfwaffen machst." },
+              "Spellcasting (Ranger)": { value: true, description: "Du wirkst Ranger-Zauber basierend auf Weisheit." },
+              "Ranger Conclave (Gloom Stalker Variant)": { value: true, description: "Du folgst dem Pfad des Gloom Stalkers (Variante)." },
+              "Umbral Sight": { value: true, description: "Solange du dich in Dunkelheit befindest, bist du für jede Kreatur unsichtbar, die auf Dunkelsicht angewiesen ist, um dich in dieser Dunkelheit zu sehen." },
+              "Amateur of the Drunkard": { value: true, description: "Regain 1d4+1 HP when drinking beer, ale, mead, or wine. Once per dawn." },
+              "Campfolgrein (Ambuscade)": { value: true, description: "Reaction on initiative (if not surprised): Hide, Attack, or mark Quarry." },
+              "Sneak Attack": { dice: "1d6", description: "Einmal pro Zug kannst du einer Kreatur, die du triffst und die Vorteil gegen dich hat oder wenn ein anderer Feind des Ziels innerhalb von 5 Fuß von ihm steht, der nicht kampfunfähig ist und du keinen Nachteil beim Angriffswurf hast, zusätzliche 1W6 Schaden zufügen. Der Angriff muss eine Finesse- oder eine Fernkampfwaffe verwenden." },
+              "Strider I": { value: true, description: "Ignore difficult terrain (natural), can't get lost by night sky, party not slowed by natural difficult terrain." },
+              "Alert Feat": { value: true, description: "Du erhältst einen +5 Bonus auf Initiative. Du kannst nicht überrascht werden, solange du bei Bewusstsein bist. Andere Kreaturen erhalten keinen Vorteil bei Angriffswürfen gegen dich, weil sie von dir ungesehen sind." }
+          },
+          spellcasting: {
+              ability: "wis",
+              slots: { level1: 3 },
+              spellsKnown: ["Expeditious Retreat", "Snare", "Disguise Self"], // Disguise Self von Gloom Stalker
+              dc: 13,
+              attackBonus: 5
+          },
+          inventory: [
+              { name: "Langbogen", weight: 2, quantity: 1, location: "equipped", type: "weapon", notes: "Sheet: Atk +9, Dmg 1d8+6" },
+              { name: "Pfeile", weight: 1, quantity: 20, location: "carried", type: "ammo" }, 
+              { name: "Rapier", weight: 2, quantity: 1, location: "carried", type: "weapon", notes: "Sheet: Atk +7, Dmg 1d8+4" },
+              { name: "Sylvan Talon Dolch", weight: 1, quantity: 1, location: "carried", type: "weapon", notes: "Sheet: Atk +9, Dmg 1d4+4" },
+              { name: "Beschlagene Lederrüstung", weight: 13, quantity: 1, location: "equipped", type: "armor" }
+          ],
+          tempHPEffects: [],
+          resources: {
+              "rangersQuarry": { current: 2, max: 2, resetOn: "long", dice: "1d4", description: "Bonusaktion. +1W4 Schaden auf Quarry. Nutzungen = WEI Mod. Erholung bei langer Rast oder Zauberplatz." },
+              "Amateur of the Drunkard": { current: 1, max: 1, resetOn: "dawn", description: "Erhalte 1W4+1 TP zurück, wenn Alkohol getrunken wird." }
+          },
+          activeToggles: {
+              rangersquarry: false,
+              sneakattack: false
+              // huntersmark wurde entfernt
+          },
+           actions: [
+                { id: "action-attack", name: "Angriff", type: "action", desc: "Nutze deine Waffe" },
+                { id: "action-cast", name: "Zauber wirken", type: "action", desc: "Siehe Zauberliste" },
+                { id: "action-dash", name: "Spurt", type: "action", desc: "+Bewegung" },
+                { id: "action-disengage", name: "Lösen", type: "action", desc: "Keine Gelegenheitsangriffe provozieren"},
+                { id: "action-dodge", name: "Ausweichen", type: "action", desc: "Nachteil für Angreifer" },
+                { id: "action-help", name: "Helfen", type: "action", desc: "Vorteil für Verbündeten" },
+                { id: "action-hide", name: "Verstecken", type: "action", desc: "Heimlichkeitswurf" },
+                { id: "action-ready", name: "Vorbereiten", type: "action", desc: "Aktion/Reaktion später" },
+                { id: "action-use-object", name: "Gegenstand nutzen", type: "action", desc: "Trank, Hebel, etc." },
+                { id: "bonus-rangers-quarry", name: "Ranger's Quarry", type: "bonus", desc: "Ziel markieren" },
+                { id: "bonus-cunning-hide", name: "Verstecken (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
+                { id: "bonus-cunning-dash", name: "Spurt (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
+                { id: "bonus-cunning-disengage", name: "Lösen (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
+                { id: "reaction-opportunity", name: "Gelegenheitsangriff", type: "reaction", desc: "Feind verlässt Reichweite" },
+                { id: "reaction-ambuscade", name: "Campfolgrein (Ambuscade)", type: "reaction", desc: "Bei Initiative: Verstecken, Angriff oder Quarry markieren" }
+            ]
+      };
 
-  </div><script>
-      // --- Character Data ---
-      const characterData = {
-          name: "Ilio Xaenor", // Name vom ursprünglichen Code, Sheet sagt nur "Ilio"
-          race: "Wood Elf",
-          levels: { "Gloom Stalker Ranger": 4, "Rogue": 1 }, // Annahme basierend auf Gloom Stalker & Rogue auf Sheet
-          alignment: "Chaotic Good", // Annahme aus ursprünglichem Code, nicht auf Sheet
-          attributes: { str: 10, dex: 18, con: 14, int: 10, wis: 14, cha: 10 },
-          hp: { baseMax: 21, current: 21, temp: 0, bonus: 0 }, // HP 21 laut Sheet
-          hitDice: { "d10": 5 }, // 5x W10 laut Sheet
-          ac: 16, // Laut Sheet
-          speed: 35, // Laut Sheet
-          profBonus: 3, // Standard für Level 5
-          proficiencies: {
-              saves: ["dex"], // Nur DEX-Rettungswurf ist geübt (+7 bei DEX +4, PB +3)
-              skills: ["Acrobatics", "Animal Handling", "Athletics", "Perception", "Stealth", "Survival"], // Basierend auf den Werten des Sheets
-              armor: ["Light", "Medium", "Shields"], // Standard Ranger
-              weapons: ["Simple", "Martial"], // Standard Ranger
-              tools: ["Thieves' Tools"] // Standard Rogue
-          },
-          expertise: ["Stealth", "Perception"], // Um Stealth +10 und Passive Perception 18 zu erreichen
-          languages: ["Common", "Elvish", "Dwarvish", "Sign Language", "Halfling"], // Laut Sheet
-          features: {
-              "Darkvision": 120, // Laut Sheet "Darkvision 120 ft."
-              "Fey Ancestry": true, // Standard Waldelf
-              "Mask of the Wild": true, // Standard Waldelf
-              "Fighting Style (Archery)": true, // Erklärt +9 Angriff mit Langbogen
-              "Spellcasting (Ranger)": true,
-              "Ranger Conclave (Gloom Stalker Variant)": true, // Gloom Stalker ist auf Sheet erwähnt
-              "Umbral Sight": "Invisible to creatures relying on darkvision to see you in darkness.", // Gloom Stalker Fähigkeit, Teil von "Invisible in Darkness" auf Sheet
-              "Amateur of the Drunkard": "Regain 1d4+1 HP when drinking beer, ale, mead, or wine. Once per dawn.", // Vom Sheet
-              "Campfolgrein (Ambuscade)": "Reaction on initiative (if not surprised): Hide, Attack, or mark Quarry.", // Vom Sheet
-              "Sneak Attack": { dice: "1d6" }, // Standard Rogue
-              "Strider I": "Ignore difficult terrain (natural), can't get lost by night sky, party not slowed by natural difficult terrain." // Vom Sheet
-              // Kein Sharpshooter, da nicht auf dem Battlesheet erwähnt
-          },
-          spellcasting: {
-              ability: "wis",
-              slots: { level1: 3 }, // Laut Sheet
-              spellsKnown: ["Expeditious Retreat", "Snare", "Disguise Self"], // "Disguise Self" als typischer Gloom Stalker Zauber
-              dc: 13, // Laut Sheet
-              attackBonus: 5 // Laut Sheet
-          },
-          inventory: [
-              { name: "Longbow", weight: 2, quantity: 1, location: "equipped", type: "weapon", notes: "Sheet: Atk +9, Dmg 1d8+6" },
-              { name: "Arrows", weight: 1, quantity: 20, location: "equipped", type: "ammo" },
-              { name: "Rapier", weight: 2, quantity: 1, location: "carried", type: "weapon", notes: "Sheet: Atk +7, Dmg 1d8+4" },
-              { name: "Sylvan Talon Dagger", weight: 1, quantity: 1, location: "carried", type: "weapon", notes: "Sheet: Atk +9, Dmg 1d4+4" },
-              { name: "Studded Leather", weight: 13, quantity: 1, location: "equipped", type: "armor" }
-              // Weitere Items aus dem ursprünglichen Code entfernt, da nicht auf Battlesheet
-          ],
-          tempHPEffects: [],
-          resources: {
-              "Ranger's Quarry": { current: 2, max: 2, resetOn: "long", dice: "1d4", description: "Bonus action. +1d4 dmg to Quarry. Uses = WIS mod. Regain on Long Rest or spell slot." }, // WIS Mod = +2
-              "Amateur of the Drunkard": { current: 1, max: 1, resetOn: "dawn", description: "Regain 1d4+1 HP when drinking alcohol." }
-          },
-          activeToggles: { // Toggles anpassen an die Features
-              rangersquarry: false, // Umbenannt von dreadfulstrike
-              sneakattack: false
-              // sharpshooter entfernt
-          },
-           actions: [ // Ggf. anpassen, falls spezielle Aktionen vom Sheet fehlen oder anders sind
-                { id: "action-attack", name: "Angriff", type: "action", desc: "Nutze deine Waffe" },
-                { id: "action-cast", name: "Zauber wirken", type: "action", desc: "Siehe Zauberliste" },
-                { id: "action-dash", name: "Spurt", type: "action", desc: "+Bewegung" },
-                { id: "action-disengage", name: "Lösen", type: "action", desc: "Keine Gelegenheitsangriffe provozieren"},
-                { id: "action-dodge", name: "Ausweichen", type: "action", desc: "Nachteil für Angreifer" },
-                { id: "action-help", name: "Helfen", type: "action", desc: "Vorteil für Verbündeten" },
-                { id: "action-hide", name: "Verstecken", type: "action", desc: "Heimlichkeitswurf" },
-                { id: "action-ready", name: "Vorbereiten", type: "action", desc: "Aktion/Reaktion später" },
-                { id: "action-use-object", name: "Gegenstand nutzen", type: "action", desc: "Trank, Hebel, etc." },
-                { id: "bonus-rangers-quarry", name: "Ranger's Quarry", type: "bonus", desc: "Ziel markieren (+1d4 Schaden)" },
-                { id: "bonus-cunning-hide", name: "Verstecken (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
-                { id: "bonus-cunning-dash", name: "Spurt (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
-                { id: "bonus-cunning-disengage", name: "Lösen (Cunning)", type: "bonus", desc: "Schurkenfähigkeit" },
-                { id: "reaction-opportunity", name: "Gelegenheitsangriff", type: "reaction", desc: "Feind verlässt Reichweite" },
-                { id: "reaction-ambuscade", name: "Campfolgrein (Ambushcade)", type: "reaction", desc: "Bei Initiative: Verstecken, Angriff oder Quarry markieren" }
-            ]
-      };
+      let totalHitDice = 0;
+      let currentHitDice = 0;
+      let lastQuarryRoll = 0; // Globale Variable für den letzten Quarry-Wurf
 
-      // --- Global State ---
-      let totalHitDice = 0;
-      let currentHitDice = 0;
+      function getModifier(attribute) {
+          const score = characterData.attributes[attribute];
+          return Math.floor((score - 10) / 2);
+      }
 
-      // --- Utility Functions ---
-      function getModifier(attribute) {
-          const score = characterData.attributes[attribute];
-          return Math.floor((score - 10) / 2);
-      }
+      function getProficiencyBonus() { return characterData.profBonus; }
 
-      function getProficiencyBonus() { return characterData.profBonus; }
+      function getSkillBonus(skillName) {
+          const skillsData = { 
+              "Acrobatics": "dex", "Stealth": "dex", "Sleight of Hand": "dex",
+              "Athletics": "str",
+              "Insight": "wis", "Medicine": "wis", "Perception": "wis", "Survival": "wis", "Animal Handling": "wis",
+              "Investigation": "int", "Arcana": "int", "History": "int", "Nature": "int", "Religion": "int",
+              "Deception": "cha", "Intimidation": "cha", "Performance": "cha", "Persuasion": "cha"
+          };
+          const attribute = skillsData[skillName];
+          if (!attribute) return 0;
 
-      function getSkillBonus(skillName) {
-          const skillsData = { /* Map skills to attributes - Add other skills */
-              "Acrobatics": "dex", "Stealth": "dex", "Sleight of Hand": "dex",
-              "Athletics": "str",
-              "Insight": "wis", "Medicine": "wis", "Perception": "wis", "Survival": "wis", "Animal Handling": "wis",
-              "Investigation": "int", "Arcana": "int", "History": "int", "Nature": "int", "Religion": "int",
-              "Deception": "cha", "Intimidation": "cha", "Performance": "cha", "Persuasion": "cha"
-          };
-          const attribute = skillsData[skillName];
-          if (!attribute) return 0;
+          let bonus = getModifier(attribute);
+          let isProficient = characterData.proficiencies.skills.includes(skillName);
+          let isExpertise = characterData.expertise.includes(skillName);
 
-          let bonus = getModifier(attribute);
-          let isProficient = characterData.proficiencies.skills.includes(skillName);
-          let isExpertise = characterData.expertise.includes(skillName);
+          if (isExpertise) { bonus += (getProficiencyBonus() * 2); } 
+          else if (isProficient) { bonus += getProficiencyBonus(); }
+          
+          if (characterData.name === "Ilio Xaenor" && skillName === "Acrobatics") { return 5; } // DM Override
+          return bonus;
+      }
 
-          if (isExpertise) {
-              bonus += (getProficiencyBonus() * 2);
-          } else if (isProficient) {
-              bonus += getProficiencyBonus();
-          }
-          return bonus;
-      }
+      function getSaveBonus(attribute) {
+          let bonus = getModifier(attribute);
+          if (characterData.proficiencies.saves.includes(attribute)) { bonus += getProficiencyBonus(); }
+          return bonus;
+      }
 
-      function getSaveBonus(attribute) {
-          let bonus = getModifier(attribute);
-          if (characterData.proficiencies.saves.includes(attribute)) {
-              bonus += getProficiencyBonus();
-          }
-          return bonus;
-      }
+       function getAttackBonus(weaponType = "ranged") {
+            const dexMod = getModifier('dex');
+            let bonus = dexMod + getProficiencyBonus();
+            if (weaponType === "ranged" && characterData.features["Fighting Style (Archery)"].value) { bonus += 2; }
+            return bonus; // Sollte +9 für Langbogen ergeben (4 DEX + 3 PB + 2 Archery)
+       }
 
-       function getAttackBonus(weaponType = "ranged") {
-            const dexMod = getModifier('dex');
-            const strMod = getModifier('str');
-            let bonus = (weaponType === "ranged" || weaponType === "finesse") ? dexMod : strMod; // Assume finesse uses DEX if higher
-            bonus += getProficiencyBonus();
-            if (weaponType === "ranged" && characterData.features["Fighting Style (Archery)"]) {
-                bonus += 2;
-            }
-            if (characterData.activeToggles.sharpshooter) {
-                bonus -= 5;
-            }
-            return bonus;
-       }
+       function getDamageBonus(weaponType = "ranged") { // Diese Funktion gibt den MODIFIKATOR zurück
+            const dexMod = getModifier('dex');
+            if (characterData.name === "Ilio Xaenor" && weaponType === "longbow") { return 6; } // DM Override für Langbogen Modifikator +6
+           return dexMod; // Standardmäßig GES-Modifikator
+       }
 
-       function getDamageBonus(weaponType = "ranged") {
-            const dexMod = getModifier('dex');
-            const strMod = getModifier('str');
-            let bonus = (weaponType === "ranged" || weaponType === "finesse") ? dexMod : strMod;
-             if (characterData.activeToggles.sharpshooter) {
-                bonus += 10;
-            }
-           return bonus;
-       }
+      function formatBonus(bonus) { return bonus >= 0 ? `+${bonus}` : bonus; }
 
-      function formatBonus(bonus) { return bonus >= 0 ? `+${bonus}` : bonus; }
+      function toggleCollapsible(headerElement) {
+          const content = headerElement.nextElementSibling;
+          content.style.display = content.style.display === "block" ? "none" : "block";
+      }
+       function toggleCollapsibleContent(contentElement) {
+           contentElement.style.display = contentElement.style.display === "block" ? "none" : "block";
+       }
 
-      function toggleCollapsible(headerElement) {
-          const content = headerElement.nextElementSibling;
-          content.style.display = content.style.display === "block" ? "none" : "block";
-      }
-       function toggleCollapsibleContent(contentElement) {
-           contentElement.style.display = contentElement.style.display === "block" ? "none" : "block";
-       }
+      window.onload = function() {
+          document.getElementById('char-name').innerText = characterData.name;
+          document.getElementById('char-details').innerText = `${characterData.race} ${Object.entries(characterData.levels).map(([cls, lvl]) => `${cls} ${lvl}`).join(' / ')}`;
+          document.getElementById('ac-value').innerText = characterData.ac;
+          document.getElementById('speed-value').innerText = characterData.speed;
+          document.getElementById('pb-value').innerText = formatBonus(characterData.profBonus);
+          
+          totalHitDice = characterData.hitDice.d10;
+          currentHitDice = totalHitDice; 
 
-      // --- Initialization ---
-      window.onload = function() {
-          console.log("Initializing...");
-          document.getElementById('char-name').innerText = characterData.name;
-          document.getElementById('char-details').innerText = `${characterData.race} ${Object.entries(characterData.levels).map(([cls, lvl]) => `${cls} ${lvl}`).join(' / ')}`;
-           document.getElementById('ac-value').innerText = characterData.ac;
-           document.getElementById('speed-value').innerText = characterData.speed;
-           document.getElementById('pb-value').innerText = formatBonus(characterData.profBonus);
-
-          // Calculate initial hit dice totals
-          totalHitDice = Object.values(characterData.hitDice).reduce((sum, val) => sum + val, 0);
-          currentHitDice = totalHitDice; // Start full
-
-          populateUI();
-          changeTab('main'); // Start on main tab
-          console.log("Initialization complete.");
-      };
-
-      function populateUI() {
-          populateAttributes();
-          populateSkillsAndSaves();
-          populateSpellcastingInfo();
-          updateHPDisplay(); // Includes hit dice
-          updateCombatSummary();
-          renderInventory(); // Includes weight
-          renderActionList();
-          updateResourceCounters(); // Update counters like Dreadful Strike
-      }
+          document.getElementById('char-portrait-img').src = "https://sharonmabel.github.io/DnD/Ilio.png";
 
 
-       // --- Populate UI Sections ---
-      function populateAttributes() {
-           Object.keys(characterData.attributes).forEach(attr => {
-               document.getElementById(`${attr}-value`).innerText = characterData.attributes[attr];
-               document.getElementById(`${attr}-mod`).innerText = formatBonus(getModifier(attr));
-           });
-           // Update initiative here as it depends on attributes
-           document.getElementById('initiative-value').innerText = formatBonus(getModifier('dex') + (characterData.features['Dread Ambusher'] ? getModifier('wis') : 0));
-      }
+          populateUI();
+          changeTab('main'); 
+          document.getElementById('hp-extra').style.display = 'none'; 
+      };
 
-       function populateSkillsAndSaves() {
-          const skillsContainer = document.getElementById('skills-list');
-          const savesContainer = document.getElementById('saves-list');
-          skillsContainer.innerHTML = '';
-          savesContainer.innerHTML = '';
+      function populateUI() {
+          populateAttributes();
+          populateSkillsAndSaves();
+          populateSpellcastingInfo();
+          updateHPDisplay(); 
+          updateCombatSummary();
+          renderInventory(); 
+          renderActionList();
+          updateResourceCounters(); 
+          populateCustomFeatures();
+      }
 
-           const allSkills = [
-              "Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
-              "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
-              "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"
-          ];
-           allSkills.sort().forEach(skill => {
-              const bonus = getSkillBonus(skill);
-              const isProficient = characterData.proficiencies.skills.includes(skill);
-              const isExpertise = characterData.expertise.includes(skill);
-              const li = document.createElement('li');
-              li.className = 'info-item';
-              li.innerHTML = `<span class="info-label ${isExpertise ? 'proficient' : (isProficient ? 'proficient' : '')}" title="${isExpertise ? 'Expertise' : (isProficient ? 'Proficient' : 'Not Proficient')}">${skill}</span><span class="info-value">${formatBonus(bonus)}</span>`;
-              skillsContainer.appendChild(li);
-          });
+      function populateAttributes() {
+           Object.keys(characterData.attributes).forEach(attr => {
+              const valueSpan = document.getElementById(`${attr}-value`);
+              const modSpan = document.getElementById(`${attr}-mod`);
+              if (valueSpan) valueSpan.innerText = characterData.attributes[attr];
+              if (modSpan) modSpan.innerText = formatBonus(getModifier(attr));
+           });
+           document.getElementById('initiative-value').innerText = formatBonus(characterData.initiativeTotal);
+      }
 
-           const allSaves = ["str", "dex", "con", "int", "wis", "cha"];
-           allSaves.forEach(save => {
-               const bonus = getSaveBonus(save);
-               const isProficient = characterData.proficiencies.saves.includes(save);
-               const li = document.createElement('li');
-               li.className = 'info-item';
-               li.innerHTML = `<span class="info-label ${isProficient ? 'proficient' : ''}" title="${isProficient ? 'Proficient' : 'Not Proficient'}">${save.toUpperCase()} Save</span><span class="info-value">${formatBonus(bonus)}</span>`;
-               savesContainer.appendChild(li);
-           });
+       function populateSkillsAndSaves() {
+          const skillsContainer = document.getElementById('skills-list');
+          const savesContainer = document.getElementById('saves-list');
+          skillsContainer.innerHTML = '';
+          savesContainer.innerHTML = '';
+           const allSkills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History", "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception", "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"];
+           allSkills.sort().forEach(skill => {
+              const bonus = getSkillBonus(skill);
+              const isProficient = characterData.proficiencies.skills.includes(skill);
+              const isExpertise = characterData.expertise.includes(skill);
+              skillsContainer.innerHTML += `<li class="info-item"><span class="info-label ${isExpertise ? 'proficient' : (isProficient ? 'proficient' : '')}">${skill}</span><span class="info-value">${formatBonus(bonus)}</span></li>`;
+          });
+           const allSaves = ["str", "dex", "con", "int", "wis", "cha"];
+           allSaves.forEach(save => {
+               const bonus = getSaveBonus(save);
+               const isProficient = characterData.proficiencies.saves.includes(save);
+               savesContainer.innerHTML += `<li class="info-item"><span class="info-label ${isProficient ? 'proficient' : ''}">${save.toUpperCase()} Save</span><span class="info-value">${formatBonus(bonus)}</span></li>`;
+           });
+            document.getElementById('passive-perception').innerText = 10 + getSkillBonus('Perception');
+            document.getElementById('passive-investigation').innerText = 10 + getSkillBonus('Investigation');
+            document.getElementById('passive-insight').innerText = 10 + getSkillBonus('Insight');
+            document.getElementById('languages').innerText = characterData.languages.join(', ');
+            if(document.getElementById('racial-darkvision')) { 
+                document.getElementById('racial-darkvision').innerText = characterData.features.Darkvision.value;
+            }
+      }
+      
+      function populateCustomFeatures() {
+        const container = document.getElementById('custom-features-list');
+        if (!container) return;
+        container.innerHTML = ''; 
+        const customFeatureKeys = ["Amateur of the Drunkard", "Campfolgrein (Ambuscade)", "Strider I", "Alert Feat"];
+        customFeatureKeys.forEach(key => {
+            if (characterData.features[key] && characterData.features[key].description) {
+                const feature = characterData.features[key];
+                const p = document.createElement('p');
+                p.innerHTML = `<b>${key.replace(/Feat/g, 'Feat')}:</b> ${feature.description}`;
+                container.appendChild(p);
+            }
+        });
+      }
 
-            // Update Passive Senses
-            document.getElementById('passive-perception').innerText = 10 + getSkillBonus('Perception');
-             document.getElementById('passive-investigation').innerText = 10 + getSkillBonus('Investigation');
-              document.getElementById('passive-insight').innerText = 10 + getSkillBonus('Insight');
-             document.getElementById('languages').innerText = characterData.languages.join(', ');
+      function populateSpellcastingInfo() {
+          document.getElementById('spell-dc').innerText = characterData.spellcasting.dc;
+          document.getElementById('spell-attack').innerText = formatBonus(characterData.spellcasting.attackBonus);
+          document.getElementById('spell-slots').innerText = `Level 1: ${characterData.spellcasting.slots.level1}/${characterData.spellcasting.slots.level1}`;
+      }
 
-      }
+       function updateResourceCounters() {
+           if (characterData.resources.rangersQuarry) {
+               const uses = characterData.resources.rangersQuarry.current;
+               const max = characterData.resources.rangersQuarry.max;
+                const usesSpan = document.getElementById('rangers-quarry-uses');
+                const maxSpan = document.getElementById('rangers-quarry-max');
+                if(usesSpan) usesSpan.innerText = uses;
+                if(maxSpan) maxSpan.innerText = max;
 
-      function populateSpellcastingInfo() {
-          const wisMod = getModifier('wis');
-          const profBonus = getProficiencyBonus();
-          document.getElementById('spell-dc').innerText = 8 + profBonus + wisMod;
-          document.getElementById('spell-attack').innerText = formatBonus(profBonus + wisMod);
-          // Display spell slots (simple example)
-          document.getElementById('spell-slots').innerText = `Level 1: ${characterData.spellcasting.slots.level1}/${characterData.spellcasting.slots.level1}`; // Assuming simple tracking for now
-      }
+                const toggleEl = document.getElementById('rangers-quarry');
+                if (toggleEl) { 
+                    toggleEl.classList.toggle('disabled', uses <= 0);
+                }
+           }
+       }
 
-       function updateResourceCounters() {
-           if (characterData.resources["Dreadful Strike"]) {
-               const uses = characterData.resources["Dreadful Strike"].current;
-               const max = characterData.resources["Dreadful Strike"].max;
-               document.getElementById('dreadfulstrike-uses').innerText = uses;
-                document.getElementById('dreadfulstrike-max').innerText = max;
-                const toggleEl = document.getElementById('dreadfulstrike');
-                toggleEl.classList.toggle('disabled', uses <= 0); // Disable visually if no uses left
-                toggleEl.classList.add('resource-limited'); // Mark as resource limited
-           }
-           // Add similar logic for Favored Foe if needed
-       }
+      function toggle(id, isResourceLimited = false) {
+          const el = document.getElementById(id === "rangersQuarry" ? "rangers-quarry" : id);
+          if (!el) { return; }
+          
+          const resourceKey = id; 
+          const resource = characterData.resources[resourceKey];
 
+           if (isResourceLimited && resource && resource.current <= 0 && !el.classList.contains('active')) {
+               return; 
+           }
 
-       // --- Combat & Toggles ---
-      function toggle(id, isResourceLimited = false) {
-          const el = document.getElementById(id);
-          if (!el) return;
+          const isActive = el.classList.toggle('active');
+          characterData.activeToggles[resourceKey] = isActive;
+          
+          const quarryDiceButton = document.getElementById('btn-roll-quarry');
+          if (resourceKey === 'rangersQuarry') {
+              quarryDiceButton.classList.toggle('disabled', !isActive);
+              if (!isActive) { lastQuarryRoll = 0; } // Reset quarry roll if toggled off
+          }
+          updateCombatSummary();
+       }
 
-          const resource = characterData.resources[id];
+       function updateCombatSummary() {
+           const longbowAttackBonus = formatBonus(9); 
+           let longbowDamageBase = "1W8" + formatBonus(getDamageBonus("longbow")); 
 
-          // If it's resource limited and has no uses left, don't toggle on
-           if (isResourceLimited && resource && resource.current <= 0 && !el.classList.contains('active')) {
-               console.log(`${id} has no uses left.`);
-               return; // Do nothing
-           }
-
-          const isActive = el.classList.toggle('active');
-          characterData.activeToggles[id] = isActive;
-
-          // If it's a resource that was just activated, decrement count
-           if (isResourceLimited && isActive && resource) {
-              // resource.current = Math.max(0, resource.current - 1); // Decrement happens ON USE, not toggle
-               console.log(`${id} toggled on.`);
-           } else if (isResourceLimited && !isActive && resource) {
-               // No need to increment here, rests handle that. Just log.
-                console.log(`${id} toggled off.`);
-           }
-
-          updateCombatSummary();
-          // updateResourceCounters(); // Update display if needed immediately
-      }
-
-       function updateCombatSummary() {
-           const baseWeaponDamage = "1d8"; // Longbow
-           const attackBonus = getAttackBonus();
-           const damageBonus = getDamageBonus();
-           let damageParts = [`${baseWeaponDamage}${formatBonus(damageBonus)}`];
-
-           // Sneak Attack
-           if (characterData.activeToggles.sneakattack) {
-               damageParts.push(characterData.features["Sneak Attack"].dice);
-           }
-           // Hunter's Mark
-           if (characterData.activeToggles.huntersmark) {
-               damageParts.push("1d6"); // Hunter's Mark damage
-           }
-            // Dreadful Strike (Gloom Stalker 1st turn extra attack damage) - Note: This applies to the *extra* attack, not baseline.
-           // Simplified: Just add if toggled, assuming first round conditions met
-           /* if (characterData.activeToggles.dreadfulstrike && characterData.resources["Dreadful Strike"].current > 0) {
-               damageParts.push("1d8"); // Dread Ambusher extra attack damage
-           } */
-           // Dreadful Strike (New TCoE version - 1/turn, WIS mod times/LR)
-            if (characterData.activeToggles.dreadfulstrike && characterData.resources["Dreadful Strike"].current > 0) {
-                damageParts.push("1d6"); // Dreadful Strike psychic damage
+           let damageParts = [];
+           if (characterData.activeToggles.sneakattack) { damageParts.push(characterData.features["Sneak Attack"].dice); }
+           // Hunter's Mark entfernt
+            if (characterData.activeToggles.rangersquarry && characterData.resources.rangersQuarry.current > 0) {
+                 damageParts.push(characterData.resources.rangersQuarry.dice); // Zeigt "1d4" in der Formel an
             }
 
 
-           document.getElementById('attack-summary').innerText = formatBonus(attackBonus);
-           document.getElementById('damage-summary').innerText = damageParts.join(" + ");
+           document.getElementById('attack-summary').innerText = longbowAttackBonus;
+           document.getElementById('damage-summary').innerText = longbowDamageBase + (damageParts.length > 0 ? " + " + damageParts.join(" + ") : "");
+           
+           document.getElementById('extra-attack-info').style.display = (characterData.levels["Gloom Stalker Ranger"] >= 5) ? 'block' : 'none';
+           updateResourceCounters();
+       }
+       
+      function rollQuarryDice() {
+        if (characterData.activeToggles.rangersquarry) {
+            const roll = Math.floor(Math.random() * 4) + 1;
+            lastQuarryRoll = roll; // Speichere den Wurf für die Schadensberechnung
+            document.getElementById('dice-result').innerText = `Quarry W4: ${roll}`;
+        } else {
+            lastQuarryRoll = 0;
+            document.getElementById('dice-result').innerText = "Quarry nicht aktiv";
+        }
+      }
 
-            // Show extra info based on level/features
-           document.getElementById('extra-attack-info').style.display = (characterData.levels["Gloom Stalker Ranger"] >= 5) ? 'block' : 'none';
-           document.getElementById('dread-ambusher-info').style.display = characterData.features['Dread Ambusher'] ? 'block' : 'none';
+      function calculateTotalDamageFromInputs() {
+        const weaponDiceRoll = parseInt(document.getElementById('weapon-dice-roll').value) || 0;
+        const otherBonusDamage = parseInt(document.getElementById('other-bonus-damage').value) || 0;
+        
+        let totalDamage = weaponDiceRoll;
+        totalDamage += getDamageBonus("longbow"); // Fester Langbogen-Schadensbonus (+6)
 
-           updateResourceCounters(); // Ensure counters like Dreadful Strike uses are correct
-       }
-
-       // --- HP Management ---
-      let currentHP = characterData.hp.current;
-      let maxHP = characterData.hp.baseMax + characterData.hp.bonus;
-      let tempHP = characterData.hp.temp;
-
-      function modifyHP(amount) {
-          if (amount < 0) { // Damage
-              let damageTaken = Math.abs(amount);
-              if (tempHP > 0) {
-                  const tempDamage = Math.min(damageTaken, tempHP);
-                  tempHP -= tempDamage;
-                  damageTaken -= tempDamage;
-              }
-              if (damageTaken > 0) {
-                  currentHP = Math.max(0, currentHP - damageTaken);
-              }
-          } else { // Healing
-              currentHP = Math.min(maxHP, currentHP + amount);
-          }
-          updateHPDisplay();
-      }
-
-       function updateHPDisplay() {
-           // Update internal data first
-           characterData.hp.current = currentHP;
-           characterData.hp.temp = tempHP;
-           maxHP = characterData.hp.baseMax + characterData.hp.bonus; // Recalculate based on bonus
-
-           document.getElementById('current-hp').innerText = currentHP;
-           document.getElementById('max-hp').innerText = maxHP;
-           document.getElementById('temp-hp-display').innerText = tempHP > 0 ? ` (+${tempHP} Temp)` : '';
-
-           const hpPercentage = maxHP > 0 ? (currentHP / maxHP) * 100 : 0;
-           document.getElementById('hp-fill').style.width = `${hpPercentage}%`;
-
-            // Update Hit Dice display
-            const hitDiceTypes = Object.keys(characterData.hitDice);
-            const hdTypeDisplay = hitDiceTypes.map(type => type.substring(1)).join('/'); // e.g., "10/8"
-            document.getElementById('hit-dice-current').innerText = currentHitDice;
-            document.getElementById('hit-dice-max').innerText = totalHitDice;
-             document.getElementById('hit-dice-type').innerText = hdTypeDisplay;
-
-
-           renderTempHPEffects(); // Update list of active temp/bonus effects
-       }
-
-       function addTempHPEffect() {
-           const sourceInput = document.getElementById('temp-hp-source-input');
-           const amountInput = document.getElementById('temp-hp-amount-input');
-           const typeSelect = document.getElementById('temp-hp-type-select');
-
-           const source = sourceInput.value.trim() || "Quelle?";
-           const amount = parseInt(amountInput.value) || 0;
-           const type = typeSelect.value; // 'temp' or 'max'
-
-           if (amount <= 0) return;
-
-           const newEffect = { id: Date.now(), source, amount, type };
-           characterData.tempHPEffects.push(newEffect);
-
-           applyTempHPEffects(); // Recalculate totals
-
-           // Clear inputs
-           sourceInput.value = '';
-           amountInput.value = '1';
-       }
-
-       function removeTempHPEffect(id) {
-           characterData.tempHPEffects = characterData.tempHPEffects.filter(effect => effect.id !== id);
-           applyTempHPEffects();
-       }
-
-       function applyTempHPEffects() {
-           let currentMaxTempHP = 0;
-           let currentTotalBonusHP = 0;
-
-           characterData.tempHPEffects.forEach(effect => {
-               if (effect.type === 'temp') {
-                   currentMaxTempHP = Math.max(currentMaxTempHP, effect.amount);
-               } else if (effect.type === 'max') {
-                   currentTotalBonusHP += effect.amount;
-               }
-           });
-
-           tempHP = currentMaxTempHP;
-           characterData.hp.bonus = currentTotalBonusHP; // Update bonus in data
-
-           // Recalculate currentHP relative to new maxHP if maxHP changed
-            const oldMaxHP = maxHP;
-            maxHP = characterData.hp.baseMax + characterData.hp.bonus;
-            if (maxHP > oldMaxHP) {
-                // If max HP increased, also increase current HP by the same amount (common rule for effects like Aid)
-                currentHP += (maxHP - oldMaxHP);
-            }
-            // Ensure currentHP doesn't exceed the (potentially new) maxHP
-            currentHP = Math.min(currentHP, maxHP);
-
-
-           updateHPDisplay(); // Update UI
-       }
-
-        function renderTempHPEffects() {
-            const list = document.getElementById('temp-hp-effects-list');
-            list.innerHTML = ''; // Clear list
-            characterData.tempHPEffects.forEach(effect => {
-                const div = document.createElement('div');
-                div.className = 'temp-hp-effect';
-                div.innerHTML = `
-                    <span>${effect.source}: ${effect.amount} ${effect.type === 'temp' ? 'Temp' : 'Bonus'} TP</span>
-                    <button onclick="removeTempHPEffect(${effect.id})">X</button>
-                `;
-                list.appendChild(div);
-            });
+        if (characterData.activeToggles.sneakattack) {
+            totalDamage += Math.floor(Math.random() * 6) + 1; // Würfle Sneak Attack 1W6
         }
-
-       function resetHP() {
-           currentHP = maxHP;
-           updateHPDisplay();
-       }
-
-        function takeShortRest() {
-             // Simple Short Rest: Allow spending Hit Dice
-             const diceToSpend = prompt(`Kurze Rast. Wieviele Trefferwürfel ausgeben? (Max ${currentHitDice})`, "0");
-             const numDice = parseInt(diceToSpend);
-
-             if (numDice > 0 && numDice <= currentHitDice) {
-                let totalHealed = 0;
-                const conMod = getModifier('con');
-                // Determine primary hit die type (simplification: use the first one defined)
-                 const dieType = parseInt(Object.keys(characterData.hitDice)[0].substring(1)); // e.g., 10 from "d10"
-
-                for (let i = 0; i < numDice; i++) {
-                    totalHealed += Math.floor(Math.random() * dieType) + 1 + conMod;
-                }
-                 currentHitDice -= numDice;
-                 modifyHP(totalHealed); // Heal the character
-                 alert(`Du gibst ${numDice}W${dieType} aus und heilst ${totalHealed} TP.`);
-                 updateHPDisplay(); // Update hit dice count display
-             } else if (numDice > currentHitDice) {
-                 alert("Nicht genug Trefferwürfel verfügbar.");
-             }
+        if (characterData.activeToggles.rangersquarry && lastQuarryRoll > 0) {
+            totalDamage += lastQuarryRoll; // Füge den gespeicherten Quarry-Wurf hinzu
         }
+        totalDamage += otherBonusDamage;
 
-        function takeLongRest() {
-            // Full HP
-            currentHP = maxHP;
-             // Reset Temp HP and Bonus HP effects (usually)
-            characterData.tempHPEffects = [];
-            tempHP = 0;
-            characterData.hp.bonus = 0;
-            // Regain half total Hit Dice (rounded down, min 1)
-            const diceRegained = Math.max(1, Math.floor(totalHitDice / 2));
-            currentHitDice = Math.min(totalHitDice, currentHitDice + diceRegained);
-             // Reset resource uses
-             Object.keys(characterData.resources).forEach(key => {
-                 if (characterData.resources[key].resetOn === 'long') {
-                     characterData.resources[key].current = characterData.resources[key].max;
-                 }
-             });
-
-            alert(`Lange Rast beendet. HP voll (${maxHP}). ${diceRegained} Trefferwürfel wiederhergestellt. Ressourcen zurückgesetzt.`);
-            populateUI(); // Full refresh
-        }
+        document.getElementById('dice-result').innerText = `Gesamtschaden: ${totalDamage}`;
+        lastQuarryRoll = 0; // Setze Quarry-Wurf zurück nach Berechnung
+        document.getElementById('weapon-dice-roll').value = ''; // Felder leeren
+        document.getElementById('other-bonus-damage').value = '';
+      }
 
 
-      // --- Attribute Changes ---
+      let currentHP = characterData.hp.current;
+      let maxHP = characterData.hp.baseMax + characterData.hp.bonus;
+      let tempHP = characterData.hp.temp;
+
+      function modifyHP(amount) {
+          if (amount < 0) { 
+              let damageTaken = Math.abs(amount);
+              if (tempHP > 0) {
+                  const tempDamage = Math.min(damageTaken, tempHP);
+                  tempHP -= tempDamage;
+                  damageTaken -= tempDamage;
+              }
+              if (damageTaken > 0) { currentHP = Math.max(0, currentHP - damageTaken); }
+          } else { currentHP = Math.min(maxHP, currentHP + amount); }
+          updateHPDisplay();
+      }
+
+       function updateHPDisplay() {
+           characterData.hp.current = currentHP;
+           characterData.hp.temp = tempHP;
+           maxHP = characterData.hp.baseMax + characterData.hp.bonus; 
+
+           document.getElementById('current-hp').innerText = currentHP;
+           document.getElementById('max-hp').innerText = maxHP;
+           document.getElementById('temp-hp-display').innerText = tempHP > 0 ? ` (+${tempHP} Temp)` : '';
+           document.getElementById('hp-fill').style.width = `${maxHP > 0 ? (currentHP / maxHP) * 100 : 0}%`;
+           
+            const hitDiceType = Object.keys(characterData.hitDice)[0];
+            document.getElementById('hit-dice-current').innerText = currentHitDice;
+            document.getElementById('hit-dice-max').innerText = totalHitDice;
+            document.getElementById('hit-dice-type').innerText = "W" + hitDiceType.substring(1);
+           renderTempHPEffects(); 
+       }
+
+       function addTempHPEffect() {
+           const source = document.getElementById('temp-hp-source-input').value.trim() || "Quelle?";
+           const amount = parseInt(document.getElementById('temp-hp-amount-input').value) || 0;
+           const type = document.getElementById('temp-hp-type-select').value; 
+           if (amount <= 0) return;
+           characterData.tempHPEffects.push({ id: Date.now(), source, amount, type });
+           applyTempHPEffects(); 
+           document.getElementById('temp-hp-source-input').value = '';
+           document.getElementById('temp-hp-amount-input').value = '1';
+       }
+
+       function removeTempHPEffect(id) {
+           characterData.tempHPEffects = characterData.tempHPEffects.filter(effect => effect.id !== id);
+           applyTempHPEffects();
+       }
+
+       function applyTempHPEffects() {
+           let currentMaxTempHP = 0; let currentTotalBonusHP = 0;
+           characterData.tempHPEffects.forEach(effect => {
+               if (effect.type === 'temp') { currentMaxTempHP = Math.max(currentMaxTempHP, effect.amount); } 
+               else if (effect.type === 'max') { currentTotalBonusHP += effect.amount; }
+           });
+           tempHP = currentMaxTempHP; characterData.hp.bonus = currentTotalBonusHP; 
+           maxHP = characterData.hp.baseMax + characterData.hp.bonus; 
+           currentHP = Math.min(currentHP, maxHP); 
+           updateHPDisplay(); 
+       }
+
+        function renderTempHPEffects() {
+            const list = document.getElementById('temp-hp-effects-list');
+            list.innerHTML = ''; 
+            characterData.tempHPEffects.forEach(effect => {
+                list.innerHTML += `<div class="temp-hp-effect"><span>${effect.source}: ${effect.amount} ${effect.type === 'temp' ? 'Temp' : 'Bonus'} TP</span><button onclick="removeTempHPEffect(${effect.id})">X</button></div>`;
+            });
+        }
+
+       function resetHP() { currentHP = maxHP; updateHPDisplay(); }
+
+        function takeShortRest() {
+             const diceToSpendPrompt = prompt(`Kurze Rast. Wieviele Trefferwürfel ausgeben? (Max ${currentHitDice}, Typ W${Object.keys(characterData.hitDice)[0].substring(1)})`, "0");
+             if (diceToSpendPrompt === null) return;
+             const numDice = parseInt(diceToSpendPrompt);
+             if (numDice > 0 && numDice <= currentHitDice) {
+                let totalHealed = 0; const conMod = getModifier('con'); const dieType = parseInt(Object.keys(characterData.hitDice)[0].substring(1));
+                for (let i = 0; i < numDice; i++) { totalHealed += Math.floor(Math.random() * dieType) + 1 + conMod; }
+                currentHitDice -= numDice; modifyHP(totalHealed); 
+                alert(`Du gibst ${numDice}W${dieType} aus und heilst ${totalHealed} TP.`);
+                updateHPDisplay(); 
+             } else if (numDice > currentHitDice) { alert("Nicht genug Trefferwürfel verfügbar."); }
+        }
+
+        function takeLongRest() {
+            currentHP = maxHP; tempHP = 0; characterData.hp.bonus = 0; characterData.tempHPEffects = [];
+            const diceRegained = Math.max(1, Math.floor(totalHitDice / 2));
+            currentHitDice = Math.min(totalHitDice, currentHitDice + diceRegained);
+            Object.keys(characterData.resources).forEach(key => {
+                 if (characterData.resources[key].resetOn === 'long' || characterData.resources[key].resetOn === 'dawn') { 
+                     characterData.resources[key].current = characterData.resources[key].max;
+                 }
+             });
+            alert(`Lange Rast beendet. HP voll (${maxHP}). ${diceRegained} Trefferwürfel wiederhergestellt. Ressourcen zurückgesetzt.`);
+            populateUI(); 
+        }
+
       function changeAttribute(attr, amount) {
-          const valueElement = document.getElementById(`${attr}-value`);
-          let currentValue = characterData.attributes[attr];
+          const valueSpan = document.getElementById(`${attr}-value`);
+          if (!valueSpan) return;
+
+          let currentValue = parseInt(valueSpan.innerText);
           let newValue = currentValue + amount;
           newValue = Math.max(1, Math.min(30, newValue)); // Clamp
 
           characterData.attributes[attr] = newValue; // Update data model
-          populateUI(); // Re-render affected parts
-      }
-
-       // --- Dice Rolling ---
-      function rollDice(dice) {
-          let resultText = "Ungültiger Wurf";
-          let rollValue = 0;
-          try {
-               if (typeof dice === 'number') { // Simple dX roll
-                  rollValue = Math.floor(Math.random() * dice) + 1;
-                  resultText = `d${dice}: ${rollValue}`;
-              } else if (typeof dice === 'string') { // Handle "XdY+Z" format
-                   const match = dice.match(/(\d+)d(\d+)(?:([+-])(\d+))?/);
-                   if (match) {
-                      const numDice = parseInt(match[1]);
-                      const sides = parseInt(match[2]);
-                      const operator = match[3];
-                      const modifier = parseInt(match[4] || '0');
-                      let total = 0;
-                      let rolls = [];
-                      for (let i = 0; i < numDice; i++) {
-                          const roll = Math.floor(Math.random() * sides) + 1;
-                          rolls.push(roll);
-                          total += roll;
-                      }
-                       if (operator === '+') total += modifier;
-                       else if (operator === '-') total -= modifier;
-                       rollValue = total; // Store numeric result if needed
-                       resultText = `${dice}: ${rolls.join('+')}${operator ? operator + modifier : ''} = ${total}`;
-                  }
-              }
-          } catch(e) { console.error("Dice roll error:", e); }
-          document.getElementById('dice-result').innerText = resultText;
-          return rollValue; // Return numeric result
+          // No full populateUI() here to avoid loops if other functions also call populateUI
+          valueSpan.innerText = newValue;
+          document.getElementById(`${attr}-mod`).innerText = formatBonus(getModifier(attr));
+          
+          // Specific updates if needed (e.g. AC for DEX/CON, weight for STR)
+          if (attr === 'dex' || attr === 'con') updateHPDisplay(); // AC and HP might depend on these
+          if (attr === 'str') renderInventory(); // For weight capacity
+          populateSkillsAndSaves(); // Skills and saves depend on all attributes
+          updateCombatSummary(); // Attack/damage might change
       }
 
 
-       // --- Inventory ---
-       function addInventoryItem() {
-           const nameInput = document.getElementById('item-name');
-           const quantityInput = document.getElementById('item-quantity');
-           const weightInput = document.getElementById('item-weight');
-           const locationSelect = document.getElementById('item-location');
+      function rollDice(dice) { // This is for general dice rolls, not the new damage calculation specifically
+          let resultText = "Ungültiger Wurf"; let rollValue = 0;
+          try {
+               if (typeof dice === 'number') { rollValue = Math.floor(Math.random() * dice) + 1; resultText = `W${dice}: ${rollValue}`; } 
+               else if (typeof dice === 'string') { 
+                   const match = dice.match(/(\d+)d(\d+)(?:([+-])(\d+))?/);
+                   if (match) {
+                      let total = 0; let rolls = []; const numDice = parseInt(match[1]); const sides = parseInt(match[2]); const modifier = parseInt(match[4] || '0'); const operator = match[3];
+                      for (let i = 0; i < numDice; i++) { const roll = Math.floor(Math.random() * sides) + 1; rolls.push(roll); total += roll; }
+                      if (operator === '+') total += modifier; else if (operator === '-') total -= modifier;
+                      rollValue = total; resultText = `${dice}: ${rolls.join('+')}${operator ? operator + modifier : ''} = ${total}`;
+                  }
+              }
+          } catch(e) { console.error("Dice roll error:", e); }
+          document.getElementById('dice-result').innerText = resultText; // Display in general dice result area
+          return rollValue; 
+      }
 
-           const name = nameInput.value.trim();
-           const quantity = parseInt(quantityInput.value) || 1;
-           const weight = parseFloat(weightInput.value) || 0;
-           const location = locationSelect.value;
-            // Basic type detection
-           const type = name.toLowerCase().includes("gold") || name.toLowerCase().includes("gp") ? "currency" :
-                        ["longbow", "shortsword"].includes(name.toLowerCase()) ? "weapon" :
-                        ["studded leather"].includes(name.toLowerCase()) ? "armor" : "gear";
+       function addInventoryItem() {
+           const name = document.getElementById('item-name').value.trim();
+           const quantity = parseInt(document.getElementById('item-quantity').value) || 1;
+           const weight = parseFloat(document.getElementById('item-weight').value) || 0;
+           const location = document.getElementById('item-location').value;
+           const type = name.toLowerCase().includes("gold") || name.toLowerCase().includes("gp") ? "currency" : ["langbogen", "rapier", "sylvan talon dolch"].includes(name.toLowerCase()) ? "weapon" : ["beschlagene lederrüstung"].includes(name.toLowerCase()) ? "armor" : "gear";
+           if (!name || quantity < 1 || weight < 0) { alert('Gültigen Namen, Menge (>=1) und Gewicht (>=0) eingeben.'); return; }
+           const existingIdx = characterData.inventory.findIndex(i=>i.name.toLowerCase()===name.toLowerCase()&&i.location===location&&i.type!=='currency');
+           if (existingIdx > -1) { characterData.inventory[existingIdx].quantity += quantity; } 
+           else { characterData.inventory.push({ name, weight, quantity, location, type, equipped: location === 'equipped', notes:'' }); }
+           document.getElementById('item-name').value = ''; document.getElementById('item-quantity').value = '1'; document.getElementById('item-weight').value = '0';
+           renderInventory();
+       }
 
-           if (!name || quantity < 1 || weight < 0) {
-               alert('Gültigen Namen, Menge (>=1) und Gewicht (>=0) eingeben.');
-               return;
-           }
+       function removeInventoryItem(index) {
+           if (index >= 0 && index < characterData.inventory.length && confirm(`"${characterData.inventory[index].name}" entfernen?`)) {
+               characterData.inventory.splice(index, 1); renderInventory();
+           }
+       }
 
-           // Stack if same item, same location (except currency)
-           const existingItemIndex = characterData.inventory.findIndex(item =>
-               item.name.toLowerCase() === name.toLowerCase() &&
-               item.location === location &&
-               item.type !== 'currency'
-           );
+       function renderInventory() {
+           const tbody = document.getElementById('inventory-items');
+           tbody.innerHTML = ''; let totalWeight = 0; let totalGold = 0;
+           characterData.inventory.forEach((item, index) => {
+               const itemTotalWeight = item.type !== 'currency' ? (item.weight * item.quantity) : 0;
+               totalWeight += itemTotalWeight;
+               if (item.type === 'currency' && item.name.toLowerCase().includes('gold')) { totalGold += item.quantity; }
+               if (item.type !== 'currency') {
+                   tbody.innerHTML += `<tr><td>${item.name}</td><td>${item.quantity}</td><td>${itemTotalWeight.toFixed(1)}</td><td>${item.location}</td><td>${item.notes || ''}</td><td><button class="delete-button" onclick="removeInventoryItem(${index})">X</button></td></tr>`;
+               }
+           });
+           document.getElementById('current-weight').textContent = totalWeight.toFixed(1);
+           document.getElementById('weight-capacity').textContent = characterData.attributes.str * 15;
+           document.getElementById('gold-total').textContent = totalGold;
+       }
 
-           if (existingItemIndex > -1) {
-               characterData.inventory[existingItemIndex].quantity += quantity;
-           } else {
-                // Add new item, inferring 'equipped' status from location
-               characterData.inventory.push({ name, weight, quantity, location, type, equipped: location === 'equipped' });
-           }
+        function renderActionList() {
+            const tbody = document.getElementById('action-list');
+            tbody.innerHTML = ''; 
+            characterData.actions.forEach(action => {
+                tbody.innerHTML += `<tr class="action-item"><td>${action.type.charAt(0).toUpperCase() + action.type.slice(1)}</td><td>${action.name} <em style="font-size:0.9em; opacity:0.7;">(${action.desc || ''})</em></td><td><input type="checkbox" class="action-checkbox" data-action-type="${action.type}" onchange="toggleActionUsed(this)"></td></tr>`;
+            });
+        }
 
-           // Reset form
-           nameInput.value = '';
-           quantityInput.value = '1';
-           weightInput.value = '0';
-           locationSelect.value = 'carried';
+        function toggleActionUsed(checkbox) {
+            const actionType = checkbox.dataset.actionType; const isChecked = checkbox.checked;
+            document.querySelectorAll(`.action-checkbox[data-action-type="${actionType}"]`).forEach(cb => {
+                if (cb !== checkbox) { cb.disabled = isChecked; cb.closest('tr').style.opacity = isChecked ? '0.5' : '1'; }
+            });
+        }
 
-           renderInventory();
-       }
+        function resetActions() {
+            document.querySelectorAll('.action-checkbox').forEach(cb => { cb.checked = false; cb.disabled = false; cb.closest('tr').style.opacity = '1'; });
+        }
 
-       function removeInventoryItem(index) {
-           if (index >= 0 && index < characterData.inventory.length) {
-               if (confirm(`"${characterData.inventory[index].name}" wirklich entfernen?`)) {
-                   characterData.inventory.splice(index, 1);
-                   renderInventory();
-               }
-           }
-       }
-
-       function renderInventory() {
-           const tbody = document.getElementById('inventory-items');
-           tbody.innerHTML = ''; // Clear table
-           let totalWeight = 0;
-           let totalGold = 0;
-
-           characterData.inventory.forEach((item, index) => {
-                // Simple weight calculation: adds weight unless it's currency
-               const itemTotalWeight = item.type !== 'currency' ? (item.weight * item.quantity) : 0;
-               totalWeight += itemTotalWeight;
-
-               if (item.type === 'currency' && item.name.toLowerCase().includes('gold')) {
-                   totalGold += item.quantity;
-               }
-
-               // Only render non-currency items in the main table
-                if (item.type !== 'currency') {
-                   const row = document.createElement('tr');
-                   row.innerHTML = `
-                      <td>${item.name}</td>
-                      <td>${item.quantity}</td>
-                      <td>${itemTotalWeight.toFixed(1)}</td>
-                      <td>${item.location}</td>
-                      <td><button class="delete-button" onclick="removeInventoryItem(${index})" title="Entfernen">X</button></td>
-                   `;
-                   tbody.appendChild(row);
-               }
-           });
-
-            // Update summary
-           const capacity = characterData.attributes.str * 15; // Simple capacity STR * 15
-           document.getElementById('current-weight').textContent = totalWeight.toFixed(1);
-           document.getElementById('weight-capacity').textContent = capacity;
-           document.getElementById('gold-total').textContent = totalGold;
-       }
-
-       // --- Action Economy ---
-        function renderActionList() {
-            const tbody = document.getElementById('action-list');
-            tbody.innerHTML = ''; // Clear list
-            characterData.actions.forEach(action => {
-                const row = document.createElement('tr');
-                row.className = 'action-item';
-                row.innerHTML = `
-                    <td>${action.type.charAt(0).toUpperCase() + action.type.slice(1)}</td>
-                    <td>${action.name} <em style="font-size:0.9em; color:#555;">(${action.desc || ''})</em></td>
-                    <td><input type="checkbox" class="action-checkbox" data-action-type="${action.type}" onchange="toggleActionUsed(this)"></td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function toggleActionUsed(checkbox) {
-            const actionType = checkbox.dataset.actionType; // 'action', 'bonus', 'reaction'
-            const isChecked = checkbox.checked;
-
-            // If checking an action, disable other actions of the same type
-             if (isChecked) {
-                 document.querySelectorAll(`.action-checkbox[data-action-type="${actionType}"]`).forEach(cb => {
-                    if (cb !== checkbox) {
-                        cb.disabled = true;
-                        cb.closest('tr').style.opacity = '0.5'; // Dim disabled rows
-                    }
-                 });
-             } else {
-                 // If unchecking, re-enable all actions of that type
-                  document.querySelectorAll(`.action-checkbox[data-action-type="${actionType}"]`).forEach(cb => {
-                     cb.disabled = false;
-                      cb.closest('tr').style.opacity = '1';
-                 });
-             }
-        }
-
-        function resetActions() {
-            document.querySelectorAll('.action-checkbox').forEach(checkbox => {
-                checkbox.checked = false;
-                checkbox.disabled = false;
-                 checkbox.closest('tr').style.opacity = '1';
-            });
-        }
-
-
-      // --- Tab Management ---
-      function changeTab(tabId) {
-          document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-          document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-          document.getElementById(tabId).classList.add('active');
-          // Find the corresponding tab button and activate it
-          document.querySelector(`.tab[onclick="changeTab('${tabId}')"]`).classList.add('active');
-      }
-
-
-  </script>
+      function changeTab(tabId) {
+          document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+          document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+          document.getElementById(tabId).classList.add('active');
+          event.currentTarget.classList.add('active');
+      }
+  </script>
 </body>
 </html>
